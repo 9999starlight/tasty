@@ -1,11 +1,14 @@
 const mongoose = require('mongoose')
 const Recipe = require('../models/recipe')
 const Comment = require('../models/comment')
+const User = require('../models/user')
 // const sharp = require('sharp')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
 
-// GET
+// @desc    Get all recipes
+// @route   GET /r
+// @access  Private/Public?
 exports.getAllRecipes = async (req, res, next) => {
     try {
         const docs = await Recipe.find()
@@ -44,10 +47,12 @@ exports.getSingleRecipe = async (req, res, next) => {
         const doc = await Recipe.findById(id)
             .populate('author') // get author info
             .populate({
-            path: 'comments',
-            // Get comment's author info
-            populate: { path: 'author' }
-          })
+                path: 'comments',
+                // Get comment's author info
+                populate: {
+                    path: 'author'
+                }
+            })
         //.select('mealName author intro rating')// dodati sve za single recipe
         console.log("getting single recipe" + doc)
         if (doc)
@@ -102,7 +107,7 @@ exports.addNewRecipe = async (req, res, next) => {
     try {
         let imageresult = ''
         if (req.file)
-            imageresult = await cloudinary.uploader.upload(req.file.path)
+            imageresult = await cloudinary.v2.uploader.upload(req.file.path, { folder: 'recipes' })
         const recipe = new Recipe({
             _id: new mongoose.Types.ObjectId(),
             mealName: req.body.mealName,
@@ -124,6 +129,13 @@ exports.addNewRecipe = async (req, res, next) => {
             rating: req.body.rating
         })
         const result = await recipe.save()
+        await User.updateOne({
+            _id: result.author
+        }, {
+            $push: {
+                createdRecipes: result._id
+            }
+        })
         //console.log(result)
         res.status(201).json({
             message: 'new recipe created',
@@ -151,10 +163,8 @@ exports.addComment = async (req, res, next) => {
         // if recipe id exists create new comment
         const comment = new Comment({
             _id: mongoose.Types.ObjectId(),
-            // commentAuthorId: ,
             commentedRecipeId: req.body.commentedRecipeId,
             author: req.body.author,
-            // authorImage: ,
             createdAt: new Date(),
             commentBody: req.body.commentBody
         })
@@ -221,8 +231,18 @@ exports.deleteRecipe = async (req, res) => {
         if (recipe.image.id) {
             await cloudinary.uploader.destroy(recipe.image.id);
         }
+        await Comment.deleteMany({
+            commentedRecipeId: recipe._id
+        })
+        await User.updateOne({
+            _id: recipe.author
+        }, {
+            $pull: {
+                createdRecipes: recipe._id
+            }
+        })
         await recipe.remove()
-        res.status(200).json(recipe.mealName + 'DELETED!')
+        res.status(200).json(recipe.mealName + ' DELETED!')
     } catch (error) {
         console.log(error.message)
         res.status(500).json({

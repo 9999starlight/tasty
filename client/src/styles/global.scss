@@ -1,0 +1,65 @@
+@import "config.scss";
+@import "keyframes.scss";
+
+// reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  scroll-behavior: smooth;
+  list-style-type: none;
+  border: none;
+  transition: all 0.1s ease;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover,
+button:hover,
+input[type="button"]:hover {
+  filter: brightness(40%);
+}
+
+// utillity classes
+
+.flex {
+  display: flex;
+}
+
+.flexCenter {
+  justify-content: center;
+  align-items: center;
+}
+
+.block {
+  display: block;
+}
+
+.grid {
+  display: grid;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+/* .btn {
+
+} */
+
+/* .error {
+  @include fonts($color: crimson, $size: 0.8rem)
+} */

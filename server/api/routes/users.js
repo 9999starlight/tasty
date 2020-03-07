@@ -8,8 +8,10 @@ const {
     deleteUser
 } = require('../controllers/users_ctrl')
 const { registerValidation, loginValidation } = require('../joi_validation')
+const upload = require('../middlewares/multer')
 
-router.post('/register', registerValidation, registerUser)
+
+router.post('/register', upload.single('user_image'), registerValidation, registerUser)
 router.post('/login', loginValidation, loginUser)
 router.get('/:userId', getSingleUser)
 

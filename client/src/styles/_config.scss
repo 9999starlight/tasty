@@ -1,0 +1,106 @@
+// colors
+$white: #fff;
+$graphite: #333;
+// gradients
+$grayGradient: linear-gradient(to bottom, #787780 0%, #3b3a44 0%, #8287a1 0%, #3e3b3f 50%);
+
+// configs
+$shadowSmall: 3px 3px 6px rgba(35, 35, 36, 0.47);
+$shadowBox: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
+0 6px 20px 0 rgba(0, 0, 0, 0.801);
+$backConfig: no-repeat center center/cover;
+
+// mixins
+
+// background all
+@mixin background($filter, $url, $backConfig) {
+  background: $filter, $url $backConfig;
+}
+
+// boxes - size/alignment
+@mixin boxSize($width: false, $height: false, $maxWidth: false, $maxHeight: false, $minHeight: false) {
+  @if($width) {
+    width: $width;
+  }
+
+  @if($height) {
+    height: $height;
+  }
+
+  @if($maxWidth) {
+    max-width: $maxWidth;
+  }
+
+  @if($maxHeight) {
+    max-height: $maxHeight;
+  }
+
+  @if($minHeight) {
+    min-height: $minHeight;
+  }
+}
+
+@mixin alignment($display: false, $align: false, $justify: false, $justifyGrid: false, $direction: false, $textAlign: false) {
+  @if $display {
+    display: $display;
+  }
+
+  @if $align {
+    align-items: $align;
+  }
+
+  @if $justify {
+    justify-content: $justify;
+  }
+
+  @if $justifyGrid {
+    justify-items: $justifyGrid;
+  }
+
+  @if $direction {
+    flex-direction: $direction;
+  }
+
+  @if $textAlign {
+    text-align: $textAlign;
+  }
+}
+
+// fonts
+@mixin fonts ($size: false, $color: false, $weight: false, $style: false) {
+  @if $size {
+    font-size: $size;
+  }
+
+  @if $color {
+    color: $color;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+
+  @if $style {
+    font-style: $style;
+  }
+}
+
+// padding & margin classes
+$sizes: 1, 2, 3;
+@each $size in $sizes {
+  .pd#{$size} {
+    padding: #{$size}rem;
+  }
+
+  .mg#{$size} {
+    margin: #{$size}rem;
+  }
+
+  .mgb#{$size} {
+    margin-bottom: #{$size}rem;
+  }
+
+  .mgt#{$size} {
+    margin-top: #{$size}rem;
+  }
+}

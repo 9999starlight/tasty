@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 // user Schema
 const User = require('../models/user')
-
+const cloudinary = require('cloudinary')
+require('../middlewares/cloudinary')
 
 exports.registerUser = async (req, res, next) => {
     try {
@@ -17,10 +18,20 @@ exports.registerUser = async (req, res, next) => {
         }
         const salt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(req.body.password, salt)
+        let imageresult = ''
+        if (req.file) {
+            imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
+                folder: 'users'
+            })
+        }
         const user = new User({
             _id: new mongoose.Types.ObjectId(),
             username: req.body.username,
-            password: hashPassword
+            password: hashPassword,
+            user_image: {
+                url: imageresult.secure_url,
+                id: imageresult.public_id
+            }
         })
         const savedUser = await user.save()
         console.log(savedUser)
@@ -85,13 +96,20 @@ exports.getSingleUser = async (req, res, next) => {
     try {
         const id = req.params.userId
         const doc = await User.findById(id)
-                // console.log('getting user: ', doc)
-                if (doc)
-                    res.status(200).json(doc)
-                else
-                    res.status(404).json({
-                        message: "no result for reqested user"
-                    })
+            .populate({
+            path: 'createdRecipes',
+            // Get comment's author info
+            populate: {
+                path: 'mealName'
+            }
+        })
+        // console.log('getting user: ', doc)
+        if (doc)
+            res.status(200).json(doc)
+        else
+            res.status(404).json({
+                message: "no result for reqested user"
+            })
     } catch (error) {
         console.log(error.message)
         res.status(500).json({

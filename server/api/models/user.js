@@ -16,13 +16,18 @@ const userSchema = mongoose.Schema({
         minlength: 6,
         maxlength: 1024
     },
-/*     user_image: {
-        type: String, reqired: false
-    }, */
+    user_image: {
+        type: Object, reqired: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    createdRecipes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Recipe',
+        required: true
+    }]
 })
 
 module.exports = mongoose.model('User', userSchema)
