@@ -6,9 +6,6 @@ const User = require('../models/user')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
 
-// @desc    Get all recipes
-// @route   GET /r
-// @access  Private/Public?
 exports.getAllRecipes = async (req, res, next) => {
     try {
         const docs = await Recipe.find()

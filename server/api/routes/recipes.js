@@ -14,20 +14,40 @@ const {
 } = require('../controllers/recipes_ctrl')
 const { newRecipeValidation, updateRecipeValidation, commentValidation } = require('../joi_validation')
 
-// GET requests
+// GET
+// @desc    Get all recipes
+// @route   GET /recipes/all
+// @access  Public
 router.get('/all', getAllRecipes)
+// @desc    Get single recipe
+// @route   GET /recipes/single/:recipeId
+// @access  Public
 router.get('/single/:recipeId', getSingleRecipe)
+// @desc    Get recipe by query
+// @route   GET ?...
+// @access  Public
 router.get('/', getRecipeByQuery)
 
-// POST requests - PROTECTED - added authUser middleware 
+// POST
+// @desc    POST recipe
+// @route   POST
+// @access  Private
 router.post('/', authUser, upload.single('image'), newRecipeValidation, addNewRecipe)
+// @desc    POST comment
+// @route   POST /addComment
+// @access  Private
 router.post('/addComment', authUser, commentValidation, addComment)
 
-// UPDATE requests - PROTECTED - added authUser middleware
-// /recipes/single/:id
+// UPDATE
+// @desc    PATCH recipe
+// @route   PATCH /:recipeId
+// @access  Private
 router.patch('/:recipeId', authUser, updateRecipeValidation, updateRecipe)
 
-// DELETE requests - PROTECTED - added authUser middleware 
+// DELETE
+// @desc    DELETE recipe
+// @route   DELETE /:recipeId
+// @access  Private
 router.delete('/:recipeId', authUser, deleteRecipe)
 
 module.exports = router

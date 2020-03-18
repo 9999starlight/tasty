@@ -7,11 +7,24 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes fade {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+  }
+}
+
+
+@media (max-width: 995px) {
+  @keyframes slideLeft {
+    from {
+      margin-left: -1000px;
+    }
+
+    to {
+      margin-left: 0;
+    }
   }
 }
