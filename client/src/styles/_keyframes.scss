@@ -2,6 +2,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -11,13 +12,43 @@
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
 
+@-webkit-keyframes expand {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
 
-@media (max-width: 995px) {
+  40% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes expand {
+  0% {
+    letter-spacing: -0.5em;
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* @media (max-width: 995px) {
   @keyframes slideLeft {
     from {
       margin-left: -1000px;
@@ -27,4 +58,4 @@
       margin-left: 0;
     }
   }
-}
+} */

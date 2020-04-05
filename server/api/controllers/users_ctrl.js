@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-// user Schema
 const User = require('../models/user')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
 
 exports.registerUser = async (req, res, next) => {
+    // console.log(req.body)
     try {
         const checkUsername = await User.find({
             username: req.body.username
@@ -22,6 +22,8 @@ exports.registerUser = async (req, res, next) => {
         if (req.file) {
             imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
                 folder: 'users'
+            }, (error, result) => {
+                console.log(result, error)
             })
         }
         const user = new User({
@@ -34,10 +36,32 @@ exports.registerUser = async (req, res, next) => {
             }
         })
         const savedUser = await user.save()
-        console.log(savedUser)
-        res.status(201).json({
-            message: 'User created'
-        })
+        // console.log(savedUser)
+        let userImage = ''
+        if (!savedUser.user_image)
+            userImage = ''
+        else
+            userImage = savedUser.user_image.url
+        const payload = {
+            _id: savedUser._id,
+            username: savedUser.username,
+            isAdmin: savedUser.isAdmin,
+            userImage
+        };
+
+        await jwt.sign(payload, process.env.JWT_KEY, {
+            expiresIn: '12h'
+        }, (err, token) => {
+            if (err) {
+                return res.status(401).json({
+                    message: `Invalid username or password or there is no user record`
+                })
+            }
+            return res.status(200).json({
+                message: 'User created',
+                token
+            })
+        });
     } catch (error) {
         console.log(error.message)
         res.status(500).json({
@@ -66,12 +90,19 @@ exports.loginUser = async (req, res, next) => {
                 })
             }
             if (result) {
+                let userImage = ''
+                if (!user[0].user_image)
+                    userImage = ''
+                else
+                    userImage = user[0].user_image.url
                 const token = jwt.sign({
                         username: user[0].username,
-                        userId: user[0]._id
+                        userId: user[0]._id,
+                        isAdmin: user[0].isAdmin,
+                        userImage
                     },
                     process.env.JWT_KEY, {
-                        expiresIn: '2h'
+                        expiresIn: '12h'
                     }
                 )
                 return res.status(200).json({
@@ -95,14 +126,15 @@ exports.loginUser = async (req, res, next) => {
 exports.getSingleUser = async (req, res, next) => {
     try {
         const id = req.params.userId
+        if (!req.userData.isAdmin && req.userData.userId !== id) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
         const doc = await User.findById(id)
             .populate({
-            path: 'createdRecipes',
-            // Get comment's author info
-            populate: {
-                path: 'mealName'
-            }
-        })
+                path: 'createdRecipes'
+            })
         // console.log('getting user: ', doc)
         if (doc)
             res.status(200).json(doc)
@@ -119,12 +151,72 @@ exports.getSingleUser = async (req, res, next) => {
     }
 }
 
+exports.updateUserImage = async (req, res, next) => {
+    try {
+        const id = req.params.userId
+        if (!req.userData.isAdmin && req.userData.userId !== id) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
+        const user = await User.findById(id)
+        let imageresult = ''
+        if (!user.user_image) {
+            imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
+                folder: 'users'
+            }, (error, result) => {
+                console.log(result, error)
+            })
+        } else {
+            await cloudinary.v2.uploader.destroy(user.user_image.id, (error, result) => {
+                console.log(result, error)
+            });
+            imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
+                folder: 'users'
+            }, (error, result) => {
+                console.log(result, error)
+            })
+        }
+        const result = await User.updateOne({
+            _id: id
+        }, {
+            $set: {
+                user_image: {
+                    url: imageresult.secure_url,
+                    id: imageresult.public_id
+                }
+            }
+        })
+        res.status(200).json({
+            message: "Updated successfully",
+            result
+        })
+        //res.status(200).json(result);
+        console.log(result)
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({
+            error,
+            message: error.message
+        })
+    }
+}
+
+// ??? brisati i sve njegove recepte i komentare??? // samo za admin
 exports.deleteUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.userId)
+        const id = req.params.userId
+        if (!req.userData.isAdmin) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
+        const user = await User.findById(id)
         // console.log('user log: ' + user)
-        if (user.image) {
-            await cloudinary.uploader.destroy(user.image.id);
+        if (user.user_image) {
+            await cloudinary.v2.uploader.destroy(user.user_image.id, (error, result) => {
+                console.log(result, error)
+            });
         }
         await user.remove()
         res.status(200).json({

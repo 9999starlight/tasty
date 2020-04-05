@@ -5,11 +5,9 @@
 </template>
 
 <script>
-
 export default {
-  name: 'userpanel'
+  name: 'userpanel',
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -38,7 +38,6 @@ exports.loginValidation = (req, res, next) => {
 exports.newRecipeValidation = (req, res, next) => {
     const newRecipeSchema = Joi.object({
         'mealName': Joi.string().min(4).max(80).regex(/^(?!\s*$).{4,80}/i).required(),
-        'author': Joi.string().required(),
         'intro': Joi.string().min(4).max(80).regex(/^(?!\s*$).{4,80}/i).required(),
         'dishType': Joi.string().min(3).max(40).regex(/^(?!\s*$).{3,40}/i).required(),
         'level': Joi.string(),
@@ -90,10 +89,25 @@ exports.updateRecipeValidation = (req, res, next) => {
     next()
 }
 
+exports.updateRating = (req, res, next) => {
+    const updateRatingSchema = Joi.object({
+        'rate': Joi.number().required().integer().min(1).max(10)
+    })
+    const {
+        error
+    } = updateRatingSchema.validate(req.body)
+    if (error) {
+        console.log('joi error ' + error.details[0].message)
+        return res.status(400).json({
+            error: error.details[0].message
+        })
+    }
+    next()
+}
+
 exports.commentValidation = (req, res, next) => {
     const commentSchema = Joi.object({
         'commentedRecipeId': Joi.string().required(),
-        'author': Joi.string().required(),
         'commentBody': Joi.string().min(4).max(200).required()
     })
     const {

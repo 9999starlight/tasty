@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import {
+    store
+} from './store/store'
+// views
 import Home from './views/Home'
 import Browse from './views/Browse'
 import FoodFacts from './views/FoodFacts'
@@ -36,7 +40,17 @@ let router = new Router({
         {
             path: '/login',
             name: 'login',
-            component: Login
+            component: Login,
+            beforeEnter(to, from, next) {
+                // check status, if logged in can't go to login page before logout
+                if (!store.getters["getIsLogged"]) {
+                    next()
+                } else {
+                    next({
+                        name: "home"
+                    });
+                }
+            }
         },
         {
             path: '/wines',

@@ -6,11 +6,22 @@ const User = require('../models/user')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
 
-exports.getAllRecipes = async (req, res, next) => {
+exports.getRecipes = async (req, res, next) => {
     try {
-        const docs = await Recipe.find()
-        //console.log("getting ALL from database", docs)
-        //const orgUrl = req.originalUrl.slice(0, 8)
+        const queryObj = {
+            ...req.query
+        } // copy query object and then exclude fields
+        const excludedFields = ['page', 'sort', 'limit', 'fields']
+        excludedFields.forEach(el => delete queryObj[el])
+        let query = Recipe.find(queryObj)
+
+        // Sorting
+        if (req.query.sort) {
+            query = query.sort(req.query.sort)
+        }
+
+        const docs = await query
+        //console.log("getting recipes ", docs)
         const response = {
             recipes: docs.map(doc => {
                 return {
@@ -23,7 +34,7 @@ exports.getAllRecipes = async (req, res, next) => {
                     rating: doc.rating,
                     request: {
                         type: 'GET',
-                        url: `${req.protocol}://${req.get('host')}/recipes/single/${doc._id}` // works wherever deployed 
+                        url: `${req.protocol}://${req.get('host')}/recipes/${doc._id}` // works wherever deployed 
                     }
                 }
             })
@@ -50,8 +61,7 @@ exports.getSingleRecipe = async (req, res, next) => {
                     path: 'author'
                 }
             })
-        //.select('mealName author intro rating')// dodati sve za single recipe
-        console.log("getting single recipe" + doc)
+        //console.log("getting single recipe" + doc)
         if (doc)
             res.status(200).json(doc)
         else
@@ -67,48 +77,19 @@ exports.getSingleRecipe = async (req, res, next) => {
     }
 }
 
-exports.getRecipeByQuery = async (req, res, next) => {
-    const query = req.query
-    try {
-        const docs = await Recipe.find(query)
-        console.log("getting by query", docs)
-        const response = {
-            recipes: docs.map(doc => {
-                return {
-                    author: doc.author,
-                    mealName: doc.mealName,
-                    intro: doc.intro,
-                    _id: doc._id,
-                    level: doc.level,
-                    image: doc.image.url,
-                    rating: doc.rating,
-                    request: {
-                        type: 'GET',
-                        url: `${req.protocol}://${req.get('host')}/recipes/single/${doc._id}` // works wherever deployed 
-                    }
-                }
-            })
-        }
-        res.status(200).json(response)
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({
-            error,
-            message: error.message
-        })
-    }
-}
-
 exports.addNewRecipe = async (req, res, next) => {
-    // create new recipe
     try {
         let imageresult = ''
         if (req.file)
-            imageresult = await cloudinary.v2.uploader.upload(req.file.path, { folder: 'recipes' })
+            imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
+                folder: 'recipes'
+            }, (error, result) => {
+                console.log(result, error)
+            })
         const recipe = new Recipe({
             _id: new mongoose.Types.ObjectId(),
             mealName: req.body.mealName,
-            author: req.body.author, // author._id
+            author: req.userData.userId,
             intro: req.body.intro,
             dishType: req.body.dishType,
             level: req.body.level,
@@ -122,8 +103,7 @@ exports.addNewRecipe = async (req, res, next) => {
                 id: imageresult.public_id
             },
             ingredients: req.body.ingredients,
-            steps: req.body.steps,
-            rating: req.body.rating
+            steps: req.body.steps
         })
         const result = await recipe.save()
         await User.updateOne({
@@ -136,7 +116,6 @@ exports.addNewRecipe = async (req, res, next) => {
         //console.log(result)
         res.status(201).json({
             message: 'new recipe created',
-            // created
             createdRecipe: result
         })
     } catch (error) {
@@ -148,58 +127,43 @@ exports.addNewRecipe = async (req, res, next) => {
     }
 }
 
-exports.addComment = async (req, res, next) => {
+exports.updateRecipe = async (req, res, next) => {
     try {
-        // check if recipe id exists in recipe collection
-        const commentedRecipe = await Recipe.findById(req.body.commentedRecipeId)
-        if (!commentedRecipe) {
+        const id = req.params.recipeId
+        const recipeForUpdate = await Recipe.findById(id)
+        if (!recipeForUpdate) {
             return res.status(404).json({
                 message: "Recipe not found"
             });
         }
-        // if recipe id exists create new comment
-        const comment = new Comment({
-            _id: mongoose.Types.ObjectId(),
-            commentedRecipeId: req.body.commentedRecipeId,
-            author: req.body.author,
-            createdAt: new Date(),
-            commentBody: req.body.commentBody
-        })
-        const result = await comment.save()
-        const updateRecipeWithComment = await Recipe.updateOne({
-            _id: req.body.commentedRecipeId
-        }, {
-            $push: {
-                comments: result._id
+        if (!req.userData.isAdmin && req.userData.userId != recipeForUpdate.author) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
+        let imageresult = ''
+        if (req.file) {
+            if (!recipeForUpdate.image.id) {
+                imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
+                    folder: 'recipes'
+                }, (error, result) => {
+                    console.log(error)
+                })
+            } else {
+                await cloudinary.v2.uploader.destroy(recipeForUpdate.image.id, (error, result) => {
+                    console.log(error)
+                });
+                imageresult = await cloudinary.v2.uploader.upload(req.file.path, {
+                    folder: 'recipes'
+                }, (error, result) => {
+                    console.log(error)
+                })
             }
-        })
-        console.log("updated " + updateRecipeWithComment)
-        res.status(201).json({
-            message: "Comment saved",
-            createdComment: {
-                _id: result._id,
-                commentedRecipeId: result.commentedRecipeId,
-                author: result.author,
-                createdAt: result.createdAt,
-                commentBody: result.commentBody
-            },
-            request: {
-                type: 'GET',
-                url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${result._id}`
+            req.body.image = {
+                url: imageresult.secure_url,
+                id: imageresult.public_id
             }
-        })
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({
-            error,
-            message: error.message
-        })
-    }
-}
-
-exports.updateRecipe = async (req, res, next) => {
-    const id = req.params.recipeId
-    try {
+        }
         const result = await Recipe.updateOne({
             _id: id
         }, {
@@ -209,7 +173,6 @@ exports.updateRecipe = async (req, res, next) => {
             message: "Updated successfully",
             result
         })
-        //res.status(200).json(result);
         console.log(result)
     } catch (error) {
         console.log(error.message)
@@ -220,13 +183,83 @@ exports.updateRecipe = async (req, res, next) => {
     }
 }
 
+exports.addRating = async (req, res, next) => {
+    try {
+        const id = req.params.recipeId
+        const recipeForRate = await Recipe.findById(id)
+        if (!recipeForRate) {
+            return res.status(404).json({
+                message: "Recipe not found"
+            });
+        }
+        // restricton - user can't rate his own recipe
+        if (req.userData.userId == recipeForRate.author) {
+            return res.status(401).json({
+                message: `You can't rate your recipe`
+            })
+        }
+        // restriction - user can rate single recipe only once
+        let findUserId = recipeForRate.rates.find(rt => rt.ratedBy == req.userData.userId)
+        if (findUserId) {
+            return res.status(401).json({
+                message: `You have already rated this recipe`
+            })
+        }
+
+        await Recipe.updateOne({
+            _id: id
+        }, {
+            $push: {
+                rates: {
+                    ratedBy: req.userData.userId,
+                    rate: req.body.rate
+                }
+            }
+        })
+        // calculate and save overall rating
+        const setRating = await Recipe.findById(id)
+        const summed = setRating.rates.reduce((total, rt) => total + rt.rate, 0) / setRating.rates.length
+        console.log(summed)
+
+        const summedRating = await Recipe.updateOne({
+            _id: id
+        }, {
+            $set: {
+                rating: summed.toFixed(1)
+            }
+        })
+        console.log("rating: " + summed)
+        res.status(200).json({
+            message: "Recipe has been rated",
+            summedRating
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({
+            error,
+            message: error.message
+        })
+    }
+}
+
 exports.deleteRecipe = async (req, res) => {
-    // console.log(req.params.recipeId)
     try {
         const recipe = await Recipe.findById(req.params.recipeId)
+        if (!recipe) {
+            return res.status(404).json({
+                message: "Recipe not found"
+            });
+        }
         // console.log('recipe log: ' + recipe)
+        if (!req.userData.isAdmin && req.userData.userId != recipe.author) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
         if (recipe.image.id) {
-            await cloudinary.uploader.destroy(recipe.image.id);
+            await cloudinary.v2.uploader.destroy(recipe.image.id, (error, result) => {
+                console.log(result, error)
+            });
         }
         await Comment.deleteMany({
             commentedRecipeId: recipe._id

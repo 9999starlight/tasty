@@ -66,19 +66,38 @@ input[type="button"]:hover {
   width: 100%;
 }
 
+.messageWrapper {
+  @include boxSize($height: 40px);
+}
+
+.error {
+  @include fonts($color: crimson, $size: 0.8rem)
+}
+
 // animations transitions
 
 .fade-enter-active {
-  animation: fade 1s;
+  animation: fade 800;
 }
+
 .fade-leave-active {
-  animation: fade 1s reverse;
+  animation: fade 800 reverse;
+}
+
+.expand-enter-active {
+  animation: expand 0.6s;
+}
+
+.expand-leave-active {
+  animation: expand 0.6s reverse;
 }
 
 /* .btn {
 
 } */
 
-/* .error {
-  @include fonts($color: crimson, $size: 0.8rem)
-} */
+@media(min-width: 996px) {
+  .error {
+    @include fonts($size: 1rem)
+  }
+}

@@ -74,6 +74,15 @@ const recipeSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    rates: [{
+        _id: false,
+        ratedBy: {
+            type: mongoose.Schema.Types.ObjectId
+        },
+        rate: {
+            type: Number
+        }
+    }],
     rating: {
         type: Number,
         default: 0
@@ -85,5 +94,4 @@ const recipeSchema = mongoose.Schema({
     }] // attach related comments to recipe via ref
 })
 
-// export model for recipe
 module.exports = mongoose.model('Recipe', recipeSchema)

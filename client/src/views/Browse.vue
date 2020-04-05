@@ -5,11 +5,9 @@
 </template>
 
 <script>
-
 export default {
-  name: 'browse'
+  name: 'browse',
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

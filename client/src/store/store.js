@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import getRecipes from './modules/getRecipes'
 import currentUser from './modules/currentUser'
 Vue.use(Vuex)
@@ -10,5 +11,10 @@ export const store = new Vuex.Store({
   modules: {
     getRecipes,
     currentUser
-  }
+  },
+  plugins: [
+    createPersistedState({
+      paths: ['currentUser']
+    })
+  ]
 })

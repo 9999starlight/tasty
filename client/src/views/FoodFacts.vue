@@ -5,11 +5,9 @@
 </template>
 
 <script>
-
 export default {
-  name: 'foodfacts'
+  name: 'foodfacts',
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

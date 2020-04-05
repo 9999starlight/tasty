@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
         unique: true,
         minlength: 4,
         maxlength: 20,
-        match: /^[a-z0-9_-]{4,20}$/igm  // alpfanumeric, alowed _ -
+        match: /^[a-z0-9_-]{4,20}$/i  // alpfanumeric, alowed _ -
     },
     password: {
         type: String,
@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
     },
     user_image: {
         type: Object, reqired: false
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

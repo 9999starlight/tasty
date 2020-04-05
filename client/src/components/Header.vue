@@ -6,57 +6,46 @@
     ></div>
     <div class="menuWrapper flex">
       <h2 class="logo">Tasty</h2>
-      <div
-        v-if="burgerIcon"
-        class="menu flex flexCenter"
-        @click="showMenu()"
-      >
+      <div v-if="burgerIcon" class="menu flex flexCenter" @click="showMenu()">
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
       </div>
     </div>
     <nav class="flex">
-      <ul
-        v-if="displayMenu"
-        class="links flex"
-      >
-        <!-- v-if="loggedIn" for each li-->
+      <ul v-if="displayMenu" class="links flex">
+        <!-- if loggedIn -->
         <router-link
+          v-if="getIsLogged"
           :to="{ name: 'userpanel' }"
           tag="li"
           active-class="active"
           class="flex"
-        ><a>&nbsp;
-            <font-awesome-icon
-              :icon="['fa', 'user']"
-              class="userIcon"
-            >
-            </font-awesome-icon>My Account
-          </a></router-link>
-        <li class="flex">
-          <button>
-            <font-awesome-icon
-              :icon="['fas', 'sign-out-alt']"
-              class="userIcon"
-            >
+          ><a
+            >&nbsp;
+            <font-awesome-icon :icon="['fa', 'user']" class="userIcon">
+            </font-awesome-icon
+            >My Account
+          </a></router-link
+        >
+        <li class="flex" v-if="getIsLogged">
+          <button @click="logout">
+            <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="userIcon">
             </font-awesome-icon>
             Logout
           </button>
         </li>
         <!-- end logged in -->
-        <!-- v-if="!loggedIn" -->
+        <!-- if !loggedIn -->
         <router-link
+          v-if="!getIsLogged"
           :to="{ name: 'login' }"
           tag="li"
           class="flex"
           active-class="active"
         >
           <a>
-            <font-awesome-icon
-              :icon="['fas', 'sign-in-alt']"
-              class="userIcon"
-            >
+            <font-awesome-icon :icon="['fas', 'sign-in-alt']" class="userIcon">
             </font-awesome-icon>
             Login
           </a>
@@ -68,74 +57,93 @@
           class="flex"
           active-class="active"
           exact
-        ><a>Home</a></router-link>
+          ><a>Home</a></router-link
+        >
         <router-link
           :to="{ name: 'browse' }"
           tag="li"
           active-class="active"
           class="flex"
-        ><a>Recipes</a></router-link>
+          ><a>Recipes</a></router-link
+        >
         <router-link
           :to="{ name: 'foodfacts' }"
           tag="li"
           active-class="active"
           class="flex"
-        ><a>Food Facts</a></router-link>
+          ><a>Food Facts</a></router-link
+        >
         <router-link
           :to="{ name: 'wines' }"
           tag="li"
           active-class="active"
           class="flex"
-        ><a>Wines</a></router-link>
+          ><a>Wines</a></router-link
+        >
       </ul>
     </nav>
   </header>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
+
 export default {
-  name: "app-header",
+  name: 'app-header',
   data() {
     return {
       displayMenu: false,
-      burgerIcon: true
-    };
+      burgerIcon: true,
+    }
   },
 
   created() {
-    window.addEventListener("load", this.onResize);
-    window.addEventListener("resize", this.onResize);
+    window.addEventListener('load', this.onResize)
+    window.addEventListener('resize', this.onResize)
   },
 
   destroyed() {
-    window.removeEventListener("load", this.onResize);
-    window.removeEventListener("resize", this.onResize);
+    window.removeEventListener('load', this.onResize)
+    window.removeEventListener('resize', this.onResize)
   },
 
   watch: {
     $route() {
       window.innerWidth > 995
         ? (this.displayMenu = true)
-        : (this.displayMenu = false);
-    }
+        : (this.displayMenu = false)
+    },
+  },
+
+  computed: {
+    ...mapActions(['logoutUser']),
+    ...mapGetters(['getCurrentUser', 'getIsLogged']),
   },
 
   methods: {
     showMenu() {
-      this.displayMenu = !this.displayMenu;
+      this.displayMenu = !this.displayMenu
     },
 
     onResize() {
       if (window.innerWidth > 995) {
-        this.burgerIcon = false;
-        this.displayMenu = true;
+        this.burgerIcon = false
+        this.displayMenu = true
       } else {
-        this.displayMenu = false;
-        this.burgerIcon = true;
+        this.displayMenu = false
+        this.burgerIcon = true
       }
-    }
-  }
-};
+    },
+
+    logout() {
+      localStorage.removeItem('userToken')
+      this.$store.dispatch('logoutUser')
+      delete axios.defaults.headers.common['Authorization']
+      this.$router.push('home')
+    },
+  },
+}
 </script>
 <style lang="scss" scoped>
 header {

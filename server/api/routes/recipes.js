@@ -4,49 +4,46 @@ const authUser = require('../middlewares/auth_user')
 const upload = require('../middlewares/multer')
 
 const {
-    getAllRecipes,
+    getRecipes,
     getSingleRecipe,
-    getRecipeByQuery,
     addNewRecipe,
-    addComment,
     updateRecipe,
+    addRating,
     deleteRecipe
 } = require('../controllers/recipes_ctrl')
-const { newRecipeValidation, updateRecipeValidation, commentValidation } = require('../joi_validation')
+const {
+    newRecipeValidation,
+    updateRecipeValidation,
+    updateRating
+} = require('../joi_validation')
 
-// GET
-// @desc    Get all recipes
-// @route   GET /recipes/all
+// @desc    Get recipes
+// @route   GET /recipes
 // @access  Public
-router.get('/all', getAllRecipes)
+router.get('/', getRecipes)
+
 // @desc    Get single recipe
-// @route   GET /recipes/single/:recipeId
+// @route   GET /recipes/:recipeId
 // @access  Public
-router.get('/single/:recipeId', getSingleRecipe)
-// @desc    Get recipe by query
-// @route   GET ?...
-// @access  Public
-router.get('/', getRecipeByQuery)
+router.get('/:recipeId', getSingleRecipe)
 
-// POST
 // @desc    POST recipe
-// @route   POST
+// @route   POST /recipes
 // @access  Private
 router.post('/', authUser, upload.single('image'), newRecipeValidation, addNewRecipe)
-// @desc    POST comment
-// @route   POST /addComment
-// @access  Private
-router.post('/addComment', authUser, commentValidation, addComment)
 
-// UPDATE
 // @desc    PATCH recipe
-// @route   PATCH /:recipeId
+// @route   PATCH /recipes/:recipeId
 // @access  Private
-router.patch('/:recipeId', authUser, updateRecipeValidation, updateRecipe)
+router.patch('/:recipeId', authUser, upload.single('image'), updateRecipeValidation, updateRecipe)
 
-// DELETE
+// @desc    PATCH rate recipe & update rating
+// @route   PATCH /recipes/rate/:recipeId
+// @access  Private
+router.patch('/rate/:recipeId', authUser, updateRating, addRating)
+
 // @desc    DELETE recipe
-// @route   DELETE /:recipeId
+// @route   DELETE /recipes/:recipeId
 // @access  Private
 router.delete('/:recipeId', authUser, deleteRecipe)
 

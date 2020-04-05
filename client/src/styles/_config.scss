@@ -18,7 +18,7 @@ $backConfig: no-repeat center center/cover;
 }
 
 // boxes - size/alignment
-@mixin boxSize($width: false, $height: false, $maxWidth: false, $maxHeight: false, $minHeight: false) {
+@mixin boxSize($width: false, $height: false, $maxWidth: false, $minWidth: false, $maxHeight: false, $minHeight: false) {
   @if($width) {
     width: $width;
   }
@@ -29,6 +29,10 @@ $backConfig: no-repeat center center/cover;
 
   @if($maxWidth) {
     max-width: $maxWidth;
+  }
+
+  @if($minWidth) {
+    min-width: $minWidth;
   }
 
   @if($maxHeight) {
@@ -86,7 +90,10 @@ $backConfig: no-repeat center center/cover;
 }
 
 // padding & margin classes
-$sizes: 1, 2, 3;
+$sizes: 1,
+2,
+3;
+
 @each $size in $sizes {
   .pd#{$size} {
     padding: #{$size}rem;

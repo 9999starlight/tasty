@@ -8,21 +8,28 @@ const {
     deleteSingleComment,
     deleteMultipleComments
 } = require('../controllers/comments_ctrl')
-// const { commentValidation } = require('../joi_validation')
+const { commentValidation } = require('../joi_validation')
 
-// handle GET requests - ???? admin - PROTECTED - added authUser middleware 
+// @desc    GET comment
+// @route   GET /comments
+// @access  Private - Admin
 router.get('/', authUser, getAllComments)
 
-// GET by id requests - ????
-// router.get('/:commentId', getSingleComment)
+// @desc    GET comment
+// @route   GET /comments/:commentId
+// @access  Private
+ router.get('/:commentId', authUser, getSingleComment)
 
-// handle POST requests - PROTECTED - added authUser middleware 
-// router.post('/', authUser, commentValidation, addComment)
+// @desc    POST comment
+// @route   POST /comments
+// @access  Private
+router.post('/', authUser, commentValidation, addComment)
 
-// DELETE requests - PROTECTED - added authUser middleware - experimental for admin
+// @desc    DELETE comment
+// @route   DELETE /comments/:commentId
+// @access  Private
 router.delete('/:commentId', authUser, deleteSingleComment)
 
-// delete many experimental for admin - PROTECTED - added authUser middleware 
 // router.delete('/delmany/:commentauthor', authUser, deleteMultipleComments)
 
 module.exports = router

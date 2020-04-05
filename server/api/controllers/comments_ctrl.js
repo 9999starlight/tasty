@@ -4,8 +4,13 @@ const Recipe = require('../models/recipe')
 
 exports.getAllComments = async (req, res, next) => {
     try {
-        const docs = Comment.find()
-        console.log("getting ALL comments from database", docs)
+        const docs = await Comment.find()
+        // console.log("getting ALL comments from database", docs)
+        if (!req.userData.isAdmin) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
         const response = {
             comments: docs.map(doc => {
                 return {
@@ -57,12 +62,64 @@ exports.getSingleComment = async (req, res, next) => {
     }
 }
 
-exports.deleteSingleComment = async (req, res, next) => {
-    const id = req.params.commentId
+exports.addComment = async (req, res, next) => {
     try {
+        const commentedRecipe = await Recipe.findById(req.body.commentedRecipeId)
+        if (!commentedRecipe) {
+            return res.status(404).json({
+                message: "Recipe not found"
+            });
+        }
+        // if recipe id exists create new comment
+        const comment = new Comment({
+            _id: mongoose.Types.ObjectId(),
+            commentedRecipeId: req.body.commentedRecipeId,
+            author: req.userData.userId,
+            createdAt: new Date(),
+            commentBody: req.body.commentBody
+        })
+        const result = await comment.save()
+        await Recipe.updateOne({
+            _id: req.body.commentedRecipeId
+        }, {
+            $push: {
+                comments: result._id
+            }
+        })
+        res.status(201).json({
+            message: "Comment saved",
+            createdComment: {
+                _id: result._id,
+                commentedRecipeId: result.commentedRecipeId,
+                author: result.author,
+                createdAt: result.createdAt,
+                commentBody: result.commentBody
+            },
+            request: {
+                type: 'GET',
+                url: `${req.protocol}://${req.get('host')}${req.originalUrl}/${result._id}`
+            }
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({
+            error,
+            message: error.message
+        })
+    }
+}
+
+exports.deleteSingleComment = async (req, res, next) => {
+    try {
+        const id = req.params.commentId
         const result = await Comment.findById({
             _id: id
         })
+        if (!req.userData.isAdmin && req.userData.userId != result.author) {
+            return res.status(401).json({
+                message: `Unauthorized - access denied!`
+            })
+        }
         // pull comment id from recipe comments ref array
         await Recipe.updateOne({
             _id: result.commentedRecipeId
@@ -87,9 +144,8 @@ exports.deleteSingleComment = async (req, res, next) => {
     }
 }
 
-exports.deleteMultipleComments = async (req, res, next) => {
+/* exports.deleteMultipleComments = async (req, res, next) => {
     try {
-        // mongo method deleteOne
         const result = Comment.deleteMany({
             author: req.params.author
         })
@@ -103,4 +159,4 @@ exports.deleteMultipleComments = async (req, res, next) => {
             message: error.message
         })
     }
-}
+} */
