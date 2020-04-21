@@ -6,9 +6,10 @@ const {
     loginUser,
     getSingleUser,
     deleteUser,
-    updateUserImage
+    updateUserImage,
+    addToFavorites
 } = require('../controllers/users_ctrl')
-const { registerValidation, loginValidation } = require('../joi_validation')
+const { registerValidation, loginValidation, favoritesValidation } = require('../joi_validation')
 const upload = require('../middlewares/multer')
 
 // @desc    POST user registration
@@ -30,6 +31,11 @@ router.get('/:userId', authUser, getSingleUser)
 // @route   PATCH /users/:userId
 // @access  Private
 router.patch('/:userId', authUser, upload.single('user_image'), updateUserImage)
+
+// @desc    PATCH update user photo
+// @route   PATCH /users/:userId
+// @access  Private
+router.patch('/favorites/:userId', authUser, favoritesValidation, addToFavorites)
 
 // @desc    DELETE remove user
 // @route   DELETE /users/:userId

@@ -1,7 +1,9 @@
 {
+ "vetur.format.defaultFormatter.html": "prettier",
+  "vetur.format.defaultFormatter.js": "prettier-eslint",
   "prettier.semi": false,
   "singleAttributePerLine": true,
   "singleQuote": true,
-  "vetur.format.defaultFormatter.html": "prettier",
-  "vetur.format.defaultFormatter.js": "prettier-eslint"
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "none"
 }

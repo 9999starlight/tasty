@@ -36,6 +36,15 @@ input[type="button"]:hover {
 
 // utillity classes
 
+.container {
+  @include boxSize($width: 100%);
+  @include alignment($display: flex, $direction:column, $justify: center, $align: center, $textAlign: center);
+  padding: 1rem;
+  margin-top: 3.5rem;
+  flex: 1;
+  overflow: auto;
+}
+
 .flex {
   display: flex;
 }

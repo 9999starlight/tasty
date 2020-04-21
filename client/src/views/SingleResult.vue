@@ -1,5 +1,6 @@
 <template>
-  <div class="singleResultWrapper">
+  <div class="singleResultWrapper container">
+    <Loader v-if="isLoading" />
     <div v-if="this.ready" class="singleResultContainer">
       <h1>{{ recipe.mealName }}</h1>
       <p>
@@ -35,8 +36,10 @@
 
       <p>{{ recipe.intro }}</p>
       <p>Ingredients</p>
-      <div v-for="ingredient in recipe.ingredients" :key="ingredient.index">
-        <p>{{ ingredient }}</p>
+      <div v-for="ingred in recipe.ingredients" :key="ingred.index">
+        <p>
+          {{ ingred.ingredient }} <span>{{ ingred.amount }}</span>
+        </p>
       </div>
       <p>Directions</p>
       <div v-for="step in recipe.steps" :key="step.index">
@@ -56,26 +59,60 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import loaderMixin from '../mixins/loaderMixin'
+import Loader from '../components/Loader'
 export default {
   data() {
     return {
       ready: false,
-      recipe: null,
+      recipe: null
     }
   },
   name: 'SingleResult',
-
-  // resolve action promise beforeCreate
-  async beforeCreate() {
-    await this.$store.dispatch('fetchSingleRecipe', this.$route.params.id)
-    this.recipe = Object.assign({}, this.getSingleRecipe)
-    this.ready = true
+  components: {
+    Loader
   },
 
+  async mounted() {
+    try {
+        this.toggleLoader()
+        const res = await this.$store.dispatch('fetchSingleRecipe', this.$route.params.id)
+        // console.log(res)
+        if(res) {
+        this.recipe = Object.assign({}, this.getSingleRecipe)
+        this.ready = true
+        }
+        this.toggleLoader()
+      } catch (error) {
+        console.log(error.message)
+      }
+  },
+
+  mixins: [loaderMixin],
+/* 
+  watch: {
+    $route: 'fetchRecipe'
+  },
+ */
   computed: {
     ...mapActions(['fetchSingleRecipe']),
-    ...mapGetters(['getSingleRecipe', 'getDefaultImage']),
+    ...mapGetters(['getSingleRecipe', 'getDefaultImage'])
   },
+
+  /* methods: {
+    async fetchRecipe() {
+      try {
+        this.toggleLoader()
+        // console.log('SingleResult param id: ', this.$route.params.id)
+        await this.$store.dispatch('fetchSingleRecipe', this.$route.params.id)
+        this.recipe = Object.assign({}, this.getSingleRecipe)
+        this.toggleLoader()
+        this.ready = true
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+  } */
 }
 </script>
 

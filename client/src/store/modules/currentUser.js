@@ -52,6 +52,7 @@ const actions = {
         localStorage.getItem('userToken'),
         jwt.decode(localStorage.getItem('userToken'))
       )
+      console.log(response.data)
       return response.data
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -67,7 +68,9 @@ const actions = {
     commit('setUserToken', '')
     commit('setCurrentUser', null)
     commit('setIsLogged', false)
-  },
+    delete axios.defaults.headers.common['Authorization']
+    localStorage.removeItem('userToken')
+  }
 }
 
 const mutations = {

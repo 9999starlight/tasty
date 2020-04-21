@@ -13,7 +13,7 @@
               :src="getDefaultImage"
               :key="recipe._id"
               :alt="recipe.mealName"
-            />
+            /> 
             <img
               v-else
               :src="recipe.image"
@@ -73,14 +73,14 @@ export default {
     }
   }
 }
-
+/* 
 @media (min-width: 500px) {
   .slideContainer {
     figure {
       @include boxSize($height: 400px);
     }
   }
-}
+} */
 
 /* @media (min-width: 776px) {
   .slideContainer {
@@ -89,19 +89,19 @@ export default {
     }
   }
 } */
-@media (min-width: 996px) {
+/* @media (min-width: 996px) {
   .slideContainer {
     figure {
       @include boxSize($height: 400px);
     }
   }
-}
+} */
 
-@media (min-width: 996px) {
+/* @media (min-width: 996px) {
   .slideContainer {
     figure {
       @include boxSize($height: 500px);
     }
   }
-}
+} */
 </style>

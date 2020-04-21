@@ -1,5 +1,5 @@
 <template>
-  <div class="formWrapper flex">
+  <div class="formWrapper container">
     <form class="loginForm flex pd1" enctype="multipart/form-data">
       <div class="formHeader flex mgb2">
         <h2 v-if="!showSignUp" class="mgb1">Login</h2>
@@ -63,7 +63,7 @@ export default {
       password: '',
       image: '',
       errorMessage: '',
-      timeSet: null,
+      timeSet: null
     }
   },
 
@@ -74,7 +74,7 @@ export default {
 
   computed: {
     ...mapActions(['loginUser', 'signUpUser']),
-    ...mapGetters(['getUserToken', 'getErrorMessage']),
+    ...mapGetters(['getUserToken', 'getErrorMessage', 'getIsLogged'])
   },
 
   methods: {
@@ -103,12 +103,7 @@ export default {
       this.image = this.$refs.image.files[0]
     },
 
-    created() {
-      console.log(this.getUserToken)
-    },
-
     // DODATI REFRESH TOKEN
-    // dodaj post request za formu sa SLIKOM!!!
     signUp() {
       const isValid = this.validation()
       if (!isValid) return
@@ -122,9 +117,9 @@ export default {
         .dispatch('signUpUser', formData)
         .then((res) => {
           if (res) {
-            //console.log(res);
-            this.$router.go(-1)
-            //console.log(this.getUserToken);
+            //console.log(res)
+            location.reload()
+            //this.$router.push("home")
           } else {
             this.errorMessage = this.getErrorMessage
             this.updateMessage(this.errorMessage)
@@ -141,14 +136,12 @@ export default {
       this.$store
         .dispatch('loginUser', {
           username: this.username,
-          password: this.password,
+          password: this.password
         })
         .then((res) => {
           if (res) {
             //console.log(res);
-            // this.$router.push("home");
-            this.$router.go(-1)
-            //console.log(this.getUserToken);
+            location.reload()
           } else {
             this.errorMessage = this.getErrorMessage
             this.updateMessage(this.errorMessage)
@@ -157,16 +150,17 @@ export default {
         .catch((err) => {
           console.log(err.message)
         })
-    },
-  },
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .formWrapper {
-  @include alignment($direction: column);
+  margin: 0;
+/*   @include alignment($direction: column);
   @include boxSize($minHeight: 100%, $width: 100%);
-  flex: 1;
+  flex: 1; */
 }
 .loginForm {
   flex: 1;

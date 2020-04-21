@@ -43,8 +43,8 @@ export default {
   // resolve action promise in beforeCreate
   async beforeCreate() {
     try {
-      await this.$store.dispatch('fetchPopularRecipes')
-      this.recipesArray = [...this.getFetchedRecipes]
+      await this.$store.dispatch('fetchSliderRecipes')
+      this.recipesArray = [...this.getSliderRecipes]
       this.ready = true
       // console.log(this.recipesArray);
     } catch (error) {
@@ -61,8 +61,8 @@ export default {
   },
 
   computed: {
-    ...mapActions(['fetchPopularRecipes']),
-    ...mapGetters(['getFetchedRecipes', 'getDefaultImage']),
+    ...mapActions(['fetchSliderRecipes']),
+    ...mapGetters(['getSliderRecipes', 'getDefaultImage']),
   },
 
   methods: {
@@ -93,6 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 .popularWrapper {
+  @include boxSize($maxWidth: 400px);
   .carouselContainer {
     position: relative;
     .carouselBtn {
@@ -127,7 +128,7 @@ export default {
   }
 }
  */
-@media (min-width: 996px) {
+/* @media (min-width: 996px) {
   .popularWrapper {
     @include boxSize($width: 70%);
     .carouselContainer {
@@ -136,7 +137,7 @@ export default {
       }
     }
   }
-}
+} */
 
 /* @media (min-width: 996px) {
   .popularWrapper {

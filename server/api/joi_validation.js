@@ -1,123 +1,166 @@
 const Joi = require('@hapi/joi')
 
 exports.registerValidation = (req, res, next) => {
-    const registerUserSchema = Joi.object({
-        'username': Joi.string().min(4).max(20).regex(/^[a-z0-9_-]{4,20}$/i).required(),
-        'password': Joi.string().min(6).max(1024).required(),
-        'user_image': Joi.object()
+  const registerUserSchema = Joi.object({
+    username: Joi.string()
+      .min(4)
+      .max(20)
+      .regex(/^[a-z0-9_-]{4,20}$/i)
+      .required(),
+    password: Joi.string().min(6).max(1024).required(),
+    user_image: Joi.object()
+  })
+  const { error } = registerUserSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
     })
-    const {
-        error
-    } = registerUserSchema.validate(req.body)
-    if (error) {
-        console.log('joi error ' + error.details[0].message)
-        return res.status(400).json({
-            error: error.details[0].message
-        })
-    }
-    next()
+  }
+  next()
 }
 
 exports.loginValidation = (req, res, next) => {
-    const loginUserSchema = Joi.object({
-        'username': Joi.string().min(4).max(20).regex(/^[a-z0-9_-]{4,20}$/i).required(),
-        'password': Joi.string().min(6).max(1024).required()
+  const loginUserSchema = Joi.object({
+    username: Joi.string()
+      .min(4)
+      .max(20)
+      .regex(/^[a-z0-9_-]{4,20}$/i)
+      .required(),
+    password: Joi.string().min(6).max(1024).required()
+  })
+  const { error } = loginUserSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
     })
-    const {
-        error
-    } = loginUserSchema.validate(req.body)
-    if (error) {
-        console.log('joi error ' + error.details[0].message)
-        return res.status(400).json({
-            error: error.details[0].message
-        })
-    }
-    next()
+  }
+  next()
+}
+
+exports.favoritesValidation = (req, res, next) => {
+  const favoritesSchema = Joi.object({
+    favoriteId: Joi.string().required()
+  })
+  const { error } = favoritesSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
+    })
+  }
+  next()
 }
 
 exports.newRecipeValidation = (req, res, next) => {
-    const newRecipeSchema = Joi.object({
-        'mealName': Joi.string().min(4).max(80).regex(/^(?!\s*$).{4,80}/i).required(),
-        'intro': Joi.string().min(4).max(80).regex(/^(?!\s*$).{4,80}/i).required(),
-        'dishType': Joi.string().min(3).max(40).regex(/^(?!\s*$).{3,40}/i).required(),
-        'level': Joi.string(),
-        'timing': Joi.string(),
-        'persons': Joi.number().required(),
-        'regional': Joi.string(),
-        'vegetarian': Joi.boolean(),
-        'glutenFree': Joi.boolean(),
-        'image': Joi.object(),
-        'ingredients': Joi.array().items(Joi.string().required()).required(),
-        'steps': Joi.array().items(Joi.string().required()).required()
+  const newRecipeSchema = Joi.object({
+    mealName: Joi.string()
+      .min(4)
+      .max(80)
+      .regex(/^(?!\s*$).{4,80}/i)
+      .required(),
+    intro: Joi.string()
+      .min(4)
+      .max(80)
+      .regex(/^(?!\s*$).{4,80}/i)
+      .required(),
+    dishType: Joi.string()
+      .min(3)
+      .max(40)
+      .regex(/^\b(pasta|salad|bread|soup|side dish|roast|pizza|stew|sandwich|pastry|sauce|cookie|dessert|drink|main|snack)\b$/i)
+      .required(),
+    level: Joi.string().regex(/^\b(easy|medium|hard)\b$/i),
+    timing: Joi.string(),
+    persons: Joi.number().required(),
+    regional: Joi.string(),
+    vegetarian: Joi.boolean(),
+    glutenFree: Joi.boolean(),
+    image: Joi.object(),
+    ingredients: Joi.array()
+      .items({
+        ingredient: Joi.string().required(),
+        amount: Joi.string()
+      })
+      .required(),
+    steps: Joi.array().items(Joi.string().required()).required(),
+    author: Joi.string()
+  })
+  const { error } = newRecipeSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
     })
-    const {
-        error
-    } = newRecipeSchema.validate(req.body)
-    if (error) {
-        console.log('joi error ' + error.details[0].message)
-        return res.status(400).json({
-            error: error.details[0].message
-        })
-    }
-    next()
+  }
+  next()
 }
 
 exports.updateRecipeValidation = (req, res, next) => {
-    const updateRecipeSchema = Joi.object({
-        'mealName': Joi.string().min(4).max(80).regex(/^(?!\s*$).{4,80}/i),
-        'intro': Joi.string().min(4).max(80).regex(/^(?!\s*$).{4,80}/i),
-        'dishType': Joi.string().min(3).max(40).regex(/^(?!\s*$).{3,40}/i),
-        'level': Joi.string(),
-        'timing': Joi.string(),
-        'persons': Joi.number(),
-        'regional': Joi.string(),
-        'vegetarian': Joi.boolean(),
-        'glutenFree': Joi.boolean(),
-        'image': Joi.object(),
-        'ingredients': Joi.array().items(Joi.string().required()),
-        'steps': Joi.array().items(Joi.string().required())
+  const updateRecipeSchema = Joi.object({
+    mealName: Joi.string()
+      .min(4)
+      .max(80)
+      .regex(/^(?!\s*$).{4,80}/i),
+    intro: Joi.string()
+      .min(4)
+      .max(80)
+      .regex(/^(?!\s*$).{4,80}/i),
+    dishType: Joi.string()
+      .min(3)
+      .max(40)
+      .regex(/^(?!\s*$).{3,40}/i),
+    level: Joi.string(),
+    timing: Joi.string(),
+    persons: Joi.number(),
+    regional: Joi.string(),
+    vegetarian: Joi.boolean(),
+    glutenFree: Joi.boolean(),
+    image: Joi.object(),
+    // ingredients: Joi.array().items(Joi.string().required()),
+    ingredients: Joi.array()
+      .items({
+        ingredient: Joi.string().required(),
+        amount: Joi.string()
+      })
+      .required(),
+    steps: Joi.array().items(Joi.string().required())
+  })
+  const { error } = updateRecipeSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
     })
-    const {
-        error
-    } = updateRecipeSchema.validate(req.body)
-    if (error) {
-        console.log('joi error ' + error.details[0].message)
-        return res.status(400).json({
-            error: error.details[0].message
-        })
-    }
-    next()
+  }
+  next()
 }
 
 exports.updateRating = (req, res, next) => {
-    const updateRatingSchema = Joi.object({
-        'rate': Joi.number().required().integer().min(1).max(10)
+  const updateRatingSchema = Joi.object({
+    rate: Joi.number().required().integer().min(1).max(10)
+  })
+  const { error } = updateRatingSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
     })
-    const {
-        error
-    } = updateRatingSchema.validate(req.body)
-    if (error) {
-        console.log('joi error ' + error.details[0].message)
-        return res.status(400).json({
-            error: error.details[0].message
-        })
-    }
-    next()
+  }
+  next()
 }
 
 exports.commentValidation = (req, res, next) => {
-    const commentSchema = Joi.object({
-        'commentedRecipeId': Joi.string().required(),
-        'commentBody': Joi.string().min(4).max(200).required()
+  const commentSchema = Joi.object({
+    commentedRecipeId: Joi.string().required(),
+    commentBody: Joi.string().min(4).max(200).required()
+  })
+  const { error } = commentSchema.validate(req.body)
+  if (error) {
+    console.log('joi error ' + error.details[0].message)
+    return res.status(400).json({
+      error: error.details[0].message
     })
-    const {
-        error
-    } = commentSchema.validate(req.body)
-    if (error) {
-        console.log('joi error ' + error.details[0].message)
-        return res.status(400).json({
-            error: error.details[0].message
-        })
-    }
-    next()
+  }
+  next()
 }

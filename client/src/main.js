@@ -21,7 +21,9 @@ import {
   faUser,
   faSignOutAlt,
   faSignInAlt,
-  faWeight
+  faWeight,
+  faUserShield,
+  faChevronDown
   //faSearch
 } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -30,7 +32,7 @@ import {
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
-library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight)
+library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false

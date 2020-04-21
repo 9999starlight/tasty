@@ -14,9 +14,38 @@
     </div>
     <nav class="flex">
       <ul v-if="displayMenu" class="links flex">
+        <router-link
+          :to="{ name: 'home' }"
+          tag="li"
+          class="flex"
+          active-class="active"
+          exact
+          ><a>Home</a></router-link
+        >
+        <!-- <router-link
+          :to="{ name: 'browse' }"
+          tag="li"
+          active-class="active"
+          class="flex"
+          ><a>Recipes</a></router-link
+        > -->
+        <router-link
+          :to="{ name: 'foodfacts' }"
+          tag="li"
+          active-class="active"
+          class="flex"
+          ><a>Food Facts</a></router-link
+        >
+        <router-link
+          :to="{ name: 'wines' }"
+          tag="li"
+          active-class="active"
+          class="flex"
+          ><a>Wines</a></router-link
+        >
         <!-- if loggedIn -->
         <router-link
-          v-if="getIsLogged"
+          v-if="authUser == true"
           :to="{ name: 'userpanel' }"
           tag="li"
           active-class="active"
@@ -25,7 +54,20 @@
             >&nbsp;
             <font-awesome-icon :icon="['fa', 'user']" class="userIcon">
             </font-awesome-icon
-            >My Account
+            >{{ getCurrentUser.username }}
+          </a></router-link
+        >
+        <router-link
+          v-if="authAdmin == true"
+          :to="{ name: 'adminpanel' }"
+          tag="li"
+          active-class="active"
+          class="flex"
+          ><a
+            >&nbsp;
+            <font-awesome-icon :icon="['fa', 'user-shield']" class="userIcon">
+            </font-awesome-icon
+            >Admin
           </a></router-link
         >
         <li class="flex" v-if="getIsLogged">
@@ -51,35 +93,6 @@
           </a>
         </router-link>
         <!-- end logged out -->
-        <router-link
-          :to="{ name: 'home' }"
-          tag="li"
-          class="flex"
-          active-class="active"
-          exact
-          ><a>Home</a></router-link
-        >
-        <router-link
-          :to="{ name: 'browse' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>Recipes</a></router-link
-        >
-        <router-link
-          :to="{ name: 'foodfacts' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>Food Facts</a></router-link
-        >
-        <router-link
-          :to="{ name: 'wines' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>Wines</a></router-link
-        >
       </ul>
     </nav>
   </header>
@@ -87,14 +100,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import axios from 'axios'
+//import axios from 'axios'
 
 export default {
   name: 'app-header',
   data() {
     return {
       displayMenu: false,
-      burgerIcon: true,
+      burgerIcon: true
     }
   },
 
@@ -113,12 +126,20 @@ export default {
       window.innerWidth > 995
         ? (this.displayMenu = true)
         : (this.displayMenu = false)
-    },
+    }
   },
 
   computed: {
     ...mapActions(['logoutUser']),
     ...mapGetters(['getCurrentUser', 'getIsLogged']),
+    authUser() {
+      return (
+        this.getCurrentUser !== null && this.getCurrentUser.isAdmin == false
+      )
+    },
+    authAdmin() {
+      return this.getCurrentUser !== null && this.getCurrentUser.isAdmin == true
+    }
   },
 
   methods: {
@@ -137,12 +158,10 @@ export default {
     },
 
     logout() {
-      localStorage.removeItem('userToken')
       this.$store.dispatch('logoutUser')
-      delete axios.defaults.headers.common['Authorization']
-      this.$router.push('home')
-    },
-  },
+      location.reload()
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -153,7 +172,7 @@ header {
   width: 100%;
   top: 0;
   background-color: $white;
-  z-index: 2;
+  z-index: 5;
 
   filter {
     position: absolute;

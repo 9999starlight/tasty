@@ -4,32 +4,52 @@ import {
 import axios from 'axios'
 
 const state = {
-    fetchedRecipes: [],
+    sliderRecipes: [],
+    queriedRecipes: [],
     defaultImage: require('@/assets/default_recipe.jpg'),
     singleRecipe: ''
 }
 
 const actions = {
-    fetchPopularRecipes: async ({
+    fetchSliderRecipes: async ({
         commit
     }) => {
         try {
             const response = await axios.get(
                 `${ recipesUrl }?sort=-rating`
             )
-            // console.log(response.data.recipes)
+            //console.log(response)
             let resultsArray = []
             if (response.data.recipes.length) {
                 response.data.recipes.forEach(d => resultsArray.push(d))
                 const popularArray = resultsArray.slice(0, 5)
-                commit('setRecipeResults', popularArray)
+                commit('setSliderRecipes', popularArray)
             } else {
                 const notFoundMessage = 'Not found'
-                commit('setRecipeResults', notFoundMessage)
+                commit('setSliderRecipes', notFoundMessage)
             }
         } catch (error) {
-            console.log(error.message)
-            //commit('setRecipeResults', error.message)
+            console.log(error.response.data.message)
+            //commit('setSliderRecipes', error.message)
+        }
+    },
+
+    fetchQueriedRecipes: async ({
+        commit
+    }, payload) => {
+        try {
+            const response = await axios.get(`${recipesUrl}`, {
+                params: payload
+              })
+            console.log(response)
+            let resultsArray = []
+            if (response.data.recipes.length) {
+                response.data.recipes.forEach(d => resultsArray.push(d))
+                commit('setQueriedRecipes', resultsArray)
+            }
+        } catch (error) {
+            console.log(error.response.data.message)
+            //commit('setQueriedRecipes', error.message)
         }
     },
 
@@ -37,25 +57,32 @@ const actions = {
         commit
     }, id) => {
         try {
+            console.log('client sends this id: ', id)
             const response = await axios.get(
                 `${ recipesUrl }/${id}`
             )
             if (response.data) {
                 commit('setSingleRecipe', response.data)
-            } else {
+            }/*  else {
                 const notFoundMessage = 'Not found'
                 commit('setSingleRecipe', notFoundMessage)
-            }
+            } */
+            return response.data
         } catch (error) {
             console.log(error.message)
+            console.log(error.response.data.message)
             //commit('setSingleRecipe', error.message)
         }
     }
 }
 
 const mutations = {
-    setRecipeResults(state, payload) {
-        state.fetchedRecipes = payload
+    setSliderRecipes(state, payload) {
+        state.sliderRecipes = payload
+    },
+
+    setQueriedRecipes(state, payload) {
+        state.queriedRecipes = payload
     },
 
     setSingleRecipe(state, payload) {
@@ -64,8 +91,12 @@ const mutations = {
 }
 
 const getters = {
-    getFetchedRecipes(state) {
-        return state.fetchedRecipes
+    getSliderRecipes(state) {
+        return state.sliderRecipes
+    },
+
+    getQueriedRecipes(state) {
+        return state.queriedRecipes
     },
 
     getDefaultImage(state) {
