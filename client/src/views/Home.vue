@@ -1,9 +1,10 @@
 <template>
-  <div class="container pd1 grid">
+  <div class="container pd1">
     <h1>Popular recipes</h1>
     <Popular />
     <BrowseRecipes />
     <BrowseResults />
+    <Tags />
   </div>
 </template>
 
@@ -11,12 +12,14 @@
 import Popular from '../components/homeComponents/Popular'
 import BrowseRecipes from '../components/homeComponents/BrowseRecipes'
 import BrowseResults from '../components/homeComponents/BrowseResults'
+import Tags from '../components/homeComponents/Tags'
 export default {
   name: 'home',
   components: {
     Popular,
     BrowseRecipes,
-    BrowseResults
+    BrowseResults,
+    Tags
   },
 }
 </script>

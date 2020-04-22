@@ -1,74 +1,39 @@
 <template>
   <div class="searchContainer flex flexCenter mgt2">
-    <form action="">
-      <fieldset>
-        <div class="basicSearchBox flex flexCenter">
-          <input type="text" v-model="searchValue" placeholder="Search..."/>
-          <Select :options="basicOptions" class="basicSelect" ref="basicSelect" />
-        </div>
-<!--         <div class="moreOptions" @click="toggleOptions">
-          <span>More options</span>
-          <font-awesome-icon
-            :icon="['fa', 'chevron-down']"
-            class="selectIcon"
-          ></font-awesome-icon>
-        </div> -->
-      </fieldset>
-      <fieldset class="detailedSearch">
-        <span>Dish type</span>
-        <Select :options="dishTypeOptions" ref="dishSelect" />
-        <!--  -->
-        <span>Difficulty</span>
-        <Select :options="difficultyOptions" ref="difficultySelect" />
-        <!--  -->
-        <label for="vegetarianCheck">Vegetarian</label>
-        <input
-          type="checkbox"
-          id="vegetarianCheck"
-          name="vegetarianCheck"
-          value="vegetarian"
-          v-model="vegetarian"
-        />
-        <label for="glutenCheck">Gluten Free</label>
-        <input
-          type="checkbox"
-          id="glutenCheck"
-          name="glutenCheck"
-          value="glutenFree"
-          v-model="glutenFree"
-        />
-      </fieldset>
-      <div class="buttonsWrapper">
-        <!-- <button @submit="queryParams" type="submit" class="submitSearch">Submit</button> -->
-        <input @click="findRecipes" type="button" value="Submit" />
+    <form>
+      <h3>Find recipes</h3>
+      <div class="basicSearchBox flex flexCenter">
+        <input type="text" v-model="searchValue" placeholder="Search..." />
+        <Select :options="basicOptions" class="basicSelect" ref="basicSelect" />
       </div>
+      <input @click="findRecipes(configBasicParams())" type="button" value="Search" />
     </form>
-    <div class="tags">
-      <figure class="tag">
-        <img src="" alt="" />
-        <figcaption>Easy to prepare</figcaption>
-      </figure>
-      <figure class="tag">
-        <img src="" alt="" />
-        <figcaption>Popular</figcaption>
-      </figure>
-      <figure class="tag">
-        <img src="" alt="" />
-        <figcaption>Latest</figcaption>
-      </figure>
-      <figure class="tag">
-        <img src="" alt="" />
-        <figcaption>Vegetarian</figcaption>
-      </figure>
-      <figure class="tag">
-        <img src="" alt="" />
-        <figcaption>Desserts</figcaption>
-      </figure>
-      <figure class="tag">
-        <img src="" alt="" />
-        <figcaption>Pastas</figcaption>
-      </figure>
-    </div>
+    <form>
+      <h3>Find with options</h3>
+      <span>Dish type</span>
+      <Select :options="dishTypeOptions" ref="dishSelect" />
+      <!--  -->
+      <span>Difficulty</span>
+      <Select :options="difficultyOptions" ref="difficultySelect" />
+      <!--  -->
+      <label for="vegetarianCheck">Vegetarian</label>
+      <input
+        type="checkbox"
+        id="vegetarianCheck"
+        name="vegetarianCheck"
+        value="vegetarian"
+        v-model="vegetarian"
+      />
+      <label for="glutenCheck">Gluten Free</label>
+      <input
+        type="checkbox"
+        id="glutenCheck"
+        name="glutenCheck"
+        value="glutenFree"
+        v-model="glutenFree"
+      />
+      <input @click="findRecipes(configDetailedParams())" type="button" value="Submit" />
+    </form>
   </div>
 </template>
 
@@ -83,8 +48,7 @@ export default {
   data() {
     return {
       searchValue: '',
-      // additionalOptions: false,
-      basicOptions: ['Any Category', 'Ingredient', 'Title', 'Regional'],
+      basicOptions: ['Ingredient', 'Title', 'Regional'],
       dishTypeOptions: [
         'Any Category',
         'Bread',
@@ -119,6 +83,7 @@ export default {
     ...mapActions(['fetchQueriedRecipes']),
     ...mapGetters(['getQueriedRecipes']),
     basicSelected() {
+      // briši iz basicSelect any category ako su dve forme
       if (this.$refs['basicSelect'].selected === 'Any Category') return ''
       else return this.$refs['basicSelect'].selected.toLowerCase()
     },
@@ -135,11 +100,8 @@ export default {
   },
 
   methods: {
-/*     toggleOptions() {
-      this.additionalOptions = !this.additionalOptions
-    }, */
-  
-    configParams() {
+    // set query params
+    configBasicParams() {
       if (this.basicSelected !== '') {
         if (this.basicSelected === 'title')
           this.queryParams['mealName'] = this.searchValue
@@ -148,6 +110,9 @@ export default {
         if (this.basicSelected === 'regional')
           this.queryParams['regional'] = this.searchValue
       }
+      return this.queryParams
+    },
+    configDetailedParams() {
       if (this.dishSelected || !this.dishSelected.length === 0) {
         this.queryParams['dishType'] = this.dishSelected
       }
@@ -164,13 +129,11 @@ export default {
     },
 
     // call with query params
-    async findRecipes() {
-      // set query params
-      const params = this.configParams()
-
+    async findRecipes(params) {
+      console.log(params)
       try {
         await this.$store.dispatch('fetchQueriedRecipes', params)
-        console.log(this.getQueriedRecipes)
+        // console.log(this.getQueriedRecipes)
         this.queryParams = {}
       } catch (error) {
         console.log(error.message)
@@ -183,19 +146,19 @@ export default {
 <style lang="scss" scoped>
 .searchContainer {
   @include boxSize($width: 100%);
-  @include alignment($direction:column);
+  @include alignment($direction: column);
   flex: 1;
   overflow: auto;
-  form, fieldset {
+  form {
     @include boxSize($width: 100%);
   }
-.basicSearchBox {
-  input {
-    @include boxSize($width: 50%); 
+  .basicSearchBox {
+    input {
+      @include boxSize($width: 50%);
+    }
+    .basicSelect {
+      width: 50%;
+    }
   }
-  .basicSelect {
-    width: 50%;
-  }
-}
 }
 </style>
