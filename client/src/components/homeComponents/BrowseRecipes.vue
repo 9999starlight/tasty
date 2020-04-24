@@ -1,46 +1,81 @@
 <template>
-  <div class="searchContainer flex flexCenter mgt2">
-    <form>
-      <h3>Find recipes</h3>
-      <div class="basicSearchBox flex flexCenter">
+  <div class="searchContainer flex mgt2" id="searchContainer">
+    <form class="basicForm flex flexCenter mg1">
+      <h3 class="lightItalic pd1">Find Recipes</h3>
+      <div class="basicSearchBox flex mg1">
         <input type="text" v-model="searchValue" placeholder="Search..." />
-        <Select :options="basicOptions" class="basicSelect" ref="basicSelect" />
+        <button @click.prevent="findRecipes(configBasicParams())" type="submit">
+          <font-awesome-icon
+            :icon="['fa', 'search']"
+            class="search"
+          ></font-awesome-icon>
+        </button>
       </div>
-      <input @click="findRecipes(configBasicParams())" type="button" value="Search" />
+      <Select
+        :options="basicOptions"
+        class="basicSelect mgb1"
+        ref="basicSelect"
+      />
     </form>
-    <form>
-      <h3>Find with options</h3>
-      <span>Dish type</span>
-      <Select :options="dishTypeOptions" ref="dishSelect" />
+    <form class="optionalForm flex flexCenter mg1">
+      <h3 class="lightItalic pd1">Search by Categories</h3>
+      <div>
+        <label for="dishType">Dish type</label>
+        <Select
+          :options="dishTypeOptions"
+          ref="dishSelect"
+          class="categories mgb1"
+          id="dishType"
+        />
+      </div>
       <!--  -->
-      <span>Difficulty</span>
-      <Select :options="difficultyOptions" ref="difficultySelect" />
+      <div>
+        <label for="">Difficulty</label>
+        <Select
+          :options="difficultyOptions"
+          ref="difficultySelect"
+          class="categories mgb1"
+          id="difficulty"
+        />
+      </div>
       <!--  -->
-      <label for="vegetarianCheck">Vegetarian</label>
-      <input
-        type="checkbox"
-        id="vegetarianCheck"
-        name="vegetarianCheck"
-        value="vegetarian"
-        v-model="vegetarian"
-      />
-      <label for="glutenCheck">Gluten Free</label>
-      <input
-        type="checkbox"
-        id="glutenCheck"
-        name="glutenCheck"
-        value="glutenFree"
-        v-model="glutenFree"
-      />
-      <input @click="findRecipes(configDetailedParams())" type="button" value="Submit" />
+      <div class="checkBoxes flex">
+        <label for="vegetarianCheck" class="block"
+          >Vegetarian
+          <input
+            type="checkbox"
+            id="vegetarianCheck"
+            name="vegetarianCheck"
+            value="vegetarian"
+            v-model="vegetarian"
+          />
+          <span></span>
+        </label>
+        <label for="glutenCheck" class="block"
+          >Gluten Free
+          <input
+            type="checkbox"
+            id="glutenCheck"
+            name="glutenCheck"
+            value="glutenFree"
+            v-model="glutenFree"
+          />
+          <span></span>
+        </label>
+      </div>
+      <button
+        @click.prevent="findRecipes(configDetailedParams())"
+        type="submit"
+        class="mg1"
+      >
+        Search
+      </button>
     </form>
   </div>
 </template>
 
 <script>
 import Select from '../Select'
-// import { recipesUrl } from '../../apiData'
-// import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'BrowseRecipes',
@@ -48,7 +83,7 @@ export default {
   data() {
     return {
       searchValue: '',
-      basicOptions: ['Ingredient', 'Title', 'Regional'],
+      basicOptions: ['Ingredient', 'Title'],
       dishTypeOptions: [
         'Any Category',
         'Bread',
@@ -83,7 +118,6 @@ export default {
     ...mapActions(['fetchQueriedRecipes']),
     ...mapGetters(['getQueriedRecipes']),
     basicSelected() {
-      // briši iz basicSelect any category ako su dve forme
       if (this.$refs['basicSelect'].selected === 'Any Category') return ''
       else return this.$refs['basicSelect'].selected.toLowerCase()
     },
@@ -135,6 +169,7 @@ export default {
         await this.$store.dispatch('fetchQueriedRecipes', params)
         // console.log(this.getQueriedRecipes)
         this.queryParams = {}
+        this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
       } catch (error) {
         console.log(error.message)
       }
@@ -145,19 +180,105 @@ export default {
 
 <style lang="scss" scoped>
 .searchContainer {
+  @include alignment($direction: column, $justify: center, $align: center);
+}
+
+.searchContainer {
   @include boxSize($width: 100%);
-  @include alignment($direction: column);
   flex: 1;
   overflow: auto;
+
   form {
+    @include alignment($direction: column);
     @include boxSize($width: 100%);
+    // box-shadow: $shadowSmall;
+    border: 2px solid lightgray;
   }
-  .basicSearchBox {
-    input {
-      @include boxSize($width: 50%);
+
+  .basicForm {
+    .basicSearchBox {
+      @include boxSize($width: 250px);
+      input {
+        @include boxSize($width: 210px, $height: 2rem);
+        border: 1px solid lightgray;
+      }
+      button {
+        @include boxSize($width: 40px, $height: 2rem);
+        background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
+        @include fonts($color: $white);
+      }
     }
-    .basicSelect {
-      width: 50%;
+  }
+
+  .optionalForm {
+    @include alignment($textAlign: left);
+    
+    // checkboxes style
+    label {
+      display: inline-block;
+      margin-bottom: 0.3rem;
+    }
+    .checkBoxes {
+      @include alignment($justify: space-around);
+      @include boxSize($width: 250px);
+      margin: 0.5rem 0;
+      label {
+        position: relative;
+        padding-left: 2rem;
+        input {
+          position: absolute;
+          visibility: hidden;
+          cursor: pointer;
+        }
+
+        span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 1.6rem;
+          width: 1.6rem;
+          background-color: lightgray;
+          border-radius: 5px;
+
+          &:after {
+            content: ' \2714';
+            position: absolute;
+            visibility: hidden;
+            color: white;
+            font-size: 1.2rem;
+            left: 0.4rem;
+          }
+        }
+        input:checked ~ span:after {
+          visibility: visible;
+        }
+        input:checked ~ span {
+          background-color: rgba(74, 143, 74, 0.979);
+        }
+      }
+    }
+    button {
+      @include boxSize($width: 250px, $height: 2rem);
+      display: inline-block;
+      background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
+      @include fonts($color: $white, $size: 1rem);
+    }
+  }
+}
+
+@media (min-width: 776px) {
+  .searchContainer {
+    @include boxSize($width: 70%);
+  }
+}
+
+@media (min-width: 992px) {
+  .searchContainer {
+    @include boxSize($width: 100%);
+    @include alignment($direction: row, $align: flex-start);
+
+    form {
+      @include boxSize($width: 450px);
     }
   }
 }

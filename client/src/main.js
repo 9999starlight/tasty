@@ -24,8 +24,11 @@ import {
   faWeight,
   faUserShield,
   faChevronDown,
-  faStar
-  //faSearch
+  faPlus,
+  faTimes,
+  faStar,
+  faSearch,
+  faHandPointUp
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faClock
@@ -33,8 +36,11 @@ import {
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
-library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown, faStar)
+library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown, faPlus, faTimes, faStar, faSearch, faHandPointUp)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+// vue-scrollto
+let VueScrollTo = require('vue-scrollto')
+Vue.use(VueScrollTo)
 
 Vue.config.productionTip = false
 /* const token = localStorage.getItem('user-token')

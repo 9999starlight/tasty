@@ -9,6 +9,7 @@ import AdminPanel from './views/AdminPanel'
 import Login from './views/Login'
 import Wines from './views/Wines'
 import SingleResult from './views/SingleResult'
+// import BrowseResults from './views/BrowseResults'
 import ErrorPage from './views/ErrorPage'
 
 Vue.use(Router)
@@ -16,6 +17,14 @@ Vue.use(Router)
 let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  },
+
   routes: [
     {
       path: '',
@@ -69,6 +78,11 @@ let router = new Router({
       component: SingleResult,
       props: true
     },
+/*     {
+      path: '/BrowseResults',
+      name: 'BrowseResults',
+      component: BrowseResults
+    }, */
     {
       path: '/error404',
       name: 'error404',

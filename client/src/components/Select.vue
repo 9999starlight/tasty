@@ -44,7 +44,7 @@ export default {
 <style lang="scss" scoped>
 .selectBox {
   position: relative;
-  @include boxSize($width: 220px, $height: 2rem);
+  @include boxSize($minWidth: 250px, $maxWidth: 300px, $height: 2rem);
   @include alignment($textAlign: left);
   line-height: 2rem;
   @include fonts($color: $white);
@@ -73,7 +73,8 @@ export default {
 
   .options {
     border-radius: 0px 0px 6px 6px;
-    overflow: hidden;
+    max-height: 120px;
+    overflow-y: auto;
     position: absolute;
     background-color: #080d0e;
     left: 0;

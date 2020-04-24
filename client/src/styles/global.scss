@@ -40,7 +40,7 @@ input[type="button"]:hover {
   @include boxSize($width: 100%);
   @include alignment($display: flex, $direction:column, $justify: center, $align: center, $textAlign: center);
   padding: 1rem;
-  margin-top: 3.5rem;
+  margin-top: 2rem;
   flex: 1;
   overflow: auto;
 }
@@ -73,6 +73,14 @@ input[type="button"]:hover {
 
 .fullWidth {
   width: 100%;
+}
+
+.lightItalic {
+  @include fonts($color: gray, $style: italic);
+}
+
+.slim {
+  @include fonts($color: $graphite, $weight: 200);
 }
 
 .messageWrapper {

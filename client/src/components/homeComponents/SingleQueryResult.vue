@@ -34,7 +34,7 @@
           class="block"
         /><span>{{ recipe.author.username }}</span>
       </div>
-      <p class="intro">{{ recipe.intro }}</p>
+      <p class="intro lightItalic">{{ recipe.intro }}</p>
     </router-link>
   </div>
 </template>
@@ -105,13 +105,13 @@ export default {
       grid-area: rating;
       @include fonts($color: gray, $size: 0.9rem);
       .starIcon {
-        @include fonts($color: rgba(236, 214, 13, 0.973), $size: 0.9rem);
+        @include fonts($color: $staryellow, $size: 0.9rem);
       }
     }
   
     .intro {
       grid-area: intro;
-      @include fonts($color: gray, $size: 0.9rem, $style: italic);
+      @include fonts($size: 0.9rem);
     }
   }
 }

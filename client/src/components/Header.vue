@@ -123,7 +123,7 @@ export default {
 
   watch: {
     $route() {
-      window.innerWidth > 995
+      window.innerWidth > 775
         ? (this.displayMenu = true)
         : (this.displayMenu = false)
     }
@@ -148,7 +148,7 @@ export default {
     },
 
     onResize() {
-      if (window.innerWidth > 995) {
+      if (window.innerWidth > 775) {
         this.burgerIcon = false
         this.displayMenu = true
       } else {
@@ -173,10 +173,11 @@ header {
   top: 0;
   background-color: $white;
   z-index: 5;
+  box-shadow: $shadowSmall;
 
   filter {
     position: absolute;
-    background-color: rgba(15, 15, 15, 0.904);
+    background-color: rgba(15, 15, 15, 0.959);
   }
 
   .open {
@@ -234,6 +235,7 @@ header {
       @include alignment($direction: column, $align: center);
       position: absolute;
       animation: slideLeft 1.2s;
+      @include fonts($size: 1.3rem);
     }
 
     li {
@@ -252,9 +254,10 @@ header {
       a,
       button {
         padding: 0.8rem;
+        // margin-left: 1rem;
         color: $white;
         @include boxSize($width: 100%);
-        @include alignment($textAlign: center);
+        @include alignment($textAlign: left);
       }
 
       .userIcon {
@@ -276,10 +279,9 @@ header {
   }
 }
 
-@media (min-width: 996px) {
+@media (min-width: 776px) {
   header {
     @include alignment($direction: row, $justify: space-between);
-    box-shadow: $shadowSmall;
 
     .menuWrapper {
       @include boxSize($width: 20%);
@@ -292,6 +294,7 @@ header {
       ul {
         @include alignment($direction: row, $justify: flex-end);
         position: relative;
+        @include fonts($size: 1rem);
 
         li {
           border: none;
@@ -312,6 +315,7 @@ header {
           a,
           button {
             color: black;
+            margin: 0;
           }
         }
       }

@@ -26,8 +26,7 @@ export default {
       console.log(params)
       try {
         await this.$store.dispatch('fetchQueriedRecipes', params)
-        // console.log(this.getQueriedRecipes)
-        // this.queryParams = {}
+        this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
       } catch (error) {
         console.log(error.message)
       }
@@ -44,13 +43,13 @@ figure {
   position: relative;
   box-shadow: $shadowSmall;
   cursor: pointer;
-  border: 2px inset lightgray;
+  // border: 2px inset lightgray;
   border-radius: 10px 0 10px 0;
 
   &:hover {
     filter: sepia(70%);
-    transform: scale(1.05);
-    transition: 0.5s;
+    // transform: scale(1.02);
+    // transition: 0.5s;
   }
 
   img {

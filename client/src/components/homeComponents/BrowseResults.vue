@@ -1,16 +1,25 @@
 <template>
-  <div class="resultsWrapper flex flexCenter">
-    <div class="successful flex" v-if="getSuccess">
-      <div
-        class="results"
-        v-for="recipe in getQueriedRecipes"
-        :key="recipe._id"
-      >
-        <SingleQueryResult :recipe="recipe" />
+  <div class="resultsWrapper flex flexCenter mgt2">
+    <h2 class="slim pd1" id="searchResults">Search Results</h2>
+    <div class="inner flex flexCenter">
+      <div class="successful flex" v-if="getSuccess === true">
+        <div
+          class="results"
+          v-for="recipe in getQueriedRecipes"
+          :key="recipe._id"
+        >
+          <SingleQueryResult :recipe="recipe" />
+        </div>
+        <a href="#searchContainer" v-scroll-to="'#searchContainer'" class="block hashLink mg2"
+      >Back to search &nbsp;<font-awesome-icon
+        :icon="['fa', 'hand-point-up']"
+        font-size="15px"
+      ></font-awesome-icon
+    ></a>
       </div>
-    </div>
-    <div class="messagewrapper" v-else>
-      <NotFound :message="'No result for your search'" />
+      <div class="messagewrapper" v-if="getSuccess === false">
+        <NotFound :message="'No result for your search'" />
+      </div>
     </div>
   </div>
 </template>
@@ -32,14 +41,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .resultsWrapper {
-    @include boxSize($width: 100%);
-    @include alignment($direction: column);
-
-      .successful {
-        @include boxSize($width: 100%);
-        @include alignment($direction: column);
-      }
-    // border: 1px solid black;
-  }
+.resultsWrapper,
+.inner {
+  @include boxSize($width: 100%);
+  @include alignment($direction: column);
+  // border: 1px solid black;
+}
+.successful {
+  @include boxSize($width: 100%);
+  @include alignment($direction: column);
+}
 </style>

@@ -1,5 +1,6 @@
 <template>
-  <div class="popularWrapper center">
+  <div class="popularWrapper flex">
+        <h1 class="slim pd1">Popular recipes</h1>
     <div v-if="this.ready" class="carouselContainer">
       <button class="carouselBtn btnLeft" @click="nextRecipe">
         &nbsp;<font-awesome-icon
@@ -94,8 +95,12 @@ export default {
 <style lang="scss" scoped>
 .popularWrapper {
   @include boxSize($maxWidth: 400px);
+  @include alignment($direction: column);
+
   .carouselContainer {
     position: relative;
+    box-shadow: $shadowBox;
+
     .carouselBtn {
       cursor: pointer;
       font-size: 30px;
