@@ -66,8 +66,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import loaderMixin from '../mixins/loaderMixin'
-import Loader from '../components/Loader'
-import NotFound from '../components/NotFound'
+import Loader from '../components/sharedComponents/Loader'
+import NotFound from '../components/sharedComponents/NotFound'
 export default {
   name: 'SingleResult',
   components: {

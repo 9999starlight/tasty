@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import Select from '../Select'
+import Select from '../sharedComponents/Select'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'BrowseRecipes',
@@ -181,6 +181,7 @@ export default {
 <style lang="scss" scoped>
 .searchContainer {
   @include alignment($direction: column, $justify: center, $align: center);
+  grid-area: forms;
 }
 
 .searchContainer {

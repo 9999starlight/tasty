@@ -95,7 +95,8 @@ export default {
 <style lang="scss" scoped>
 .popularWrapper {
   @include boxSize($maxWidth: 400px);
-  @include alignment($direction: column);
+  @include alignment($direction: column, $textAlign: center);
+  grid-area: popular;
 
   .carouselContainer {
     position: relative;

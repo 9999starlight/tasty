@@ -1,12 +1,17 @@
 <template>
   <div id="app" class="flex">
     <app-header></app-header>
+    <transition
+      name="fade"
+      mode="out-in"
+    >
     <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
-import Header from './components/Header'
+import Header from './components/sharedComponents/Header'
 
 export default {
   name: 'app',

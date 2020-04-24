@@ -58,11 +58,11 @@ export default {
 
 <style lang="scss" scoped>
 .singleQuery {
-  @include boxSize($width: 100%);
+  @include boxSize($width: 90%);
   box-shadow: $shadowBox;
 
   .recipeLink {
-    @include boxSize($width: 90%);
+    @include boxSize($width: 100%);
     @include alignment($justifyGrid: center, $align: center);
     grid-template-rows: repeat(4, 1fr);
     grid-template-columns: 1fr, 1.5fr;
@@ -112,6 +112,7 @@ export default {
     .intro {
       grid-area: intro;
       @include fonts($size: 0.9rem);
+      text-align: left;
     }
   }
 }
