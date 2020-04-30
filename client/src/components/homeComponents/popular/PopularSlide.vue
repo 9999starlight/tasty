@@ -13,7 +13,7 @@
               :src="getDefaultImage"
               :key="recipe._id"
               :alt="recipe.mealName"
-            /> 
+            />
             <img
               v-else
               :src="recipe.image"
@@ -21,7 +21,17 @@
               :alt="recipe.mealName"
             />
           </transition>
-          <figcaption>{{ recipe.mealName }} {{ recipe.rating }}</figcaption>
+          <figcaption>
+            {{ recipe.mealName }}
+            <span>
+            <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
+            </font-awesome-icon
+            >&nbsp;&nbsp;{{ recipe.rating }} /
+            {{
+              recipe.rates.length ? recipe.rates.length + ' votes' : 'not rated'
+            }}
+            </span>
+          </figcaption>
         </figure>
       </router-link>
     </div>
@@ -36,20 +46,20 @@ export default {
   props: {
     recipe: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
 
   computed: {
-    ...mapGetters(['getDefaultImage']),
+    ...mapGetters(['getDefaultImage'])
   },
 
   methods: {
     leave(el) {
       el.style.opacity = 0
       el.duration = 1500
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -67,9 +77,15 @@ export default {
       position: absolute;
       bottom: 0;
       background-color: rgba(29, 28, 28, 0.774);
-      color: #f1f1f1;
-      width: 100%;
+      @include fonts($color: $white);
+      @include boxSize($width: 100%);
       padding: 1.3rem;
+
+      span {
+        display: inline-block;
+        margin-left: 0.7rem;
+        @include fonts($size: 0.8rem, $color: rgb(197, 195, 195));
+      }
     }
   }
 }

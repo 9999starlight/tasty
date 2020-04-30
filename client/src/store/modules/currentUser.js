@@ -9,6 +9,7 @@ const state = {
   currentUser: null,
   isLogged: false,
   errorMessage: '',
+  defaultUserImage: require('@/assets/default_user.png'),
 }
 
 const actions = {
@@ -43,7 +44,7 @@ const actions = {
   }, credentials) {
     try {
       const response = await axios.post(`${usersUrl}/login`, credentials)
-      //console.log(response);
+      // console.log(response.data);
       if (response.data.token) {
         localStorage.setItem('userToken', response.data.token)
       }
@@ -52,7 +53,7 @@ const actions = {
         localStorage.getItem('userToken'),
         jwt.decode(localStorage.getItem('userToken'))
       )
-      console.log(response.data)
+      // console.log(response.data)
       return response.data
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -68,7 +69,6 @@ const actions = {
     commit('setUserToken', '')
     commit('setCurrentUser', null)
     commit('setIsLogged', false)
-    delete axios.defaults.headers.common['Authorization']
     localStorage.removeItem('userToken')
   }
 }
@@ -106,14 +106,15 @@ const getters = {
   getErrorMessage(state) {
     return state.errorMessage
   },
+
+  getDefaultUserImage(state) {
+    return state.defaultUserImage
+  },
 }
 
 // private helpers
 
 function userSettings(commit, token, user) {
-  // default request header
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  console.log(user)
   commit('setCurrentUser', user)
   commit('setUserToken', token)
   commit('setIsLogged', true)

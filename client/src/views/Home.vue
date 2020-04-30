@@ -12,6 +12,7 @@ import Popular from '../components/homeComponents/popular/Popular'
 import BrowseRecipes from '../components/homeComponents/BrowseRecipes'
 import BrowseResults from '../components/homeComponents/browseResults/BrowseResults'
 import Tags from '../components/homeComponents/tags/Tags'
+
 export default {
   name: 'home',
   components: {

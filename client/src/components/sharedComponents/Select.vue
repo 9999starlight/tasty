@@ -1,13 +1,21 @@
 <template>
-  <div class="selectBox" tabindex="0" @blur="open = false">
-    <div class="selected" :class="{ open: open }" @click="open = !open">
+  <div
+    class="selectBox"
+    tabindex="0"
+    @blur="open = false"
+    @keydown.esc.exact.prevent="open = false"
+    @keydown.enter.exact.prevent="open = true"
+            @keydown.up.prevent="previousItem"
+     @keydown.down.prevent="nextItem"
+  >
+    <div class="selected" :class="{ open: open }" @click="toggleOpen">
       {{ selected }}
       <font-awesome-icon
         :icon="['fa', 'chevron-down']"
         class="arrows"
       ></font-awesome-icon>
     </div>
-    <div class="options" v-if="open">
+    <div class="options" v-show="open" ref="options">
       <div
         class="option"
         v-for="(option, index) of options"
@@ -16,6 +24,9 @@
           selected = option
           open = false
         "
+
+        @keydown.enter.prevent="selected = option; open = false"
+        :class="{ 'active-option': currentItem === index }"
       >
         {{ option }}
       </div>
@@ -35,7 +46,34 @@ export default {
   data() {
     return {
       selected: this.options.length > 0 ? this.options[0] : null,
-      open: false
+      open: false,
+      currentItem: 0
+    }
+  },
+
+  methods: {
+    toggleOpen() {
+      this.open = !this.open
+    },
+
+    nextItem() {
+      if (this.currentItem < this.$refs.options.children.length - 1) {
+        // event.preventDefault();
+        this.currentItem++
+      }
+      /* if (event.keyCode === 38 && this.currentItem > 0) {
+        event.preventDefault();
+        this.currentItem--
+      } else if (event.keyCode === 40 && this.currentItem < this.$refs.options.children.length - 1) {
+        event.preventDefault();
+        this.currentItem++
+      } */
+    },
+    previousItem() {
+      if (this.currentItem > 0) {
+        // event.preventDefault();
+        this.currentItem--
+      }
     }
   }
 }
@@ -44,22 +82,22 @@ export default {
 <style lang="scss" scoped>
 .selectBox {
   position: relative;
-  @include boxSize($minWidth: 250px, $maxWidth: 300px, $height: 2rem);
+  @include boxSize($minWidth: 260px, $maxWidth: 300px, $height: 2rem);
   @include alignment($textAlign: left);
   line-height: 2rem;
   @include fonts($color: $white);
 
   .selected {
     @include boxSize($height: 2rem);
-    background-color: $graphite;
+    background-color: #7a7465fd;
     border-radius: 6px;
-    border: 1px solid #858586;
+    border: 1px solid #423f37ef;
     padding-left: 0.5rem;
     cursor: pointer;
     user-select: none;
 
     &.open {
-      border: 1px solid #ce9b2c;
+      border: 1px solid #856a32;
       border-radius: 6px 6px 0px 0px;
     }
 
@@ -76,7 +114,7 @@ export default {
     max-height: 120px;
     overflow-y: auto;
     position: absolute;
-    background-color: #080d0e;
+    background-color: #7a7465fb;
     left: 0;
     right: 0;
     z-index: 2;
@@ -86,15 +124,12 @@ export default {
       cursor: pointer;
       user-select: none;
     }
-
+    .active-option {
+      background-color: rgba(230, 165, 46, 0.959);
+    }
     .option:hover {
-      background-color: #b68a28;
+      background-color:rgba(214, 170, 87, 0.959);
     }
   }
 }
-
-/* place before to display selectable */
-/* .selected:empty:not(:focus):before{
-    content:attr(data-text)
-} */
 </style>

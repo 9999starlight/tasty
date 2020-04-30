@@ -1,5 +1,6 @@
 <template>
   <div class="searchContainer flex mgt2" id="searchContainer">
+    <!-- basic Form -->
     <form class="basicForm flex flexCenter mg1">
       <h3 class="lightItalic pd1">Find Recipes</h3>
       <div class="basicSearchBox flex mg1">
@@ -17,6 +18,7 @@
         ref="basicSelect"
       />
     </form>
+    <!-- optional form -->
     <form class="optionalForm flex flexCenter mg1">
       <h3 class="lightItalic pd1">Search by Categories</h3>
       <div>
@@ -28,7 +30,6 @@
           id="dishType"
         />
       </div>
-      <!--  -->
       <div>
         <label for="">Difficulty</label>
         <Select
@@ -38,10 +39,8 @@
           id="difficulty"
         />
       </div>
-      <!--  -->
       <div class="checkBoxes flex">
-        <label for="vegetarianCheck" class="block"
-          >Vegetarian
+        <label for="vegetarianCheck" class="block">Vegetarian
           <input
             type="checkbox"
             id="vegetarianCheck"
@@ -49,10 +48,9 @@
             value="vegetarian"
             v-model="vegetarian"
           />
-          <span></span>
+          <span tabindex="0"></span>
         </label>
-        <label for="glutenCheck" class="block"
-          >Gluten Free
+        <label for="glutenCheck" class="block">Gluten Free
           <input
             type="checkbox"
             id="glutenCheck"
@@ -60,13 +58,13 @@
             value="glutenFree"
             v-model="glutenFree"
           />
-          <span></span>
+          <span tabindex="0"></span>
         </label>
       </div>
       <button
         @click.prevent="findRecipes(configDetailedParams())"
         type="submit"
-        class="mg1"
+        class="btnAction mg1"
       >
         Search
       </button>
@@ -117,6 +115,7 @@ export default {
   computed: {
     ...mapActions(['fetchQueriedRecipes']),
     ...mapGetters(['getQueriedRecipes']),
+
     basicSelected() {
       if (this.$refs['basicSelect'].selected === 'Any Category') return ''
       else return this.$refs['basicSelect'].selected.toLowerCase()
@@ -146,6 +145,7 @@ export default {
       }
       return this.queryParams
     },
+
     configDetailedParams() {
       if (this.dishSelected || !this.dishSelected.length === 0) {
         this.queryParams['dishType'] = this.dishSelected
@@ -192,28 +192,32 @@ export default {
   form {
     @include alignment($direction: column);
     @include boxSize($width: 100%);
-    // box-shadow: $shadowSmall;
+    @include fonts($color: $graphite);
     border: 2px solid lightgray;
   }
 
   .basicForm {
     .basicSearchBox {
-      @include boxSize($width: 250px);
+      @include boxSize($width: 260px);
       input {
-        @include boxSize($width: 210px, $height: 2rem);
+        @include boxSize($width: 200px, $height: 2rem);
+        padding: 0 0.4rem;
         border: 1px solid lightgray;
+        border-radius: 6px 0 0 6px;
       }
       button {
-        @include boxSize($width: 40px, $height: 2rem);
-        background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
+        @include boxSize($width: 60px, $height: 2rem);
+        background-color: #fbab7e;
+        background: $orangeGradient;
         @include fonts($color: $white);
+        border-radius: 0 6px 6px 0;
       }
     }
   }
 
   .optionalForm {
     @include alignment($textAlign: left);
-    
+
     // checkboxes style
     label {
       display: inline-block;
@@ -221,7 +225,7 @@ export default {
     }
     .checkBoxes {
       @include alignment($justify: space-around);
-      @include boxSize($width: 250px);
+      @include boxSize($width: 260px);
       margin: 0.5rem 0;
       label {
         position: relative;
@@ -258,12 +262,15 @@ export default {
         }
       }
     }
-    button {
-      @include boxSize($width: 250px, $height: 2rem);
+/*     button {
+      @include boxSize($width: 260px, $height: 2rem);
       display: inline-block;
-      background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
+      // background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
+      background-color: #fbab7e;
+      background: $orangeGradient;;
       @include fonts($color: $white, $size: 1rem);
-    }
+      border-radius: 6px;
+    } */
   }
 }
 

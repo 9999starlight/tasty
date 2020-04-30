@@ -153,7 +153,8 @@ exports.updateRating = (req, res, next) => {
 exports.commentValidation = (req, res, next) => {
   const commentSchema = Joi.object({
     commentedRecipeId: Joi.string().required(),
-    commentBody: Joi.string().min(4).max(200).required()
+    commentBody: Joi.string().min(4).max(200).required(),
+    author: Joi.string()
   })
   const { error } = commentSchema.validate(req.body)
   if (error) {

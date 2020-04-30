@@ -40,6 +40,7 @@ exports.getRecipes = async (req, res, next) => {
           level: doc.level,
           image: doc.image.url,
           rating: doc.rating,
+          rates: doc.rates,
           request: {
             type: 'GET',
             url: `${req.protocol}://${req.get('host')}/recipes/${doc._id}` // works wherever deployed

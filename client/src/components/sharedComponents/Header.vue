@@ -51,10 +51,21 @@
           active-class="active"
           class="flex"
           ><a
-            >&nbsp;
+            ><!-- &nbsp;
             <font-awesome-icon :icon="['fa', 'user']" class="userIcon">
             </font-awesome-icon
-            >{{ getCurrentUser.username }}
+            > -->
+            <img
+              v-if="getCurrentUser.userImage"
+              :src="getCurrentUser.userImage"
+              :alt="getCurrentUser.username"
+            />
+            <img
+              v-else
+              :src="getDefaultUserImage"
+              :alt="getCurrentUser.username"
+            />
+            {{ getCurrentUser.username }}
           </a></router-link
         >
         <router-link
@@ -131,7 +142,8 @@ export default {
 
   computed: {
     ...mapActions(['logoutUser']),
-    ...mapGetters(['getCurrentUser', 'getIsLogged']),
+    ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
+
     authUser() {
       return (
         this.getCurrentUser !== null && this.getCurrentUser.isAdmin == false
@@ -260,10 +272,15 @@ header {
         @include alignment($textAlign: left);
       }
 
-      .userIcon {
-        @include fonts($color: gray, $size: 1rem);
+      a {
+        @include alignment($display: flex, $align: center);
+      }
+
+      img {
         display: inline-block;
-        padding-right: 0.2rem;
+        @include boxSize($width: 20px, $height: 20px);
+        border-radius: 50%;
+        margin-right: 10px;
       }
 
       button {

@@ -7,7 +7,8 @@ import {
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
-// font awesome imports:
+
+// Font Awesome:
 import {
   library
 } from '@fortawesome/fontawesome-svg-core'
@@ -15,9 +16,7 @@ import {
   faChevronCircleRight,
   faChevronCircleLeft,
   faUsers,
-  //faWindowClose,
   //faTrashAlt,
-  //faHandPointUp,
   faUser,
   faSignOutAlt,
   faSignInAlt,
@@ -28,7 +27,8 @@ import {
   faTimes,
   faStar,
   faSearch,
-  faHandPointUp
+  faHandPointUp,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faClock
@@ -36,17 +36,21 @@ import {
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
-library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown, faPlus, faTimes, faStar, faSearch, faHandPointUp)
+library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown, faPlus, faTimes, faStar, faSearch, faHandPointUp, faCheck)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 // vue-scrollto
 let VueScrollTo = require('vue-scrollto')
 Vue.use(VueScrollTo)
 
-Vue.config.productionTip = false
-/* const token = localStorage.getItem('user-token')
+// set deafult Axios headers for current user's requests
+const token = localStorage.getItem('userToken')
 if (token) {
-  axios.defaults.headers.common['Authorization'] = token
-} */
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+}
+
+Vue.config.productionTip = false
+
 new Vue({
   store,
   router,

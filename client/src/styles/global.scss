@@ -18,6 +18,13 @@
   transition: all 0.1s ease;
 }
 
+button:focus,
+input:focus,
+input:checked ~ span:focus,
+.selectBox:focus {
+  outline: 1px solid rgb(203, 214, 39);
+}
+
 a,
 button,
 .link {
@@ -83,12 +90,31 @@ input[type="button"]:hover {
   @include fonts($color: $graphite, $weight: 200);
 }
 
-.messageWrapper {
-  @include boxSize($height: 40px);
+.btnAction {
+  @include boxSize($width: 260px, $height: 2rem);
+  display: inline-block;
+  // background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
+  background-color: #fbab7e;
+  background: $orangeGradient;
+  ;
+  @include fonts($color: $white, $size: 1rem);
+  border-radius: 6px;
+}
+
+.starIcon {
+  @include fonts($color: $staryellow, $size: 0.9rem);
+}
+
+.hashLink {
+  @include fonts($color: rgb(49, 117, 108), $size: 1.1rem);
 }
 
 .error {
-  @include fonts($color: crimson, $size: 0.8rem)
+  @include fonts($color: crimson, $size: 0.8rem);
+}
+
+.success {
+  @include fonts($color: green, $size: 0.8rem);
 }
 
 // animations transitions
@@ -120,12 +146,17 @@ input[type="button"]:hover {
   animation: expand 0.6s reverse;
 }
 
+.expand-enter,
+.expand-leave-active {
+  opacity: 0;
+}
+
 /* .btn {
 
 } */
 
 @media(min-width: 996px) {
-  .error {
+  .error, .success {
     @include fonts($size: 1rem)
   }
 }

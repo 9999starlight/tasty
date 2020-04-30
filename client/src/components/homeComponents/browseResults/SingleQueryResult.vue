@@ -1,5 +1,5 @@
 <template>
-  <div class="singleQuery mgb1">
+  <div class="singleQuery">
     <router-link
       :to="{ name: 'SingleResult', params: { id: recipe._id } }"
       tag="div"
@@ -20,19 +20,28 @@
           :alt="recipe.mealName"
           class="block"
         />
+        <figcaption>{{ recipe.mealName }}</figcaption>
       </figure>
-      <h4 class="mealName">{{ recipe.mealName }}</h4>
+      <!-- <h4 class="mealName">{{ recipe.mealName }}</h4> -->
       <p class="rating">
         <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
         </font-awesome-icon
-        >&nbsp;{{ recipe.rating }}
+        >&nbsp;{{ recipe.rating }} / {{ recipe.rates.length ? recipe.rates.length + ' votes': 'not rated'}}
       </p>
       <div class="author flex flexCenter">
         <img
+          v-if="recipe.author.image"
           :src="recipe.author.image"
           :alt="recipe.author.username"
           class="block"
-        /><span>{{ recipe.author.username }}</span>
+        />
+        <img
+          v-else
+          :src="defaultUserImage"
+          :alt="recipe.author.username"
+          class="block"
+        />
+        <span>{{ recipe.author.username }}</span>
       </div>
       <p class="intro lightItalic">{{ recipe.intro }}</p>
     </router-link>
@@ -40,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'SingleQueryResult',
   props: {
@@ -51,26 +60,28 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getDefaultImage'])
+    ...mapGetters(['getDefaultImage']),
+    ...mapState(['defaultUserImage'])
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .singleQuery {
-  @include boxSize($width: 90%);
+  @include boxSize($width: 100%);
   box-shadow: $shadowBox;
 
   .recipeLink {
     @include boxSize($width: 100%);
     @include alignment($justifyGrid: center, $align: center);
-    grid-template-rows: repeat(4, 1fr);
-    grid-template-columns: 1fr, 1.5fr;
+    grid-template-rows: 1.5fr 1.5fr 1.5fr 1fr 1fr;
+    grid-template-columns: 1fr, 1fr;
     grid-template-areas:
-      'figure mealName'
-      'figure rating'
-      'figure author'
-      'intro intro';
+      'figure figure'
+      'figure figure'
+      'figure figure'
+      'intro intro'
+      'author rating';
     cursor: pointer;
 
     &:hover {
@@ -78,19 +89,24 @@ export default {
     }
 
     figure {
-      @include boxSize($width: 100px, $height: 100px);
-      margin: 0.5rem 0;
+      @include boxSize($width: 290px, $height: 290px);
+      // margin: 0.5rem 0;
       grid-area: figure;
+      position: relative;
       img {
-        @include boxSize($width: 100px, $height: 100px);
+        @include boxSize($width: 290px, $height: 290px);
         object-fit: cover;
       }
+      figcaption {
+        position: absolute;
+        bottom: 0;
+        background-color: rgba(29, 28, 28, 0.774);
+        @include fonts($color: $white, $size: 1.2rem);
+        @include boxSize($width: 100%);
+        padding: 0.5rem;
+      }
     }
-
-    .mealName {
-      grid-area: mealName;
-    }
-
+  
     .author {
       grid-area: author;
 
@@ -100,19 +116,29 @@ export default {
         margin-right: 10px;
       }
     }
-  
+
     .rating {
       grid-area: rating;
       @include fonts($color: gray, $size: 0.9rem);
-      .starIcon {
-        @include fonts($color: $staryellow, $size: 0.9rem);
-      }
     }
-  
+
     .intro {
       grid-area: intro;
       @include fonts($size: 0.9rem);
       text-align: left;
+    }
+  }
+}
+
+@media(min-width: 500px) {
+  .singleQuery {
+    .recipeLink {
+      figure {
+         @include boxSize($width: 320px, $height: 320px);
+         img {
+        @include boxSize($width: 320px, $height: 320px);
+         }
+      }
     }
   }
 }

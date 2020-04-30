@@ -26,10 +26,13 @@
         <input type="file" ref="image" @change="selectFile" />
       </div>
       <div class="messageWrapper center">
-        <transition name="expand">
-          <p class="message error" v-if="errorMessage !== ''">
-            {{ errorMessage }}
-          </p>
+        <transition name="expand" mode="out-in">
+          <InfoMessage
+            v-if="errorMessage !== ''"
+            :message="errorMessage"
+            :messageStatus="messageStatus"
+            @clear="updateMessage('')"
+          />
         </transition>
       </div>
       <button
@@ -54,8 +57,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import InfoMessage from '../components/sharedComponents/InfoMessage'
 export default {
   name: 'login',
+
+  components: {
+    InfoMessage
+  },
+
   data() {
     return {
       showSignUp: false,
@@ -63,13 +72,8 @@ export default {
       password: '',
       image: '',
       errorMessage: '',
-      timeSet: null
+      messageStatus: false
     }
-  },
-
-  beforeDestroy() {
-    clearTimeout(this.timeSet)
-    this.timeSet = null
   },
 
   computed: {
@@ -80,9 +84,6 @@ export default {
   methods: {
     updateMessage(message) {
       this.errorMessage = message
-      this.timeSet = setTimeout(() => {
-        this.errorMessage = ''
-      }, 4000)
     },
 
     // toggle login/sign up forms
@@ -140,7 +141,7 @@ export default {
         })
         .then((res) => {
           if (res) {
-            //console.log(res);
+            // console.log(res);
             location.reload()
           } else {
             this.errorMessage = this.getErrorMessage
@@ -158,7 +159,7 @@ export default {
 <style lang="scss" scoped>
 .formWrapper {
   margin: 0;
-/*   @include alignment($direction: column);
+  /*   @include alignment($direction: column);
   @include boxSize($minHeight: 100%, $width: 100%);
   flex: 1; */
 }
@@ -198,6 +199,10 @@ export default {
         box-shadow: 0 0 0 100px rgb(250, 255, 189) inset;
         -webkit-box-shadow: 0 0 0 100px rgb(250, 255, 189) inset;
       } */
+  }
+
+  .messageWrapper {
+    @include boxSize($height: 40px);
   }
 }
 
