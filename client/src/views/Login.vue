@@ -177,9 +177,6 @@ export default {
       cursor: pointer;
       text-decoration: underline;
       //margin: 0 auto;
-      &:hover {
-        filter: brightness(40%);
-      }
     }
   }
 
@@ -221,6 +218,16 @@ export default {
     .formGroup {
       input {
         @include boxSize($width: 300px);
+      }
+    }
+  }
+}
+
+@media (min-width: 776px) {
+  .loginForm {
+    .formHeader {
+      .signupLink:hover {
+        filter: brightness(60%);
       }
     }
   }

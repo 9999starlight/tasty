@@ -15,34 +15,34 @@
     </p>
     <p class="commentBody mgt1">{{ singleComment.commentBody }}</p>
     <p class="date lightItalic mgt1">
-      {{ this.convertDate(singleComment.createdAt) }}
+      {{ convertDate(singleComment.createdAt) }}
     </p>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import dateFormat from '../../mixins/dateFormat'
 export default {
   name: 'Comment',
-
   props: {
     singleComment: {
       type: Object,
       required: true
     }
   },
-
   computed: {
     ...mapGetters(['getDefaultUserImage'])
   },
 
-  methods: {
+  mixins: [dateFormat]
+  /* methods: {
     convertDate(utcDate) {
       let date = new Date(utcDate)
       date.toISOString()
       return date
     }
-  }
+  } */
 }
 </script>
 
@@ -52,7 +52,6 @@ export default {
   @include boxSize($width: 280px);
   border: 2px solid lightgray;
   padding: 0.8rem;
-
   .commentAuthor {
     align-self: flex-start;
     img {
@@ -60,21 +59,18 @@ export default {
       object-fit: cover;
       border-radius: 50%;
     }
-
     span {
       margin-left: 0.5rem;
     }
   }
-
   .commentBody {
     @include alignment($textAlign: left);
   }
-
   .date {
     align-self: flex-end;
+    @include fonts($size: 0.8rem);
   }
 }
-
 @media (min-width: 500px) {
   .singleCommentWrapper {
     @include boxSize($width: 400px);

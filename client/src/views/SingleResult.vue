@@ -2,22 +2,34 @@
   <div class="singleResultContainer container">
     <div v-if="ready" class="singleResultWrapper">
       <h1 class="mgb1">{{ resultRecipe.mealName }}</h1>
-      <section class="favorites">
-        <button class="addToFavorites">addd favorites</button>
-        <button class="addRate">rate recipe</button>
+      <section class="favorites flex">
+        <button class="addToFavorites mgt1" title="Add to favorites">
+          Add to favorites &nbsp;<font-awesome-icon
+            :icon="['fas', 'plus']"
+            class="plus"
+          >
+          </font-awesome-icon>
+        </button>
+        <button class="addRate mgt1">
+          Rate this &nbsp;<font-awesome-icon
+            :icon="['fa', 'star']"
+            class="starIcon"
+          >
+          </font-awesome-icon>
+        </button>
       </section>
       <section class="basicInfo flex mgb1">
-        <span
+        <span title="Level of difficulty"
           ><font-awesome-icon :icon="['fas', 'weight']" class="mealIcons">
           </font-awesome-icon>
           {{ resultRecipe.level }}</span
         >
-        <span
+        <span title="Number of persons"
           ><font-awesome-icon :icon="['fas', 'users']" class="mealIcons">
           </font-awesome-icon>
           {{ resultRecipe.persons }}</span
         >
-        <span
+        <span title="Preparation time"
           ><font-awesome-icon
             :icon="['far', 'clock']"
             class="mealIcons"
@@ -53,7 +65,9 @@
           />
           <span class="authorUsername">{{ resultRecipe.author.username }}</span>
         </p>
-        <span class="recipeDate">{{ resultRecipe.createdAt }}</span>
+        <span class="recipeDate">{{
+          convertDate(resultRecipe.createdAt)
+        }}</span>
         <p class="intro lightItalic">{{ resultRecipe.intro }}</p>
       </section>
       <section class="additionalInfo flex mgb1">
@@ -130,6 +144,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
+import dateFormat from './../mixins/dateFormat'
 
 export default {
   name: 'SingleResult',
@@ -164,7 +179,9 @@ export default {
   computed: {
     ...mapActions(['fetchSingleRecipe']),
     ...mapGetters(['getSingleRecipe', 'getDefaultImage', 'getDefaultUserImage'])
-  }
+  },
+
+  mixins: [dateFormat]
 }
 </script>
 
@@ -172,7 +189,6 @@ export default {
 .singleResultWrapper {
   @include alignment($display: flex, $justify: center, $align: center);
   flex-direction: column;
-  // @include boxSize($maxWidth: 100vw);
 
   section {
     border-bottom: 1px inset rgb(209, 207, 207);
@@ -192,6 +208,26 @@ export default {
   }
   h1 {
     $color: $graphite;
+  }
+
+  .favorites {
+    @include alignment($align: center);
+    button {
+      @include alignment($display: inline-block);
+      @include boxSize($width: 140px, $height: 30px);
+    }
+    .addToFavorites {
+      @include fonts($color: $white);
+      background: linear-gradient(270deg, #38a16a, #16604d, #7cd49a);
+      background-size: 600% 600%;
+      animation: movingBackground 30s ease infinite;
+    }
+
+    .addRate {
+      @include fonts($color: $graphite);
+      background-color: $white;
+      border: 2px inset darkgray;
+    }
   }
 
   .basicInfo {
@@ -224,7 +260,7 @@ export default {
     }
 
     .recipeDate {
-      color: gray;
+      @include fonts($size: 0.8rem, $color: gray);
     }
     .intro {
       margin-top: 0.7rem;
@@ -279,6 +315,14 @@ export default {
   }
 }
 
+@media (min-width: 776px) {
+  .singleResultWrapper {
+    .favorites {
+      @include alignment($direction: row, $justify: space-evenly);
+    }
+  }
+}
+
 @media (min-width: 996px) {
   .singleResultWrapper {
     @include boxSize($maxWidth: 1500px);
@@ -288,6 +332,10 @@ export default {
     }
     .favorites {
       grid-area: favorites;
+
+      .addToFavorites:hover {
+        text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+      }
     }
     .basicInfo {
       grid-area: basicInfo;

@@ -48,6 +48,26 @@
   }
 }
 
+/* -webkit-animation: movingBackground 30s ease infinite;
+-moz-animation: movingBackground 30s ease infinite;
+animation: movingBackground 30s ease infinite; */
+
+@-webkit-keyframes movingBackground {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes movingBackground {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes movingBackground {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
 /* @media (max-width: 995px) {
   @keyframes slideLeft {
     from {

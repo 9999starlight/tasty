@@ -2,23 +2,23 @@
   <div class="homeContainer pd1">
     <Popular />
     <Tags />
-    <BrowseRecipes class="browse" />
-    <BrowseResults />
+    <Forms class="browse" />
+    <QueryResults />
   </div>
 </template>
 
 <script>
-import Popular from '../components/homeComponents/popular/Popular'
-import BrowseRecipes from '../components/homeComponents/BrowseRecipes'
-import BrowseResults from '../components/homeComponents/browseResults/BrowseResults'
-import Tags from '../components/homeComponents/tags/Tags'
+import Popular from '../components/Home/Popular/Popular'
+import Forms from '../components/Home/Forms'
+import QueryResults from '../components/Home/QueryResults/QueryResults'
+import Tags from '../components/Home/Tags/Tags'
 
 export default {
   name: 'home',
   components: {
     Popular,
-    BrowseRecipes,
-    BrowseResults,
+    Forms,
+    QueryResults,
     Tags
   }
 }

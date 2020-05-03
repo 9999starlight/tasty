@@ -18,18 +18,15 @@ import Comment from './Comment'
 import PostComment from './PostComment'
 export default {
   name: 'Comments',
-
   components: {
     Comment,
     PostComment
   },
-
   props: {
     comments: {
       type: Array,
       required: true
     },
-
     recipeId: {
       type: String,
       required: true

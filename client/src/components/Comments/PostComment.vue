@@ -39,11 +39,9 @@ import { mapGetters } from 'vuex'
 import axios from 'axios'
 export default {
   name: 'PostComment',
-
   components: {
     InfoMessage
   },
-
   data() {
     return {
       commentText: '',
@@ -51,17 +49,14 @@ export default {
       messageStatus: false
     }
   },
-
   props: {
     recipeId: {
       type: String,
       required: true
     }
   },
-
   computed: {
     ...mapGetters(['getCurrentUser', 'getIsLogged']),
-
     validateCommentText() {
       if (this.commentText.length === 0 || this.commentText.length > 300) {
         return false
@@ -70,12 +65,10 @@ export default {
       }
     }
   },
-
   methods: {
     updateMessage(message) {
       this.postCommentMessage = message
     },
-
     async postUserComment() {
       try {
         if (!this.getIsLogged) {
@@ -113,23 +106,19 @@ export default {
 .addComment {
   @include alignment($direction: column, $align: center);
   @include boxSize($width: 100%);
-
   textarea {
     resize: none;
     overflow: auto;
     @include boxSize($width: 250px, $height: 120px);
     border: 1px solid lightgray;
     padding: 0.7rem;
-
     &:focus {
       outline: 1px solid rgb(158, 192, 90);
     }
   }
-
   .messageWrapper {
     @include boxSize($height: 40px);
   }
-
   button {
     @include boxSize($width: 250px);
     border-radius: 0;

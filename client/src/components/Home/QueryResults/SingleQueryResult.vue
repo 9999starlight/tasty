@@ -26,7 +26,8 @@
       <p class="rating">
         <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
         </font-awesome-icon
-        >&nbsp;{{ recipe.rating }} / {{ recipe.rates.length ? recipe.rates.length + ' votes': 'not rated'}}
+        >&nbsp;{{ recipe.rating }} /
+        {{ recipe.rates.length ? recipe.rates.length + ' votes' : 'not rated' }}
       </p>
       <div class="author flex flexCenter">
         <img
@@ -84,10 +85,6 @@ export default {
       'author rating';
     cursor: pointer;
 
-    &:hover {
-      filter: brightness(40%);
-    }
-
     figure {
       @include boxSize($width: 290px, $height: 290px);
       // margin: 0.5rem 0;
@@ -106,7 +103,7 @@ export default {
         padding: 0.5rem;
       }
     }
-  
+
     .author {
       grid-area: author;
 
@@ -130,14 +127,17 @@ export default {
   }
 }
 
-@media(min-width: 500px) {
+@media (min-width: 500px) {
   .singleQuery {
     .recipeLink {
+      &:hover {
+      filter: brightness(80%);
+      }
       figure {
-         @include boxSize($width: 320px, $height: 320px);
-         img {
         @include boxSize($width: 320px, $height: 320px);
-         }
+        img {
+          @include boxSize($width: 320px, $height: 320px);
+        }
       }
     }
   }

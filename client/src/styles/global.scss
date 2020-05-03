@@ -20,7 +20,7 @@
 
 button:focus,
 input:focus,
-input:checked ~ span:focus,
+input:checked~span:focus,
 .selectBox:focus {
   outline: 1px solid rgb(203, 214, 39);
 }
@@ -33,12 +33,6 @@ button,
 
 a {
   text-decoration: none;
-}
-
-a:hover,
-button:hover,
-input[type="button"]:hover {
-  filter: brightness(40%);
 }
 
 // utillity classes
@@ -119,13 +113,6 @@ input[type="button"]:hover {
 
 // animations transitions
 
-/* .fade-enter-active {
-  animation: fade 800;
-}
-
-.fade-leave-active {
-  animation: fade 800 reverse;
-} */
 .fade-enter-active,
 .fade-leave-active {
   transition-duration: 0.4s;
@@ -151,12 +138,28 @@ input[type="button"]:hover {
   opacity: 0;
 }
 
+.movingBackground-enter-active,
+.expand-leave-active {
+  animation: movingBackground 30s ease;
+  animation-iteration-count: infinite;
+}
+
 /* .btn {
 
 } */
 
+@media(min-width: 776px) {
+  a:hover,
+  button:hover,
+  input[type="button"]:hover {
+    filter: brightness(80%);
+  }
+}
+
 @media(min-width: 996px) {
-  .error, .success {
+
+  .error,
+  .success {
     @include fonts($size: 1rem)
   }
 }
