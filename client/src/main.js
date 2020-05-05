@@ -28,7 +28,9 @@ import {
   faStar,
   faSearch,
   faHandPointUp,
-  faCheck
+  faCheck,
+  faAngleDoubleLeft,
+  faAngleDoubleRight
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faClock
@@ -36,7 +38,7 @@ import {
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
-library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown, faPlus, faTimes, faStar, faSearch, faHandPointUp, faCheck)
+library.add(faUser, faSignOutAlt, faSignInAlt, faChevronCircleRight, faChevronCircleLeft, faUsers, faClock, faWeight, faUserShield, faChevronDown, faPlus, faTimes, faStar, faSearch, faHandPointUp, faCheck, faAngleDoubleLeft, faAngleDoubleRight)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // vue-scrollto

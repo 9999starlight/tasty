@@ -89,7 +89,7 @@ export default {
 
   .selected {
     @include boxSize($height: 2rem);
-    background-color: #7a7465fd;
+    background-color: $gray;
     border-radius: 6px;
     border: 1px solid #423f37ef;
     padding-left: 0.5rem;
@@ -114,7 +114,7 @@ export default {
     max-height: 120px;
     overflow-y: auto;
     position: absolute;
-    background-color: #7a7465fb;
+    background-color: $gray;
     left: 0;
     right: 0;
     z-index: 2;
