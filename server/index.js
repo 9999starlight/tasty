@@ -6,6 +6,8 @@ const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config()
 const mongoPass = process.env.MONGO_PASS
+ // enable findByIdAndUpdate without deprication warning:
+mongoose.set('useFindAndModify', false)
 
 mongoose.connect(`mongodb+srv://irenamongo:${mongoPass}@tasty-eyv2p.mongodb.net/test?retryWrites=true&w=majority`, {
         useNewUrlParser: true,
@@ -23,6 +25,9 @@ app.use(cors())
 app.use(bodyParser.urlencoded({
     extended: false
 }))
+// added to limit file upload
+/* app.use(bodyParser.urlencoded({ extended: false, limit: 1024 * 1024 * 2, type: 'application/x-www-form-urlencoded' })) */
+
 app.use(bodyParser.json()) // parse data from client
 
 

@@ -50,11 +50,7 @@
           tag="li"
           active-class="active"
           class="flex"
-          ><a
-            ><!-- &nbsp;
-            <font-awesome-icon :icon="['fa', 'user']" class="userIcon">
-            </font-awesome-icon
-            > -->
+          ><a>
             <img
               v-if="getCurrentUser.userImage"
               :src="getCurrentUser.userImage"
@@ -66,8 +62,11 @@
               :alt="getCurrentUser.username"
             />
             {{ getCurrentUser.username }}
-          </a></router-link
-        >
+            <font-awesome-icon
+              :icon="['fa', 'chevron-down']"
+              class="arrowDown"
+            ></font-awesome-icon> </a
+        ></router-link>
         <router-link
           v-if="authAdmin == true"
           :to="{ name: 'adminpanel' }"
@@ -99,7 +98,7 @@
         >
           <a>
             <font-awesome-icon :icon="['fas', 'sign-in-alt']" class="userIcon">
-            </font-awesome-icon>
+            </font-awesome-icon>&nbsp;
             Login
           </a>
         </router-link>
@@ -281,6 +280,15 @@ header {
         @include boxSize($width: 20px, $height: 20px);
         border-radius: 50%;
         margin-right: 10px;
+      }
+
+      .arrowDown {
+        margin-left: 0.4rem;
+        @include fonts($size: 0.8rem, $color: gray);
+      }
+
+      .userIcon {
+        margin-right: 0.3rem;
       }
 
       button {

@@ -27,6 +27,8 @@ input:checked~span:focus,
 
 a,
 button,
+input[type="file"],
+input[type="button"],
 .link {
   cursor: pointer;
 }
@@ -103,14 +105,14 @@ a {
   @include fonts($color: rgb(49, 117, 108), $size: 1.1rem);
 }
 
-.error {
-  @include fonts($color: crimson, $size: 0.8rem);
+/* .error {
+  @include fonts($color: crimson, $size: 0.7rem);
 }
 
 .success {
-  @include fonts($color: green, $size: 0.8rem);
+  @include fonts($color: green, $size: 0.7rem);
 }
-
+ */
 :disabled {
   color: red;
 }
@@ -160,10 +162,10 @@ a {
   }
 }
 
-@media(min-width: 996px) {
+/* @media(min-width: 996px) {
 
   .error,
   .success {
     @include fonts($size: 1rem)
   }
-}
+} */

@@ -175,6 +175,7 @@ exports.updateUserImage = async (req, res, next) => {
         message: `Unauthorized - access denied!`
       })
     }
+
     const user = await User.findById(id)
     let imageresult = ''
     if (!user.user_image) {
@@ -204,7 +205,7 @@ exports.updateUserImage = async (req, res, next) => {
         }
       )
     }
-    const result = await User.updateOne(
+    const result = await User.findByIdAndUpdate(
       {
         _id: id
       },
@@ -215,16 +216,25 @@ exports.updateUserImage = async (req, res, next) => {
             id: imageresult.public_id
           }
         }
-      }
+      },
+      { new: true }
     )
     res.status(200).json({
       message: 'Updated successfully',
-      result
+      updatedUser: {
+        username: result.username,
+        userId: result._id,
+        isAdmin: result.isAdmin,
+        createdAt: result.createdAt,
+        createdRecipes: result.createdRecipes,
+        favorites: result.favorites,
+        userImage: result.user_image.url
+      }
     })
     //res.status(200).json(result);
-    console.log(result)
+    // console.log(result)
   } catch (error) {
-    console.log(error.message)
+    console.log("server upload function: ", error.message)
     res.status(500).json({
       error,
       message: error.message

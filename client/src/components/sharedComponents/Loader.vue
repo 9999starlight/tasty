@@ -1,38 +1,72 @@
 <template>
-  <div class="loderContainer">
-     <div class="loader mg2"></div>
+  <div class="loaderContainer flex flexCenter mg1">
+    <div :class="[!bigLoader ? 'small progress' : 'large progress']">
+      <div>Loading…</div>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Loader'
+  name: 'Loader',
+
+  props: {
+    bigLoader: {
+      type: Boolean
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
-/* .loader {
-  @include boxSize($width: 50px, $height: 50px);
-  border-top: rgba(141, 241, 216, 0.308) 6px dotted;
-  border-right: rgba(111, 240, 218, 0.61) 7px dotted;
-  border-bottom: rgba(75, 240, 199, 0.719) 8px dotted;
-  border-left: rgba(24, 235, 200, 0.884) 9px dotted;
-  border-radius: 100%;
-  animation: spinning 2s infinite linear;
-} */
-.loader {
-  width: 50px;
-  height: 50px;
-  margin: 2rem 0;
-  border: 2px solid #41f24a;
-  border-top: 2px ridge #1b4e1d;
-  border-radius: 100%;
-  animation: spin 1s infinite linear;
-}
+.progress {
+  position: relative;
+  display: inline-block;
+  @include boxSize($width: 5em, $height: 5em);
+  margin: 0 0.5em;
+  font-size: 12px;
+  text-indent: 999em;
+  overflow: hidden;
+  animation: spinning 1s infinite steps(8);
 
-@media(min-width: 768px) {
-  .loader {
-    width: 80px;
-    height: 80px;
-    margin: 3rem 0;
+  &.small {
+    font-size: 6px;
+  }
+  &.large {
+    font-size: 20px;
+  }
+
+  &:before,
+  &:after,
+  & > div:before,
+  & > div:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 2.25em; /* (container width - part width)/2  */
+    width: 0.5em;
+    height: 1.5em;
+    border-radius: 0.2em;
+    background: #eee;
+    box-shadow: 0 3.5em #eee; /* container height - part height */
+    transform-origin: 50% 2.5em; /* container height / 2 */
+  }
+
+  &:before {
+    background: #555;
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+    background: #777;
+  }
+
+  & > div:before {
+    transform: rotate(-90deg);
+    background: #999;
+  }
+
+  & > div:after {
+    transform: rotate(-135deg);
+    background: #bbb;
   }
 }
 </style>

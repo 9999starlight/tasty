@@ -27,7 +27,7 @@ export default {
   created() {
     this.timeSet = setTimeout(() => {
       this.$emit('clear', '')
-    }, 4000)
+    }, 5000)
   },
 
   methods: {
@@ -43,4 +43,20 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.error {
+  @include fonts($color: crimson, $size: 0.8rem);
+}
+
+.success {
+  @include fonts($color: green, $size: 0.8rem);
+}
+
+@media(min-width: 996px) {
+
+  .error,
+  .success {
+    @include fonts($size: 1rem)
+  }
+}
+</style>

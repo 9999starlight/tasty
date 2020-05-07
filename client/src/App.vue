@@ -24,6 +24,7 @@ export default {
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Lato|Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 @import './styles/global.scss';
 #app {
   box-sizing: border-box;

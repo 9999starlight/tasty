@@ -56,8 +56,6 @@ export default {
 
   /*   data() {
     return {
-      prevDisabled: false,
-      nextDisabled: false
     }
   }, */
 

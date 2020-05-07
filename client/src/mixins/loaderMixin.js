@@ -8,7 +8,7 @@ const loaderMixin = {
       toggleLoader () {
         this.isLoading = !this.isLoading
       }
-    }
+  }
   }
   
   export default loaderMixin

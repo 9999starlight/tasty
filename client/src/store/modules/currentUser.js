@@ -1,6 +1,4 @@
-import {
-  usersUrl
-} from '../../apiData'
+import { usersUrl } from '../../apiData'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 
@@ -9,13 +7,11 @@ const state = {
   currentUser: null,
   isLogged: false,
   errorMessage: '',
-  defaultUserImage: require('@/assets/default_user.png'),
+  defaultUserImage: require('@/assets/default_user.png')
 }
 
 const actions = {
-  async signUpUser({
-    commit
-  }, credentials) {
+  async signUpUser({ commit }, credentials) {
     try {
       const response = await axios.post(`${usersUrl}/register`, credentials)
       // console.log(response);
@@ -39,9 +35,7 @@ const actions = {
     }
   },
 
-  async loginUser({
-    commit
-  }, credentials) {
+  async loginUser({ commit }, credentials) {
     try {
       const response = await axios.post(`${usersUrl}/login`, credentials)
       // console.log(response.data);
@@ -63,13 +57,15 @@ const actions = {
     }
   },
 
-  logoutUser({
-    commit
-  }) {
+  logoutUser({ commit }) {
     commit('setUserToken', '')
     commit('setCurrentUser', null)
     commit('setIsLogged', false)
     localStorage.removeItem('userToken')
+  },
+
+  updateUser({ commit }, payload) {
+    commit('setCurrentUser', payload)
   }
 }
 
@@ -88,7 +84,7 @@ const mutations = {
 
   setErrorMessage(state, payload) {
     state.errorMessage = payload
-  },
+  }
 }
 
 const getters = {
@@ -109,7 +105,7 @@ const getters = {
 
   getDefaultUserImage(state) {
     return state.defaultUserImage
-  },
+  }
 }
 
 // private helpers
@@ -125,5 +121,5 @@ export default {
   state,
   actions,
   mutations,
-  getters,
+  getters
 }

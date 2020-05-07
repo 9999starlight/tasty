@@ -9,7 +9,9 @@ import AdminPanel from './views/AdminPanel'
 import Login from './views/Login'
 import Wines from './views/Wines'
 import SingleResult from './views/SingleResult'
-// import BrowseResults from './views/BrowseResults'
+import UserRecipes from './components/UserPanel/UserRecipes'
+import CreateRecipe from './components/UserPanel/CreateRecipe'
+import SavedRecipes from './components/UserPanel/SavedRecipes'
 import ErrorPage from './views/ErrorPage'
 
 Vue.use(Router)
@@ -40,6 +42,23 @@ let router = new Router({
       path: '/userpanel',
       name: 'userpanel',
       component: UserPanel,
+      children: [
+        {
+          path: '/user_recipes',
+          name: 'user_recipes',
+          component: UserRecipes
+        },
+        {
+          path: '/create_recipe',
+          name: 'create_recipe',
+          component: CreateRecipe
+        },
+        {
+          path: '/saved_recipes',
+          name: 'saved_recipes',
+          component: SavedRecipes
+        }
+      ],
       meta: {
         requiresAuth: true
       }
@@ -78,7 +97,7 @@ let router = new Router({
       component: SingleResult,
       props: true
     },
-/*     {
+    /*     {
       path: '/BrowseResults',
       name: 'BrowseResults',
       component: BrowseResults
