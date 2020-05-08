@@ -34,11 +34,11 @@
             <button class="chooseImage">Choose image</button>
           </div>
           <div class="small">
-          <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
-          <small>Maximum upload file size 2Mb</small>
-          <small class="block selected" v-show="filename"
-            >Selected image: {{ filename }}</small
-          >
+            <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
+            <small>Maximum upload file size 2Mb</small>
+            <small class="block selected" v-show="filename"
+              >Selected image: {{ filename }}</small
+            >
           </div>
           <Loader :bigLoader="bigLoader" v-show="isLoading" />
           <div class="messageWrapper center">
@@ -95,7 +95,7 @@
           </router-link>
         </ul>
       </nav>
-      <div class="routerViewContainer mgt2" id="routerViewContainer">
+      <div class="routerViewContainer container" id="routerViewContainer">
         <router-view></router-view>
       </div>
     </div>
@@ -178,7 +178,7 @@ export default {
           this.updateMessage('Image uploaded successfully!')
         }
       } catch {
-        (thrown, error) => {
+         (thrown, error) => {
           this.messageStatus = false
           if (axios.isCancel(thrown)) {
             console.log('Request canceled', thrown.message)
@@ -201,11 +201,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loggedInContainer {
+  @include boxSize($width: 100%);
+}
+
 .userPanel {
   @include alignment($justifyGrid: center, $textAlign: center);
   @include boxSize($width: 100%);
-  
-  h1{
+
+  h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
   }
@@ -288,7 +292,7 @@ export default {
           opacity: 0;
         }
       }
-      .small  {
+      .small {
         @include boxSize($height: 70px);
       }
 
@@ -345,9 +349,14 @@ export default {
       }
     }
   }
+  .routerViewContainer {
+    @include alignment($direction: column);
+    @include boxSize($width: 100%);
+    padding: 0;
+  }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
   .loggedInContainer {
     @include boxSize($width: 100%);
   }

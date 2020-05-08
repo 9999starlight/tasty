@@ -223,7 +223,7 @@ export default {
   }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
   .loginForm {
     .formHeader {
       .signupLink:hover {

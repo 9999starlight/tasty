@@ -315,7 +315,7 @@ export default {
   }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
   .singleResultWrapper {
     .favorites {
       @include alignment($direction: row, $justify: space-evenly);

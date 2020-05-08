@@ -133,7 +133,7 @@ export default {
 
   watch: {
     $route() {
-      window.innerWidth > 775
+      window.innerWidth > 767
         ? (this.displayMenu = true)
         : (this.displayMenu = false)
     }
@@ -159,7 +159,7 @@ export default {
     },
 
     onResize() {
-      if (window.innerWidth > 775) {
+      if (window.innerWidth > 767) {
         this.burgerIcon = false
         this.displayMenu = true
       } else {
@@ -304,7 +304,7 @@ header {
   }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
   header {
     @include alignment($direction: row, $justify: space-between);
 

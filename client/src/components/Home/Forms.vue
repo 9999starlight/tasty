@@ -274,7 +274,7 @@ export default {
   }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
   .searchContainer {
     @include boxSize($width: 70%);
   }

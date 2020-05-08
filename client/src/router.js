@@ -9,7 +9,7 @@ import AdminPanel from './views/AdminPanel'
 import Login from './views/Login'
 import Wines from './views/Wines'
 import SingleResult from './views/SingleResult'
-import UserRecipes from './components/UserPanel/UserRecipes'
+import UserRecipes from './components/UserPanel/UserRecipes/UserRecipes'
 import CreateRecipe from './components/UserPanel/CreateRecipe'
 import SavedRecipes from './components/UserPanel/SavedRecipes'
 import ErrorPage from './views/ErrorPage'
@@ -44,17 +44,17 @@ let router = new Router({
       component: UserPanel,
       children: [
         {
-          path: '/user_recipes',
+          path: '/userpanel/user_recipes',
           name: 'user_recipes',
           component: UserRecipes
         },
         {
-          path: '/create_recipe',
+          path: '/userpanel/create_recipe',
           name: 'create_recipe',
           component: CreateRecipe
         },
         {
-          path: '/saved_recipes',
+          path: '/userpanel/saved_recipes',
           name: 'saved_recipes',
           component: SavedRecipes
         }
