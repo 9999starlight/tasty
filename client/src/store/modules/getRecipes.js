@@ -50,7 +50,8 @@ const actions = {
     try {
       // console.log('client sends this id: ', id)
       const response = await axios.get(`${recipesUrl}/${id}`, {
-        cancelToken: source.token
+        cancelToken: source.token,
+        timeout: 5000
       })
       if (!response.data) {
         commit('setSingleRecipe', '')

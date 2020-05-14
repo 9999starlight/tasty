@@ -7,11 +7,14 @@
       :message="noRecipes"
     />
     <div v-else class="listContainer" id="listContainer">
-      <UserRecipe
+      <SortingButtons />
+      <Recipe
         v-for="recipe in fetchedRecipes"
         :key="recipe._id"
         class="renderRecipes"
         :recipe="recipe"
+        :usersRecipes="usersRecipes"
+        @del="currentUserRecipes"
       />
     </div>
   </div>
@@ -19,12 +22,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import NotFound from '../../sharedComponents/NotFound'
-import Loader from '../../sharedComponents/Loader'
-import loaderMixin from '../../../mixins/loaderMixin'
-import UserRecipe from './UserRecipe'
+import NotFound from '../sharedComponents/NotFound'
+import Loader from '../sharedComponents/Loader'
+import SortingButtons from '../sharedComponents/SortingButtons'
+import loaderMixin from '../../mixins/loaderMixin'
+import Recipe from './Recipe'
 import axios from 'axios'
-import { recipesUrl } from '../../../apiData'
+import { recipesUrl } from '../../apiData'
 
 export default {
   name: 'user_recipes',
@@ -32,14 +36,16 @@ export default {
   components: {
     NotFound,
     Loader,
-    UserRecipe
+    Recipe,
+    SortingButtons
   },
 
   data() {
     return {
       noRecipes: `You haven't created any recipes yet`,
       bigLoader: false,
-      fetchedRecipes: []
+      fetchedRecipes: [],
+      usersRecipes: true
     }
   },
 
@@ -70,7 +76,6 @@ export default {
         })
         this.fetchedRecipes = [...result.data.recipes]
         this.toggleLoader()
-        // console.log(this.fetchedRecipes)
       } catch (error) {
         console.log(error.message)
       }

@@ -84,8 +84,13 @@ export default {
 }
 @media (min-width: 992px) {
   .tagsWrapper {
-    //@include boxSize($minWidth: 990px, $maxWidth: 1500px);
     text-align: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .tagsWrapper {
+    @include boxSize($width: 500px);
   }
 }
 </style>

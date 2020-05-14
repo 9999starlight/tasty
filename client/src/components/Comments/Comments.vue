@@ -9,7 +9,7 @@
     >
       <Comment :singleComment="singleComment" />
     </div>
-    <PostComment :recipeId="recipeId" />
+    <PostComment :recipeId="recipeId" @commentAdded="updateComments" />
   </section>
 </template>
 
@@ -30,6 +30,12 @@ export default {
     recipeId: {
       type: String,
       required: true
+    }
+  },
+
+  methods: {
+    updateComments() {
+      this.$emit('updating')
     }
   }
 }

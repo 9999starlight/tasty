@@ -234,7 +234,7 @@ exports.updateUserImage = async (req, res, next) => {
     //res.status(200).json(result);
     // console.log(result)
   } catch (error) {
-    console.log("server upload function: ", error.message)
+    // console.log("server upload function: ", error.message)
     res.status(500).json({
       error,
       message: error.message
@@ -268,7 +268,7 @@ exports.addToFavorites = async (req, res, next) => {
       })
     }
 
-    const result = await User.updateOne(
+    const result = await User.findByIdAndUpdate(
       {
         _id: id
       },
@@ -276,14 +276,74 @@ exports.addToFavorites = async (req, res, next) => {
         $push: {
           favorites: req.body.favoriteId
         }
-      }
+      },
+      { new: true }
     )
     res.status(200).json({
-      message: 'Updated successfully',
-      result
+      message: 'Added to your saved recipes',
+      updatedUser: {
+        username: result.username,
+        userId: result._id,
+        isAdmin: result.isAdmin,
+        createdAt: result.createdAt,
+        createdRecipes: result.createdRecipes,
+        favorites: result.favorites,
+        userImage: result.user_image.url
+      }
     })
-    //res.status(200).json(result);
-    console.log(result)
+    // console.log(result)
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({
+      error,
+      message: error.message
+    })
+  }
+}
+
+exports.removeFromFavorites = async (req, res, next) => {
+  try {
+    const id = req.params.userId
+    if (!req.userData.isAdmin && req.userData.userId !== id) {
+      return res.status(401).json({
+        message: `Unauthorized - access denied!`
+      })
+    }
+    // restriction - check if recipe is in favorites array
+    const findUser = await User.findById(id)
+    let findRecipeId = findUser.favorites.find(
+      (fav) => fav == req.body.favoriteId
+    )
+    if (!findRecipeId) {
+      return res.status(406).json({
+        message: `Recipe is not saved in favorites!`
+      })
+    }
+    // remove from saved recipes
+    const result = await User.findByIdAndUpdate(
+      {
+        _id: id
+      },
+      {
+        $pull: {
+          favorites: req.body.favoriteId
+        }
+      },
+      { new: true }
+    )
+    res.status(200).json({
+      message: 'Removed from saved recipes',
+      updatedUser: {
+        username: result.username,
+        userId: result._id,
+        isAdmin: result.isAdmin,
+        createdAt: result.createdAt,
+        createdRecipes: result.createdRecipes,
+        favorites: result.favorites,
+        userImage: result.user_image.url
+      }
+    })
+    // console.log(result)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({

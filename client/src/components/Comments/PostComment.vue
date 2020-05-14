@@ -88,6 +88,7 @@ export default {
               // console.log(response.data)
               this.messageStatus = true
               this.updateMessage('Comment posted successfully!')
+              this.$emit('commentAdded')
             }
           }
         }

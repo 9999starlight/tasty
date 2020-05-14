@@ -78,6 +78,15 @@ a {
   width: 100%;
 }
 
+.overlay {
+  @include boxSize($width: 100%, $height: 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  z-index: 3;
+}
+
 .lightItalic {
   @include fonts($color: gray, $style: italic);
 }
@@ -101,8 +110,18 @@ a {
   @include fonts($color: $staryellow, $size: 0.9rem);
 }
 
+.starEntity {
+  @include fonts($color: $staryellow, $size: 1.5rem);
+  margin-left: 0.3rem;
+}
+
 .hashLink {
   @include fonts($color: rgb(49, 117, 108), $size: 1.1rem);
+}
+
+.imageFit {
+  @include boxSize($width: 100%, $height: 100%);
+  object-fit: cover;
 }
 
 /* .error {
@@ -145,16 +164,18 @@ a {
 }
 
 .movingBackground-enter-active,
-.expand-leave-active {
+.movingBackground-leave-active {
   animation: movingBackground 30s ease;
   animation-iteration-count: infinite;
 }
 
-/* .btn {
-
-} */
+.pulsing-in-enter-active,
+.pulsing-in-leave-active {
+  animation: pulsing-in 2s ease;
+} 
 
 @media(min-width: 776px) {
+
   a:hover,
   button:hover,
   input[type="button"]:hover {

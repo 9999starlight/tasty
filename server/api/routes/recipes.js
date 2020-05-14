@@ -4,17 +4,17 @@ const authUser = require('../middlewares/auth_user')
 const upload = require('../middlewares/multer')
 
 const {
-    getRecipes,
-    getSingleRecipe,
-    addNewRecipe,
-    updateRecipe,
-    addRating,
-    deleteRecipe
+  getRecipes,
+  getSingleRecipe,
+  addNewRecipe,
+  updateRecipe,
+  addRating,
+  deleteRecipe
 } = require('../controllers/recipes_ctrl')
 const {
-    newRecipeValidation,
-    updateRecipeValidation,
-    updateRating
+  newRecipeValidation,
+  updateRecipeValidation,
+  updateRating
 } = require('../joi_validation')
 
 // @desc    Get recipes
@@ -30,12 +30,24 @@ router.get('/:recipeId', getSingleRecipe)
 // @desc    POST recipe
 // @route   POST /recipes
 // @access  Private
-router.post('/', authUser, upload.single('image'), newRecipeValidation, addNewRecipe)
+router.post(
+  '/',
+  authUser,
+  upload.single('image'),
+  newRecipeValidation,
+  addNewRecipe
+)
 
 // @desc    PATCH recipe
 // @route   PATCH /recipes/:recipeId
 // @access  Private
-router.patch('/:recipeId', authUser, upload.single('image'), updateRecipeValidation, updateRecipe)
+router.patch(
+  '/:recipeId',
+  authUser,
+  upload.single('image'),
+  updateRecipeValidation,
+  updateRecipe
+)
 
 // @desc    PATCH rate recipe & update rating
 // @route   PATCH /recipes/rate/:recipeId

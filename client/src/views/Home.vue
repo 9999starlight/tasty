@@ -1,7 +1,9 @@
 <template>
   <div class="homeContainer pd1">
-    <Popular />
-    <Tags />
+    <div class="popularTags flex flexCenter">
+      <Popular />
+      <Tags />
+    </div>
     <Forms class="browse" />
     <QueryResults />
   </div>
@@ -41,20 +43,32 @@ export default {
   margin-top: 2rem;
   flex: 1;
   overflow: auto;
+
+  .popularTags {
+    @include alignment($direction: column);
+  }
 }
 
 @media (min-width: 996px) {
   .homeContainer {
     @include alignment($display: grid, $justifyGrid: center);
-    grid-template-columns: repeat(2, 1fr, 1fr);
-    grid-template-rows: repeat(3, 2fr, 1fr, auto);
-    grid-template-areas: 'popular tags' 'forms forms' 'results results';
+    grid-template-columns: 1fr, 1fr;
+    grid-template-rows: 3, 2fr, 1fr, auto;
+    grid-template-areas: 'popularTags popularTags' 'forms forms' 'results results';
+
+    .popularTags {
+      @include alignment($direction: row, $justify: space-evenly);
+    }
   }
 }
 
 @media (min-width: 1200px) {
   .homeContainer {
-    justify-content: space-evenly;
+    justify-content: center;
+
+    .popularTags {
+      @include boxSize($width: 1100px);
+    }
   }
 }
 </style>

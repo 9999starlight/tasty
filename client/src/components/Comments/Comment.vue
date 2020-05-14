@@ -36,13 +36,6 @@ export default {
   },
 
   mixins: [dateFormat]
-  /* methods: {
-    convertDate(utcDate) {
-      let date = new Date(utcDate)
-      date.toISOString()
-      return date
-    }
-  } */
 }
 </script>
 

@@ -111,4 +111,10 @@ export default {
     }
   }
 }
+
+@media (min-width: 1200px) {
+  .resultsWrapper {
+    @include boxSize($width: 1100px);
+  }
+}
 </style>

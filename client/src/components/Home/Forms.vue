@@ -40,7 +40,8 @@
         />
       </div>
       <div class="checkBoxes flex">
-        <label for="vegetarianCheck" class="block">Vegetarian
+        <label for="vegetarianCheck" class="block"
+          >Vegetarian
           <input
             type="checkbox"
             id="vegetarianCheck"
@@ -50,7 +51,8 @@
           />
           <span tabindex="0"></span>
         </label>
-        <label for="glutenCheck" class="block">Gluten Free
+        <label for="glutenCheck" class="block"
+          >Gluten Free
           <input
             type="checkbox"
             id="glutenCheck"
@@ -262,15 +264,6 @@ export default {
         }
       }
     }
-/*     button {
-      @include boxSize($width: 260px, $height: 2rem);
-      display: inline-block;
-      // background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
-      background-color: #fbab7e;
-      background: $orangeGradient;;
-      @include fonts($color: $white, $size: 1rem);
-      border-radius: 6px;
-    } */
   }
 }
 
@@ -288,6 +281,13 @@ export default {
     form {
       @include boxSize($width: 450px);
     }
+  }
+}
+
+@media (min-width: 1200px) {
+  .searchContainer {
+    @include boxSize($width: 1100px);
+    @include alignment($justify: space-evenly, $align: flex-start);
   }
 }
 </style>

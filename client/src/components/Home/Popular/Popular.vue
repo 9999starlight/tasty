@@ -1,7 +1,7 @@
 <template>
   <div class="popularWrapper flex">
-        <h1 class="slim pd1">Popular recipes</h1>
-    <div v-if="this.ready" class="carouselContainer">
+    <h1 class="slim pd1">Popular recipes</h1>
+    <div v-if="this.ready" class="carouselContainer center">
       <button class="carouselBtn btnLeft" @click="nextRecipe">
         &nbsp;<font-awesome-icon
           :icon="['fa', 'chevron-circle-left']"
@@ -19,7 +19,7 @@
       </button>
     </div>
     <figure v-else>
-      <img :src="getDefaultImage" alt="our menu" />
+      <img :src="getDefaultImage" alt="our menu" class="imageFit" />
     </figure>
   </div>
 </template>
@@ -32,13 +32,13 @@ export default {
     return {
       ready: false,
       recipesArray: [],
-      currentRecipe: 0,
+      currentRecipe: 0
     }
   },
 
   name: 'Popular',
   components: {
-    PopularSlide,
+    PopularSlide
   },
 
   // resolve action promise in beforeCreate
@@ -63,7 +63,7 @@ export default {
 
   computed: {
     ...mapActions(['fetchSliderRecipes']),
-    ...mapGetters(['getSliderRecipes', 'getDefaultImage']),
+    ...mapGetters(['getSliderRecipes', 'getDefaultImage'])
   },
 
   methods: {
@@ -87,8 +87,8 @@ export default {
         this.currentRecipe = this.recipesArray.length - 1
       }
       this.$refs.slide = this.recipesArray[this.currentRecipe]
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -128,26 +128,9 @@ export default {
   }
 }
 
-/* @media (min-width: 776px) {
+@media (min-width: 992px) {
   .popularWrapper {
-    @include boxSize($width: 80%);
+    @include boxSize($width: 500px, $maxWidth: initial);
   }
 }
- */
-/* @media (min-width: 996px) {
-  .popularWrapper {
-    @include boxSize($width: 70%);
-    .carouselContainer {
-      .arrows {
-        @include fonts($size: 2.5rem);
-      }
-    }
-  }
-} */
-
-/* @media (min-width: 996px) {
-  .popularWrapper {
-    //@include boxSize($width: 60%);
-  }
-} */
 </style>

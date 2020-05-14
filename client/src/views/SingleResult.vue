@@ -3,20 +3,51 @@
     <div v-if="ready" class="singleResultWrapper">
       <h1 class="mgb1">{{ resultRecipe.mealName }}</h1>
       <section class="favorites flex">
-        <button class="addToFavorites mgt1" title="Add to favorites">
+        <div class="messageWrapper center">
+          <transition name="expand" mode="out-in">
+            <InfoMessage
+              v-if="message !== ''"
+              :message="message"
+              :messageStatus="messageStatus"
+              @clear="updateMessage('')"
+            />
+          </transition>
+        </div>
+        <button
+          v-if="disableRecipeSaving"
+          class="addToFavorites"
+          title="Add to favorites"
+          @click="addToFavorites"
+        >
           Add to favorites &nbsp;<font-awesome-icon
             :icon="['fas', 'plus']"
             class="plus"
           >
           </font-awesome-icon>
         </button>
-        <button class="addRate mgt1">
-          Rate this &nbsp;<font-awesome-icon
-            :icon="['fa', 'star']"
-            class="starIcon"
+        <transition v-else name="pulsing-in" appear>
+          <div
+            :class="
+              disableRecipeSaving ? 'changableSave' : 'changableSave heart'
+            "
           >
-          </font-awesome-icon>
-        </button>
+            <span>Recipe saved</span>
+          </div>
+        </transition>
+        <Rating
+          v-if="disableRating"
+          :resultRecipe="resultRecipe"
+          @updateRating="updateRecipe"
+          @updateMsg="updateMessage"
+          @updateMsgStatus="updateMessageStatus"
+        />
+        <transition v-if="userRate" name="pulsing-in" appear>
+          <p class="userRating flex flexCenter">
+            Your rate:<span>{{ userRate }}</span
+            ><font-awesome-icon :icon="['fas', 'star']" class="starIcon">
+            </font-awesome-icon>
+          </p>
+        </transition>
       </section>
       <section class="basicInfo flex mgb1">
         <span title="Level of difficulty"
@@ -25,7 +56,7 @@
           {{ resultRecipe.level }}</span
         >
         <span title="Number of persons"
-          ><font-awesome-icon :icon="['fas', 'users']" class="mealIcons">
+          ><font-awesome-icon :icon="['fas', 'user']" class="mealIcons">
           </font-awesome-icon>
           {{ resultRecipe.persons }}</span
         >
@@ -50,21 +81,35 @@
         />
       </figure>
       <section class="underImage flex mgb1">
-        <p class="userInfo flex flexCenter mgb1">
-          <img
-            v-if="resultRecipe.author.user_image.url"
-            :src="resultRecipe.author.user_image.url"
-            alt="user image"
-            class="authorImage"
-          />
-          <img
-            v-else
-            :src="getDefaultUserImage"
-            alt="user image"
-            class="authorImage"
-          />
-          <span class="authorUsername">{{ resultRecipe.author.username }}</span>
-        </p>
+        <div class="userInfoRating flex mgb1">
+          <p class="userInfo flex flexCenter">
+            <img
+              v-if="resultRecipe.author.user_image.url"
+              :src="resultRecipe.author.user_image.url"
+              alt="user image"
+              class="authorImage"
+            />
+            <img
+              v-else
+              :src="getDefaultUserImage"
+              alt="user image"
+              class="authorImage"
+            />
+            <span class="authorUsername">{{
+              resultRecipe.author.username
+            }}</span>
+          </p>
+          <p class="rating">
+            <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
+            </font-awesome-icon
+            >&nbsp;&nbsp;{{ resultRecipe.rating }} /
+            <span class="lightItalic">{{
+              resultRecipe.rates.length
+                ? resultRecipe.rates.length + ' votes'
+                : 'not rated'
+            }}</span>
+          </p>
+        </div>
         <span class="recipeDate">{{
           convertDate(resultRecipe.createdAt)
         }}</span>
@@ -132,6 +177,7 @@
       <Comments
         :comments="resultRecipe.comments"
         :recipeId="this.$route.params.id"
+        @updating="updateRecipe"
       />
     </div>
     <div class="messagewrapper" v-else>
@@ -145,18 +191,26 @@ import { mapActions, mapGetters } from 'vuex'
 import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
 import dateFormat from './../mixins/dateFormat'
+import InfoMessage from '../components/sharedComponents/InfoMessage'
+import Rating from '../components/SingleResult/Rating'
+import axios from 'axios'
+import { usersUrl, source } from '../apiData'
 
 export default {
   name: 'SingleResult',
   components: {
     NotFound,
-    Comments
+    Rating,
+    Comments,
+    InfoMessage
   },
 
   data() {
     return {
       ready: false,
-      resultRecipe: {}
+      resultRecipe: {},
+      message: '',
+      messageStatus: false
     }
   },
 
@@ -178,10 +232,136 @@ export default {
 
   computed: {
     ...mapActions(['fetchSingleRecipe']),
-    ...mapGetters(['getSingleRecipe', 'getDefaultImage', 'getDefaultUserImage'])
+    ...mapGetters([
+      'getSingleRecipe',
+      'getDefaultImage',
+      'getDefaultUserImage',
+      'getCurrentUser',
+      'getIsLogged'
+    ]),
+
+    disableRecipeSaving() {
+      if (!this.getIsLogged) {
+        return true
+      }
+      const checkUserFavorites = this.getCurrentUser.favorites.filter(
+        (fav) => fav === this.resultRecipe._id
+      )
+      // console.log(checkUserFavorites)
+      if (checkUserFavorites.length) {
+        return false
+      } else {
+        return true
+      }
+    },
+
+    checkRatedBy() {
+      if (this.getIsLogged) {
+        return this.resultRecipe.rates.filter(
+          (rate) => rate.ratedBy === this.getCurrentUser.userId
+        )
+      } else {
+        return null
+      }
+    },
+
+    disableRating() {
+      if (!this.getIsLogged) {
+        return true
+      }
+      if (
+        this.getIsLogged &&
+        (this.resultRecipe.author._id === this.getCurrentUser.userId ||
+          this.checkRatedBy.length)
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
+
+    userRate() {
+      if (
+        this.getIsLogged &&
+        this.resultRecipe.author._id !== this.getCurrentUser.userId &&
+        this.checkRatedBy.length
+      ) {
+        console.log(this.checkRatedBy)
+        return this.checkRatedBy[0].rate
+      } else {
+        return null
+      }
+    }
   },
 
-  mixins: [dateFormat]
+  mixins: [dateFormat],
+
+  methods: {
+    updateMessage(message) {
+      this.message = message
+    },
+
+    updateMessageStatus(msgStatus) {
+      this.messageStatus = msgStatus
+    },
+
+    async updateRecipe() {
+      try {
+        const result = await this.$store.dispatch(
+          'fetchSingleRecipe',
+          this.$route.params.id
+        )
+        if (result) {
+          this.resultRecipe = Object.assign({}, this.getSingleRecipe)
+          console.log(result)
+          this.updateMessageStatus(true)
+          this.updateMessage('Recipe has been rated')
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    },
+
+    async addToFavorites() {
+      try {
+        if (!this.getIsLogged) {
+          this.updateMessageStatus(false)
+          this.updateMessage('Login to add this recipe')
+          return
+        }
+        const response = await axios.patch(
+          `${usersUrl}/favorites/${this.getCurrentUser.userId}`,
+          { favoriteId: this.resultRecipe._id },
+          {
+            cancelToken: source.token
+          }
+        )
+        if (response) {
+          console.log(response)
+          this.$store.dispatch('updateUser', response.data.updatedUser)
+          this.updateMessageStatus(true)
+          console.log(this.messageStatus)
+          this.updateMessage(response.data.message)
+        }
+      } catch (error) {
+         (thrown, error) => {
+          this.updateMessageStatus(false)
+          if (axios.isCancel(thrown)) {
+            console.log('Request canceled', thrown.message)
+          } else {
+            if (
+              error.response &&
+              (error.response.status === 401 || error.response.status === 409)
+            ) {
+              console.log(error.response.data.message)
+              this.updateMessageStatus(false)
+              this.updateMessage(error.response.data.message)
+            }
+          }
+        }
+      }
+    }
+  }
 }
 </script>
 
@@ -189,6 +369,7 @@ export default {
 .singleResultWrapper {
   @include alignment($display: flex, $justify: center, $align: center);
   flex-direction: column;
+  @include boxSize($width: 100%);
 
   section {
     border-bottom: 1px inset rgb(209, 207, 207);
@@ -207,26 +388,82 @@ export default {
     object-fit: cover;
   }
   h1 {
-    $color: $graphite;
+    //$color: $graphite;
+    color: transparent;
+    background: #666666;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
   }
 
   .favorites {
     @include alignment($align: center);
-    button {
-      @include alignment($display: inline-block);
-      @include boxSize($width: 140px, $height: 30px);
+    flex-wrap: wrap;
+
+    .addToFavorites,
+    .changableSave {
+      @include boxSize($width: 140px, $height: 40px);
     }
+
     .addToFavorites {
       @include fonts($color: $white);
+      @include alignment($display: inline-block);
       background: linear-gradient(270deg, #38a16a, #16604d, #7cd49a);
       background-size: 600% 600%;
       animation: movingBackground 30s ease infinite;
+      margin-bottom: 0.8rem;
     }
 
-    .addRate {
-      @include fonts($color: $graphite);
-      background-color: $white;
-      border: 2px inset darkgray;
+    .changableSave {
+      &.heart {
+        position: relative;
+        width: 100px;
+        height: 40px;
+      }
+      &.heart:before,
+      &.heart:after {
+        position: absolute;
+        content: '';
+        left: 20px;
+        top: 0;
+        width: 20px;
+        height: 35px;
+        background: #ec476b;
+        border-radius: 50px 50px 0 0;
+        transform: rotate(-45deg);
+        transform-origin: 0 100%;
+      }
+      &.heart:after {
+        left: 0;
+        transform: rotate(45deg);
+        transform-origin: 100% 100%;
+      }
+
+      span {
+        position: absolute;
+        text-align: left;
+        @include fonts($size: 0.9rem, $color: lighten($graphite, 20%));
+      }
+    }
+
+    .userRating {
+      @include boxSize($height: 40px);
+      @include fonts($size: 0.9rem, $color: lighten($graphite, 20%));
+
+      span,
+      .starIcon {
+        margin-left: 0.3rem;
+      }
+
+      span {
+        @include fonts($color: lighten($graphite, 15%));
+        text-shadow: #706f6f 1px 1px 0;
+      }
+    }
+
+    .messageWrapper {
+      @include boxSize($width: 100%, $height: 40px);
     }
   }
 
@@ -237,6 +474,7 @@ export default {
     span {
       margin-right: 1rem;
     }
+
     .mealIcons {
       color: gray;
       margin-right: 0.2rem;
@@ -248,28 +486,38 @@ export default {
     box-shadow: $shadowSmall;
 
     img {
-      @include boxSize($width: 100%, $height: 270px);
+      @include boxSize($width: 100%, $height: 100%);
     }
   }
 
   .underImage {
-    .authorImage {
-      @include boxSize($width: 40px, $height: 40px);
-      border-radius: 50%;
-      margin-right: 0.5rem;
+    @include boxSize($width: 100%);
+
+    .userInfoRating {
+      @include boxSize($width: 100%);
+      @include alignment($justify: space-between, $align: center);
+
+      .authorImage {
+        @include boxSize($width: 40px, $height: 40px);
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
     }
 
     .recipeDate {
       @include fonts($size: 0.8rem, $color: gray);
     }
     .intro {
-      margin-top: 0.7rem;
       color: rgb(75, 72, 72);
+    }
+
+    .intro {
+      margin-top: 0.7rem;
     }
   }
 
   .additionalInfo {
-    @include fonts($size: 1.2rem);
+    @include fonts($size: 1.1rem);
 
     .additionalIcons {
       margin-left: 0.5rem;
@@ -315,17 +563,34 @@ export default {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   .singleResultWrapper {
-    .favorites {
-      @include alignment($direction: row, $justify: space-evenly);
+    @include boxSize($width: 550px);
+
+    figure {
+      @include boxSize($width: 500px);
     }
   }
 }
 
-@media (min-width: 996px) {
+@media (min-width: 768px) {
   .singleResultWrapper {
-    @include boxSize($maxWidth: 1500px);
+    .favorites {
+      @include alignment($direction: row, $justify: space-evenly);
+      .addToFavorites {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .singleResultWrapper {
+    @include boxSize($width: 900px, $maxWidth: initial);
+    @include alignment($display: grid);
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(8, auto);
+    grid-template-areas: 'title title' 'favorites favorites' 'basicInfo basicInfo' 'photo additionalInfo' 'underImage underImage' 'ingredients ingredients' 'directions directions' 'comments comments';
 
     h1 {
       grid-area: title;
@@ -343,19 +608,21 @@ export default {
 
     figure {
       grid-area: photo;
-      @include boxSize($height: 400px);
-
-      img {
-        @include boxSize($height: 400px);
-      }
+      @include boxSize($height: 400px, $width: 600px);
     }
 
     .underImage {
       grid-area: underImage;
+
+      .userInfoRating {
+        @include boxSize($width: 65%);
+      }
     }
 
     .additionalInfo {
       grid-area: additionalInfo;
+      border: none;
+      align-self: start;
     }
 
     .ingredients {

@@ -167,33 +167,31 @@ export default {
           `${usersUrl}/${this.getCurrentUser.userId}`,
           formData,
           {
-            cancelToken: source.token
+            cancelToken: source.token,
+            timeout: 5000
           }
         )
         if (response) {
-          console.log(response.data.updatedUser)
+          // console.log(response.data.updatedUser)
           this.$store.dispatch('updateUser', response.data.updatedUser)
           this.toggleLoader()
           this.messageStatus = true
           this.updateMessage('Image uploaded successfully!')
         }
-      } catch {
-         (thrown, error) => {
+      } catch (error) {
+         (thrown) => {
           this.messageStatus = false
           if (axios.isCancel(thrown)) {
             console.log('Request canceled', thrown.message)
-          } else {
-            if (
-              error.response &&
-              (error.response.status === 401 || error.response.status === 409)
-            ) {
-              // console.log(error.response.data.message)
-
-              this.messageStatus = false
-              this.updateMessage(error.response.data.message)
-            }
           }
         }
+        this.toggleLoader()
+        if (error.response.status === 500) {
+          this.updateMessage('Too large or unsupported file')
+        } else {
+          this.updateMessage(error.response.data.message)
+        }
+        console.log(error.message)
       }
     }
   }

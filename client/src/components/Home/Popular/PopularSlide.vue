@@ -13,12 +13,14 @@
               :src="getDefaultImage"
               :key="recipe._id"
               :alt="recipe.mealName"
+              class="imageFit"
             />
             <img
               v-else
               :src="recipe.image"
               :key="recipe._id"
               :alt="recipe.mealName"
+              class="imageFit"
             />
           </transition>
           <figcaption>
@@ -67,12 +69,9 @@ export default {
 .slideContainer {
   position: relative;
   figure {
-    @include boxSize($height: 300px);
+    @include boxSize($height: 250px, $width: 300px);
     overflow: hidden;
-    img {
-      @include boxSize($width: 100%, $height: 100%);
-      object-fit: cover;
-    }
+
     figcaption {
       position: absolute;
       bottom: 0;
@@ -89,14 +88,14 @@ export default {
     }
   }
 }
-/* 
+
 @media (min-width: 500px) {
   .slideContainer {
     figure {
-      @include boxSize($height: 400px);
+      @include boxSize($width: 400px, $height: 300px);
     }
   }
-} */
+}
 
 /* @media (min-width: 776px) {
   .slideContainer {
@@ -105,19 +104,11 @@ export default {
     }
   }
 } */
-/* @media (min-width: 996px) {
+/* @media (min-width: 992px) {
   .slideContainer {
     figure {
-      @include boxSize($height: 400px);
+      @include boxSize($width: 400px);
     }
   }
-} */
-
-/* @media (min-width: 996px) {
-  .slideContainer {
-    figure {
-      @include boxSize($height: 500px);
-    }
-  }
-} */
+}  */
 </style>

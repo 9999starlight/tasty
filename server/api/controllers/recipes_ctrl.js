@@ -20,8 +20,7 @@ exports.getRecipes = async (req, res, next) => {
       query = query.sort(req.query.sort)
     }
 
-    const docs = await query
-    .populate({
+    const docs = await query.populate({
       // Get comment's author info
       path: 'author',
       select: 'username user_image createdRecipes _id'
@@ -277,7 +276,7 @@ exports.addRating = async (req, res, next) => {
         }
       }
     )
-    console.log('rating: ' + summed)
+    // console.log('rating: ' + summed)
     res.status(200).json({
       message: 'Recipe has been rated',
       summedRating
@@ -323,6 +322,11 @@ exports.deleteRecipe = async (req, res) => {
         }
       }
     )
+    await User.updateMany({
+      $pull: {
+        favorites: recipe._id
+      }
+    })
     await recipe.remove()
     res.status(200).json(recipe.mealName + ' DELETED!')
   } catch (error) {

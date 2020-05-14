@@ -30,11 +30,11 @@ export default {
     }, 5000)
   },
 
-  methods: {
+/*   methods: {
     clear() {
       this.message = ''
     }
-  },
+  }, */
 
   beforeDestroy() {
     clearTimeout(this.timeSet)
