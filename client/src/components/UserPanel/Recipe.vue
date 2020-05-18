@@ -106,6 +106,7 @@ export default {
           const response = await axios.delete(`${recipesUrl}/${recipeId}`)
           if (response) {
             console.log(response.data)
+            this.$store.dispatch('updateUser', response.data.userUpdate)
             this.$emit('del')
           }
         }
@@ -206,6 +207,7 @@ export default {
 
 @media (min-width: 768px) {
   .userRecipe {
+    @include boxSize($width: 100%);
     grid-template-columns: 1fr 1.5fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: 'image mealName rating editDelete' 'image details date editDelete';
@@ -216,9 +218,19 @@ export default {
 
       button {
         @include boxSize($width: 60px, $height: 60px);
-        align-self: end;
+        align-self: flex-end;
+      }
+
+      .userInfo {
+        justify-content: flex-end;
       }
     }
+  }
+}
+
+@media (min-width: 992px) {
+  .userRecipe {
+    @include boxSize($width: 900px);
   }
 }
 </style>

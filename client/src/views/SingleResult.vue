@@ -165,12 +165,12 @@
         <h3 class="mgb1">Directions:</h3>
         <ol class="flex">
           <li
-            v-for="(step, index) in resultRecipe.steps"
+            v-for="(st, index) in resultRecipe.steps"
             :key="index"
             :data-number="index + 1"
             class="mgb1"
           >
-            <p>{{ step }}</p>
+            <p>{{ st.step }}</p>
           </li>
         </ol>
       </section>
@@ -381,6 +381,7 @@ export default {
   }
 
   section {
+    //@include boxSize($height: 100%);
     @include alignment($direction: column, $align: flex-start);
     padding: 0.8rem;
   }
@@ -509,6 +510,7 @@ export default {
     }
     .intro {
       color: rgb(75, 72, 72);
+      text-align: left;
     }
 
     .intro {
@@ -537,6 +539,7 @@ export default {
 
       li {
         @include fonts($color: rgb(75, 72, 72), $size: 1.2rem);
+        text-align: left;
       }
     }
   }

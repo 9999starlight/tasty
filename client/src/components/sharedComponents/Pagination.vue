@@ -14,7 +14,11 @@
         </a>
       </li>
       <li>
-        <a v-show="currentPage > 1" href="#" @click.prevent="$emit('first')">
+        <a
+          v-show="!togglePrevDisabled && totalResults > resultsPerPage"
+          href="#"
+          @click.prevent="$emit('first')"
+        >
           First
         </a>
       </li>
@@ -28,7 +32,7 @@
       </li>
       <li>
         <a
-          v-show="this.currentPage < pageNumbers[pageNumbers.length - 1]"
+          v-show="!toggleNextDisabled"
           href="#"
           @click.prevent="$emit('last', pageNumbers)"
           >Last
@@ -53,11 +57,6 @@
 <script>
 export default {
   name: 'Pagination',
-
-  /*   data() {
-    return {
-    }
-  }, */
 
   props: {
     resultsPerPage: {

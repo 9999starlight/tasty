@@ -6,8 +6,15 @@
       v-if="!getCurrentUser.createdRecipes.length"
       :message="noRecipes"
     />
-    <div v-else class="listContainer" id="listContainer">
-      <SortingButtons />
+    <div v-else class="listContainer flex flexCenter" id="listContainer">
+      <SortingButtons
+        @sortTitleAsc="sortTitleAscending(fetchedRecipes)"
+        @sortTitleDesc="sortTitleDescending(fetchedRecipes)"
+        @sortRatingAsc="sortRatingAscending(fetchedRecipes)"
+        @sortRatingDesc="sortRatingDescending(fetchedRecipes)"
+        @sortDateAsc="sortDateAscending(fetchedRecipes)"
+        @sortDateDesc="sortDateDescending(fetchedRecipes)"
+      />
       <Recipe
         v-for="recipe in fetchedRecipes"
         :key="recipe._id"
@@ -26,6 +33,7 @@ import NotFound from '../sharedComponents/NotFound'
 import Loader from '../sharedComponents/Loader'
 import SortingButtons from '../sharedComponents/SortingButtons'
 import loaderMixin from '../../mixins/loaderMixin'
+import sortingResults from '../../mixins/sortingResults'
 import Recipe from './Recipe'
 import axios from 'axios'
 import { recipesUrl } from '../../apiData'
@@ -49,7 +57,7 @@ export default {
     }
   },
 
-  mixins: [loaderMixin],
+  mixins: [loaderMixin, sortingResults],
 
   computed: {
     ...mapGetters(['getCurrentUser'])
@@ -85,21 +93,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .userRecipes {
   @include boxSize($width: 100%);
   @include alignment($direction: column);
   // border-top: 2px solid rgb(233, 231, 231);
-
+    .listContainer {
+      @include alignment($direction: column);
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
   }
 }
+    }
 
 @media (min-width: 992px) {
   .userRecipes {
     .listContainer {
-      @include boxSize($maxWidth: 900px);
+      @include alignment($direction: column);
+      @include boxSize($width: 900px);
 
       .renderRecipes {
         @include boxSize($maxWidth: 900px);

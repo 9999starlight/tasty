@@ -57,21 +57,23 @@ exports.newRecipeValidation = (req, res, next) => {
   const newRecipeSchema = Joi.object({
     mealName: Joi.string()
       .min(4)
-      .max(80)
-      .regex(/^(?!\s*$).{4,80}/i)
+      .max(50)
+      .regex(/^(?!\s*$).{4,50}/i)
       .required(),
     intro: Joi.string()
       .min(4)
-      .max(80)
-      .regex(/^(?!\s*$).{4,80}/i)
+      .max(150)
+      .regex(/^(?!\s*$).{4,150}/i)
       .required(),
     dishType: Joi.string()
       .min(3)
       .max(40)
-      .regex(/^\b(pasta|salad|bread|soup|side dish|roast|pizza|stew|sandwich|pastry|sauce|cookie|dessert|drink|main|snack)\b$/i)
+      .regex(
+        /^\b(pasta|salad|bread|soup|side dish|roast|pizza|stew|sandwich|pastry|sauce|cookie|dessert|drink|main|snack)\b$/i
+      )
       .required(),
     level: Joi.string().regex(/^\b(easy|medium|hard)\b$/i),
-    timing: Joi.string(),
+    timing: Joi.number().required(),
     persons: Joi.number().required(),
     regional: Joi.string(),
     vegetarian: Joi.boolean(),
@@ -80,11 +82,11 @@ exports.newRecipeValidation = (req, res, next) => {
     ingredients: Joi.array()
       .items({
         ingredient: Joi.string().required(),
-        amount: Joi.string()
+        amount: Joi.string().allow('')
       })
       .required(),
-    steps: Joi.array().items(Joi.string().required()).required(),
-    author: Joi.string()
+    steps: Joi.array().items({ step: Joi.string().required() }).required(),
+    author: Joi.string().required()
   })
   const { error } = newRecipeSchema.validate(req.body)
   if (error) {
@@ -100,31 +102,30 @@ exports.updateRecipeValidation = (req, res, next) => {
   const updateRecipeSchema = Joi.object({
     mealName: Joi.string()
       .min(4)
-      .max(80)
-      .regex(/^(?!\s*$).{4,80}/i),
+      .max(50)
+      .regex(/^(?!\s*$).{4,50}/i),
     intro: Joi.string()
       .min(4)
-      .max(80)
-      .regex(/^(?!\s*$).{4,80}/i),
+      .max(150)
+      .regex(/^(?!\s*$).{4,150}/i),
     dishType: Joi.string()
       .min(3)
       .max(40)
       .regex(/^(?!\s*$).{3,40}/i),
     level: Joi.string(),
-    timing: Joi.string(),
+    timing: Joi.number(),
     persons: Joi.number(),
     regional: Joi.string(),
     vegetarian: Joi.boolean(),
     glutenFree: Joi.boolean(),
     image: Joi.object(),
-    // ingredients: Joi.array().items(Joi.string().required()),
     ingredients: Joi.array()
       .items({
         ingredient: Joi.string().required(),
         amount: Joi.string()
       })
       .required(),
-    steps: Joi.array().items(Joi.string().required())
+    steps: Joi.array().items({ step: Joi.string().required() }).required()
   })
   const { error } = updateRecipeSchema.validate(req.body)
   if (error) {

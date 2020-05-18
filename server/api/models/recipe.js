@@ -6,8 +6,8 @@ const recipeSchema = mongoose.Schema({
     type: String,
     required: true,
     minlength: 4,
-    maxlength: 80,
-    match: /^(?!\s*$).{4,80}/i
+    maxlength: 50,
+    match: /^(?!\s*$).{4,50}/i
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
@@ -18,8 +18,8 @@ const recipeSchema = mongoose.Schema({
     type: String,
     required: true,
     minlength: 4,
-    maxlength: 80,
-    match: /^(?!\s*$).{4,80}/i
+    maxlength: 150,
+    match: /^(?!\s*$).{4,150}/i
   },
   dishType: {
     type: String,
@@ -35,9 +35,8 @@ const recipeSchema = mongoose.Schema({
     match: /^\b(easy|medium|hard)\b$/i
   },
   timing: {
-    type: String,
-    required: false,
-    default: ''
+    type: Number,
+    required: true,
   },
   persons: {
     type: Number,
@@ -75,10 +74,15 @@ const recipeSchema = mongoose.Schema({
       }
     }
   ],
-  steps: {
-    type: Array,
-    required: true
-  },
+  steps: [
+    {
+      _id: false,
+      step: {
+        type: String,
+        required: true
+      }
+    }
+  ],
   createdAt: {
     type: Date,
     default: Date.now

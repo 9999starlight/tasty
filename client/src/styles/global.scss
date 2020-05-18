@@ -18,6 +18,11 @@
   transition: all 0.1s ease;
 }
 
+button[disabled],
+input[disabled] {
+  cursor: not-allowed;
+}
+
 button:focus,
 input:focus,
 input:checked~span:focus,
@@ -132,8 +137,54 @@ a {
   @include fonts($color: green, $size: 0.7rem);
 }
  */
-:disabled {
-  color: red;
+ .messageWrapper {
+  @include boxSize($height: 40px);
+  margin-top: 1rem;
+}
+
+.required {
+  color: crimson;
+}
+
+// checkboxes, home page form, create/edit recipe form
+.checkBoxes {
+  @include alignment($justify: space-around);
+  @include boxSize($width: 260px);
+  margin: 0.5rem 0;
+  label {
+    position: relative;
+    padding-left: 2rem;
+    input {
+      position: absolute;
+      visibility: hidden;
+      cursor: pointer;
+    }
+
+    span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 1.6rem;
+      width: 1.6rem;
+      background-color: lightgray;
+      border-radius: 5px;
+
+      &:after {
+        content: ' \2714';
+        position: absolute;
+        visibility: hidden;
+        color: white;
+        font-size: 1.2rem;
+        left: 0.4rem;
+      }
+    }
+    input:checked ~ span:after {
+      visibility: visible;
+    }
+    input:checked ~ span {
+      background-color: rgba(74, 143, 74, 0.979);
+    }
+  }
 }
 
 // animations transitions
@@ -179,7 +230,7 @@ a {
   a:hover,
   button:hover,
   input[type="button"]:hover {
-    filter: brightness(80%);
+    filter: brightness(90%);
   }
 }
 

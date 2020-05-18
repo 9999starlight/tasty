@@ -3,7 +3,15 @@
     <h1 class="mg1">Saved recipes</h1>
     <Loader :bigLoader="bigLoader" v-if="isLoading" />
     <NotFound v-if="!getCurrentUser.favorites.length" :message="noRecipes" />
-    <div v-else class="listContainer" id="listContainer">
+    <div v-else class="listContainer flex flexCenter" id="listContainer">
+      <SortingButtons
+        @sortTitleAsc="sortTitleAscending(savedRecipes)"
+        @sortTitleDesc="sortTitleDescending(savedRecipes)"
+        @sortRatingAsc="sortRatingAscending(savedRecipes)"
+        @sortRatingDesc="sortRatingDescending(savedRecipes)"
+        @sortDateAsc="sortDateAscending(savedRecipes)"
+        @sortDateDesc="sortDateDescending(savedRecipes)"
+      />
       <Recipe
         v-for="recipe in savedRecipes"
         :key="recipe._id"
@@ -20,7 +28,9 @@
 import { mapGetters } from 'vuex'
 import NotFound from '../sharedComponents/NotFound'
 import Loader from '../sharedComponents/Loader'
+import SortingButtons from '../sharedComponents/SortingButtons'
 import loaderMixin from '../../mixins/loaderMixin'
+import sortingResults from '../../mixins/sortingResults'
 import Recipe from './Recipe'
 import axios from 'axios'
 import { recipesUrl } from '../../apiData'
@@ -30,7 +40,8 @@ export default {
   components: {
     NotFound,
     Loader,
-    Recipe
+    Recipe,
+    SortingButtons
   },
 
   data() {
@@ -42,7 +53,7 @@ export default {
     }
   },
 
-  mixins: [loaderMixin],
+  mixins: [loaderMixin, sortingResults],
 
   mounted() {
     //console.log('saved recipes mounted')
@@ -84,21 +95,23 @@ export default {
   @include boxSize($width: 100%);
   @include alignment($direction: column);
   // border-top: 2px solid rgb(233, 231, 231);
-
+  .listContainer {
+    @include alignment($direction: column);
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
   }
 }
-
+}
 @media (min-width: 992px) {
   .savedRecipes {
     .listContainer {
-      @include boxSize($maxWidth: 900px);
+      @include alignment($direction: column);
+      @include boxSize($width: 900px);
 
-      .renderRecipes {
+     /*  .renderRecipes {
         @include boxSize($maxWidth: 900px);
-      }
+      } */
     }
   }
 }

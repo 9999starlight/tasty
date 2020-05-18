@@ -158,6 +158,8 @@ export default {
         }
         //console.log(this.imageValidation(this.image))
         if (!this.imageValidation(this.image)) {
+          this.messageStatus = false
+          this.updateMessage(this.valMessage)
           return
         }
         this.toggleLoader()

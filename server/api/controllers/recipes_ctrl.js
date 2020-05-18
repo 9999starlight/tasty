@@ -60,7 +60,7 @@ exports.getRecipes = async (req, res, next) => {
 
 exports.getSingleRecipe = async (req, res, next) => {
   const id = req.params.recipeId
-  console.log('server gets this id: ', id)
+  // console.log('server gets this id: ', id)
   try {
     const doc = await Recipe.findById(id)
       .populate({
@@ -93,6 +93,7 @@ exports.getSingleRecipe = async (req, res, next) => {
 
 exports.addNewRecipe = async (req, res, next) => {
   try {
+    // console.log(req.body)
     let imageresult = ''
     if (req.file)
       imageresult = await cloudinary.v2.uploader.upload(
@@ -124,7 +125,7 @@ exports.addNewRecipe = async (req, res, next) => {
       steps: req.body.steps
     })
     const result = await recipe.save()
-    await User.updateOne(
+    const updateUserRecipes = await User.findByIdAndUpdate(
       {
         _id: result.author
       },
@@ -132,12 +133,22 @@ exports.addNewRecipe = async (req, res, next) => {
         $push: {
           createdRecipes: result._id
         }
-      }
+      },
+      { new: true }
     )
     //console.log(result)
     res.status(201).json({
-      message: 'new recipe created',
-      createdRecipe: result
+      message: 'New recipe created successfully!',
+      createdRecipe: result,
+      updatedUser: {
+        username: updateUserRecipes.username,
+        userId: updateUserRecipes._id,
+        isAdmin: updateUserRecipes.isAdmin,
+        createdAt: updateUserRecipes.createdAt,
+        createdRecipes: updateUserRecipes.createdRecipes,
+        favorites: updateUserRecipes.favorites,
+        userImage: updateUserRecipes.user_image.url
+      }
     })
   } catch (error) {
     console.log(error.message)
@@ -264,7 +275,7 @@ exports.addRating = async (req, res, next) => {
     const summed =
       setRating.rates.reduce((total, rt) => total + rt.rate, 0) /
       setRating.rates.length
-    console.log(summed)
+    // console.log(summed)
 
     const summedRating = await Recipe.updateOne(
       {
@@ -312,7 +323,12 @@ exports.deleteRecipe = async (req, res) => {
     await Comment.deleteMany({
       commentedRecipeId: recipe._id
     })
-    await User.updateOne(
+    await User.updateMany({
+      $pull: {
+        favorites: recipe._id
+      }
+    })
+    const updatedUser = await User.findByIdAndUpdate(
       {
         _id: recipe.author
       },
@@ -320,15 +336,23 @@ exports.deleteRecipe = async (req, res) => {
         $pull: {
           createdRecipes: recipe._id
         }
-      }
+      },
+      { new: true }
     )
-    await User.updateMany({
-      $pull: {
-        favorites: recipe._id
+
+    await recipe.remove()
+    res.status(200).json({
+      message: recipe.mealName + ' deleted!',
+      userUpdate: {
+        username: updatedUser.username,
+        userId: updatedUser._id,
+        isAdmin: updatedUser.isAdmin,
+        createdAt: updatedUser.createdAt,
+        createdRecipes: updatedUser.createdRecipes,
+        favorites: updatedUser.favorites,
+        userImage: updatedUser.user_image.url
       }
     })
-    await recipe.remove()
-    res.status(200).json(recipe.mealName + ' DELETED!')
   } catch (error) {
     console.log(error.message)
     res.status(500).json({

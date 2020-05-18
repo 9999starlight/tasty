@@ -7,6 +7,7 @@
     @keydown.enter.exact.prevent="open = true"
             @keydown.up.prevent="previousItem"
      @keydown.down.prevent="nextItem"
+     @focusout="$emit('checkValue')"
   >
     <div class="selected" :class="{ open: open }" @click="toggleOpen">
       {{ selected }}

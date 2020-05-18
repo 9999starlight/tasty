@@ -1,8 +1,17 @@
 <template>
   <div class="resultsWrapper flex flexCenter mgt2" id="searchResults">
-    <div class="inner flex flexCenter">
-      <h2 class="slim pd1" v-if="getSuccess === true">Search Results</h2>
-      <div class="successful flex" v-if="getSuccess === true">
+    <div class="inner flex flexCenter" v-if="getSuccess">
+      <h2 class="slim pd1">Search Results</h2>
+      <h5>Number of results: {{ this.results.length }}</h5>
+      <SortingButtons
+        @sortTitleAsc="sortTitleAscending(results)"
+        @sortTitleDesc="sortTitleDescending(results)"
+        @sortRatingAsc="sortRatingAscending(results)"
+        @sortRatingDesc="sortRatingDescending(results)"
+        @sortDateAsc="sortDateAscending(results)"
+        @sortDateDesc="sortDateDescending(results)"
+      />
+      <div class="successful flex">
         <div
           class="results flex flexCenter mg1"
           v-for="recipe in currentRecipes"
@@ -12,9 +21,8 @@
         </div>
       </div>
       <Pagination
-        v-if="getSuccess === true"
         :resultsPerPage="resultsPerPage"
-        :totalResults="getQueriedRecipes.length"
+        :totalResults="results.length"
         :currentPage="currentPage"
         @paginate="changePage"
         @prev="prevPage"
@@ -22,40 +30,67 @@
         @first="firstPage"
         @last="lastPage"
       />
-      <div class="messagewrapper" v-if="getSuccess === false">
-        <NotFound :message="'No result for your search'" />
-      </div>
+      <a
+        v-if="getSuccess === true"
+        href="#searchContainer"
+        v-scroll-to="'#searchContainer'"
+        class="block hashLink mg2"
+        >Back to search &nbsp;<font-awesome-icon
+          :icon="['fa', 'hand-point-up']"
+          font-size="15px"
+        ></font-awesome-icon
+      ></a>
     </div>
-    <a
-      v-if="getSuccess === true"
-      href="#searchContainer"
-      v-scroll-to="'#searchContainer'"
-      class="block hashLink mg2"
-      >Back to search &nbsp;<font-awesome-icon
-        :icon="['fa', 'hand-point-up']"
-        font-size="15px"
-      ></font-awesome-icon
-    ></a>
+    <!--     <div class="messagewrapper" v-else>
+      <NotFound :message="'No result for your search'" />
+    </div> -->
   </div>
 </template>
 
 <script>
 import SingleQueryResult from './SingleQueryResult'
-import NotFound from './../../sharedComponents/NotFound'
+//import NotFound from './../../sharedComponents/NotFound'
 import Pagination from './../../sharedComponents/Pagination'
+import SortingButtons from './../../sharedComponents/SortingButtons'
 import { mapGetters } from 'vuex'
 import paginationOptions from '../../../mixins/paginationOptions'
+import sortingResults from '../../../mixins/sortingResults'
 
 export default {
-  name: 'BrowseResults',
+  name: 'QueryResults',
+
+  data() {
+    return {
+      results: []
+    }
+  },
 
   components: {
     SingleQueryResult,
     Pagination,
-    NotFound
+    //NotFound,
+    SortingButtons
   },
 
-  mixins: [paginationOptions],
+  mixins: [paginationOptions, sortingResults],
+
+  created() {
+    this.results = [...this.getQueriedRecipes]
+  },
+
+  watch: {
+    getQueriedRecipes(newValue, oldValue) {
+      if (oldValue !== newValue) {
+        this.results = [...newValue]
+        this.currentPage = 1
+        // console.log('watcher', this.results, this.currentPage)
+      } else {
+        this.currentPage = 1
+        // console.log('watcher', this.results, this.currentPage)
+      }
+    },
+    deep: true
+  },
 
   computed: {
     ...mapGetters(['getQueriedRecipes', 'getSuccess']),
@@ -63,15 +98,15 @@ export default {
     // page settings
     resultsPerPage() {
       // check if results are less than initial value of 2 (to be changed to 10)
-      if (this.getQueriedRecipes.length < 2) {
-        return this.getQueriedRecipes.length
+      if (this.results.length < 2) {
+        return this.results.length
       } else {
         return 2
       }
     },
 
     currentRecipes() {
-      const arr = this.getQueriedRecipes.slice(
+      const arr = this.results.slice(
         this.firstResultIndex,
         this.lastResultIndex
       )

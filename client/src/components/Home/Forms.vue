@@ -77,6 +77,8 @@
 <script>
 import Select from '../sharedComponents/Select'
 import { mapActions, mapGetters } from 'vuex'
+// import paginationOptions from '../../mixins/paginationOptions'
+
 export default {
   name: 'BrowseRecipes',
 
@@ -113,6 +115,8 @@ export default {
   components: {
     Select
   },
+
+  // mixins:[paginationOptions],
 
   computed: {
     ...mapActions(['fetchQueriedRecipes']),
@@ -166,11 +170,12 @@ export default {
 
     // call with query params
     async findRecipes(params) {
-      console.log(params)
+      //console.log(params)
       try {
         await this.$store.dispatch('fetchQueriedRecipes', params)
         // console.log(this.getQueriedRecipes)
         this.queryParams = {}
+        //this.$router.push("query_results")
         this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
       } catch (error) {
         console.log(error.message)
@@ -224,45 +229,6 @@ export default {
     label {
       display: inline-block;
       margin-bottom: 0.3rem;
-    }
-    .checkBoxes {
-      @include alignment($justify: space-around);
-      @include boxSize($width: 260px);
-      margin: 0.5rem 0;
-      label {
-        position: relative;
-        padding-left: 2rem;
-        input {
-          position: absolute;
-          visibility: hidden;
-          cursor: pointer;
-        }
-
-        span {
-          position: absolute;
-          top: 0;
-          left: 0;
-          height: 1.6rem;
-          width: 1.6rem;
-          background-color: lightgray;
-          border-radius: 5px;
-
-          &:after {
-            content: ' \2714';
-            position: absolute;
-            visibility: hidden;
-            color: white;
-            font-size: 1.2rem;
-            left: 0.4rem;
-          }
-        }
-        input:checked ~ span:after {
-          visibility: visible;
-        }
-        input:checked ~ span {
-          background-color: rgba(74, 143, 74, 0.979);
-        }
-      }
     }
   }
 }
