@@ -32,6 +32,7 @@
           :icon="['fa', 'edit']"
           class="edit"
           title="Edit recipe"
+          @click="editingStateSettings"
         ></font-awesome-icon>
       </button>
       <!-- user info conditonal render -->
@@ -132,6 +133,16 @@ export default {
       } catch (error) {
         console.log(error.response.data.message)
       }
+    },
+
+    async editingStateSettings() {
+      try {
+      await this.$store.dispatch('changeEditState', true),
+      await this.$store.dispatch('fetchSingleRecipe', this.recipe._id)
+      this.$router.push('create_recipe')
+      } catch (error) {
+        console.log(error.message)
+      }
     }
   }
 }
@@ -198,7 +209,7 @@ export default {
     }
 
     .authorImage {
-      @include boxSize($width: 40px, $height: 40px);
+      @include boxSize($width: 30px, $height: 30px);
       border-radius: 50%;
       margin-right: 0.5rem;
     }

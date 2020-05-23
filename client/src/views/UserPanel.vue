@@ -20,25 +20,37 @@
         <div class="additionalInfo">
           <p>
             <span class="italic">Member since:</span>
-            {{ convertDate(getCurrentUser.createdAt).substr(0, 11) }}
+            <span>{{ convertDate(getCurrentUser.createdAt) }}</span>
           </p>
           <p>
             <span class="italic">Published recipes:</span>
-            {{ getCurrentUser.createdRecipes.length }}
+            <span>{{ getCurrentUser.createdRecipes.length }}</span>
           </p>
         </div>
         <form enctype="multipart/form-data" class="changePhoto pd1">
-          <label for="file" class="block">Change profile image</label>
-          <div class="uploadBtnWrapper">
-            <input type="file" ref="image" @change="selectImageFile" />
-            <button class="chooseImage">Choose image</button>
+          <label for="file" class="block center">Change profile image</label>
+          <div class="upload flex">
+            <div class="buttons flex">
+              <div class="uploadBtnWrapper">
+                <input type="file" ref="image" @change="selectImageFile" />
+                <button class="chooseImage">Browse image</button>
+              </div>
+              <button
+                @click.prevent="removeSelectedImage"
+                v-if="preview"
+                class="cancelBtn"
+              >
+                Cancel image
+              </button>
+            </div>
+            <figure v-if="preview" class="flex">
+              <img :src="preview" alt="preview" class="imageFit" />
+            </figure>
           </div>
           <div class="small">
+            <small class="selected block">{{ filename }}</small>
             <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
             <small>Maximum upload file size 2Mb</small>
-            <small class="block selected" v-show="filename"
-              >Selected image: {{ filename }}</small
-            >
           </div>
           <Loader :bigLoader="bigLoader" v-show="isLoading" />
           <div class="messageWrapper center">
@@ -112,7 +124,7 @@ import InfoMessage from '../components/sharedComponents/InfoMessage'
 import NotFound from '../components/sharedComponents/NotFound'
 import Loader from '../components/sharedComponents/Loader'
 import axios from 'axios'
-import { usersUrl, source } from '../apiData'
+import { usersUrl } from '../apiData'
 
 export default {
   name: 'userpanel',
@@ -129,6 +141,7 @@ export default {
       message: '',
       messageStatus: false,
       filename: '',
+      preview: null,
       image: ''
     }
   },
@@ -147,6 +160,14 @@ export default {
     selectImageFile() {
       this.image = this.$refs.image.files[0]
       this.filename = this.$refs.image.files[0].name
+      this.preview = URL.createObjectURL(this.image)
+    },
+
+    removeSelectedImage() {
+      this.$refs.image.value = ''
+      this.image = ''
+      this.filename = ''
+      this.preview = null
     },
 
     async submitImage() {
@@ -169,7 +190,6 @@ export default {
           `${usersUrl}/${this.getCurrentUser.userId}`,
           formData,
           {
-            cancelToken: source.token,
             timeout: 5000
           }
         )
@@ -181,12 +201,6 @@ export default {
           this.updateMessage('Image uploaded successfully!')
         }
       } catch (error) {
-         (thrown) => {
-          this.messageStatus = false
-          if (axios.isCancel(thrown)) {
-            console.log('Request canceled', thrown.message)
-          }
-        }
         this.toggleLoader()
         if (error.response.status === 500) {
           this.updateMessage('Too large or unsupported file')
@@ -232,6 +246,10 @@ export default {
       font-size: 0.9rem;
       margin-bottom: 0.5rem;
     }
+
+    label {
+      color: lighten($graphite, 20%);
+    }
   }
   .profile {
     @include alignment($display: flex, $direction: column, $align: center);
@@ -260,13 +278,52 @@ export default {
         box-shadow: $shadowBox;
       }
     }
-    .additionalInfo span {
-      margin-right: 0.5rem;
+    .additionalInfo {
+      span {
+        margin-right: 0.5rem;
+        @include fonts($size: 0.8rem);
+      }
     }
     form {
       grid-area: form;
       background-color: white;
       color: $graphite;
+
+      .upload {
+        @include alignment($justify: space-evenly, $align: center);
+        @include boxSize($width: 100%, $height: 110px);
+        .buttons {
+          @include alignment(
+            $direction: column,
+            $justify: space-evenly,
+            $align: center
+          );
+          @include boxSize($height: 100%);
+        }
+
+        .cancelBtn {
+          padding: 0.3rem;
+          width: 100px;
+          background-color: $white;
+          @include fonts($color: lighten($graphite, 30%));
+          border: 1px solid lighten($graphite, 30%);
+        }
+
+        figure {
+          @include alignment($direction: column, $justify: center);
+          @include boxSize($width: 100px, $height: 80px);
+
+          img {
+            // @include boxSize($maxHeight: 100%, $width: 80px);
+            box-shadow: $shadowSmall;
+          }
+
+          figcaption {
+            @include fonts($size: 0.8rem);
+            padding: 0.2rem 0;
+          }
+        }
+      }
 
       // hide default upload button and change style
       .uploadBtnWrapper {
@@ -275,25 +332,25 @@ export default {
         display: inline-block;
         box-shadow: $shadowSmall;
 
-        button {
-          background: lighten($graphite, 40%);
-          @include fonts($color: $white);
-          padding: 0.3rem;
-          width: 100px;
-          //border: 2px solid lighten($graphite, 10%);
-          //border-radius: 8px;
-        }
-
         input[type='file'] {
-          font-size: 2rem;
           position: absolute;
           left: 0;
           top: 0;
           opacity: 0;
         }
-      }
-      .small {
-        @include boxSize($height: 70px);
+
+        button,
+        input[type='file'],
+        .uploadBtnWrapper {
+          padding: 0.3rem;
+          width: 100px;
+          cursor: pointer;
+        }
+
+        button {
+          background: lighten($graphite, 40%);
+          @include fonts($color: $white);
+        }
       }
 
       .imageSubmit {
@@ -304,13 +361,15 @@ export default {
         @include boxSize($width: 150px);
         box-shadow: $shadowSmall;
       }
+
       small {
         margin-top: 0.5rem;
         @include fonts($color: $graphite, $size: 0.7rem);
-      }
 
-      .selected {
-        @include fonts($color: rgb(46, 7, 189));
+        &.selected {
+          text-align: center;
+          color: mediumblue;
+        }
       }
 
       .messageWrapper {
@@ -374,6 +433,12 @@ export default {
       grid-area: profile;
       @include boxSize($minWidth: 350px);
 
+      .additionalInfo {
+        span {
+          @include fonts($size: 0.9rem);
+        }
+      }
+
       .imageUsername {
         img {
           width: 70px;
@@ -403,7 +468,7 @@ export default {
       }
     }
 
-    form div {
+    .uploadBtnWrapper {
       &:hover {
         filter: brightness(80%);
       }
@@ -417,10 +482,10 @@ export default {
 
     .profile {
       @include alignment($display: grid);
-      @include boxSize($height: 350px, $width: 600px);
+      @include boxSize($height: 380px, $width: 600px);
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: 40px 200px 70px auto;
-      grid-template-areas: 'heading3 form' 'imageUsername form' 'additionalInfo form' '. form';
+      grid-template-rows: repeat(3, auto);
+      grid-template-areas: 'heading3 form' 'imageUsername form' 'additionalInfo form';
 
       h3,
       span,
@@ -458,20 +523,33 @@ export default {
 
         label {
           @include fonts($size: 1.2rem);
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
         }
-        .uploadBtnWrapper {
-          width: 120px;
-          button {
-            @include fonts($size: 0.9rem);
-            padding: 0.5rem;
-            width: 120px;
+
+        .upload {
+          .cancelBtn {
+            width: 110px;
+            padding: 0.4rem;
+          }
+
+          .uploadBtnWrapper {
+            width: 110px;
+
+            button,
+            input[type='file'] {
+              width: 110px;
+              padding: 0.4rem;
+            }
+
+            button {
+              @include fonts($size: 0.9rem);
+            }
           }
         }
+
         small {
           @include fonts($size: 0.8rem);
         }
-
         .imageSubmit {
           //margin: 2rem auto;
           padding: 0.6rem;

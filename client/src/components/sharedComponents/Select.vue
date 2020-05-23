@@ -5,9 +5,9 @@
     @blur="open = false"
     @keydown.esc.exact.prevent="open = false"
     @keydown.enter.exact.prevent="open = true"
-            @keydown.up.prevent="previousItem"
-     @keydown.down.prevent="nextItem"
-     @focusout="$emit('checkValue')"
+    @keydown.up.prevent="previousItem"
+    @keydown.down.prevent="nextItem"
+    @focusout="$emit('checkValue')"
   >
     <div class="selected" :class="{ open: open }" @click="toggleOpen">
       {{ selected }}
@@ -36,20 +36,28 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Select',
   props: {
     options: {
       type: Array,
       required: true
+    },
+    preloaded: {
+      type: Number
     }
   },
   data() {
     return {
-      selected: this.options.length > 0 ? this.options[0] : null,
+      selected: this.options[this.preloaded] || this.options[0],
       open: false,
       currentItem: 0
     }
+  },
+
+  computed: {
+    ...mapGetters(['getEditState'])
   },
 
   methods: {
@@ -126,10 +134,10 @@ export default {
       user-select: none;
     }
     .active-option {
-      background-color: rgba(230, 165, 46, 0.959);
+      background-color: lighten($gray, 10%);
     }
     .option:hover {
-      background-color:rgba(214, 170, 87, 0.959);
+      background-color: lighten($gray, 8%);
     }
   }
 }

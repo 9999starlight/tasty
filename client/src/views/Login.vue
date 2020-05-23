@@ -1,9 +1,9 @@
 <template>
   <div class="formWrapper container">
     <form class="loginForm flex pd1" enctype="multipart/form-data">
-      <div class="formHeader flex mgb2">
-        <h2 v-if="!showSignUp" class="mgb1">Login</h2>
-        <h2 v-else class="mgb1">Sign Up</h2>
+      <div class="formHeader flex">
+        <h1 v-if="!showSignUp" class="mgb1">Login</h1>
+        <h1 v-else class="mgb1">Sign Up</h1>
         <p v-if="!showSignUp">
           Dont'have an account?&nbsp;
           <span @click="toggleSignUp" class="signupLink">Sign Up</span>
@@ -13,13 +13,30 @@
           <span @click="toggleSignUp" class="signupLink">Sign in</span>
         </p>
       </div>
-      <div class="formGroup center">
-        <label for="username" class="block">Username</label>
-        <input type="text" v-model.trim="username" id="username" />
+      <div class="formGroup flex flexCenter">
+        <font-awesome-icon
+          :icon="['fa', 'user']"
+          class="userIcons"
+        ></font-awesome-icon>
+        <div class="labelWrapper">
+          <input type="text" v-model.trim="username" id="username" required />
+          <label for="username">Username</label>
+        </div>
       </div>
-      <div class="formGroup center">
-        <label for="password" class="block">Password</label>
-        <input type="password" v-model.trim="password" id="password" />
+      <div class="formGroup flex flexCenter">
+        <font-awesome-icon
+          :icon="['fa', 'lock']"
+          class="userIcons"
+        ></font-awesome-icon>
+        <div class="labelWrapper">
+          <input
+            type="password"
+            v-model.trim="password"
+            id="password"
+            required
+          />
+          <label for="password">Password</label>
+        </div>
       </div>
       <div v-if="showSignUp" class="formGroup center">
         <label for="file" class="block">Upload Image</label>
@@ -38,7 +55,7 @@
       <button
         v-if="!showSignUp"
         type="submit"
-        class="btn loginBtn"
+        class="btnAction loginBtn"
         @click.prevent="login"
       >
         Login
@@ -46,7 +63,7 @@
       <button
         v-if="showSignUp"
         type="submit"
-        class="btn signUpBtn"
+        class="btnAction signUpBtn"
         @click.prevent="signUp"
       >
         Create Account
@@ -159,18 +176,41 @@ export default {
 <style lang="scss" scoped>
 .formWrapper {
   margin: 0;
-  /*   @include alignment($direction: column);
-  @include boxSize($minHeight: 100%, $width: 100%);
-  flex: 1; */
+  padding: 0;
+  @include background(
+    radial-gradient(
+      ellipse at center,
+      rgba(41, 35, 35, 0.349) 0%,
+      rgba(27, 26, 26, 0.425) 100%
+    ),
+    url('../assets/table.jpg'),
+    $backConfig
+  );
+  background-attachment: fixed;
 }
 .loginForm {
   flex: 1;
-  @include alignment($direction: column, $justify: space-evenly);
+  @include alignment(
+    $direction: column,
+    $justify: space-evenly,
+    $align: center
+  );
   @include boxSize($minHeight: 400px, $width: 100%);
   box-shadow: $shadowBox;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.459),
+    0 5px 10px -3px rgba(0, 0, 0, 0.322);
 
   .formHeader {
     @include alignment($direction: column, $align: center);
+
+    h1 {
+      font-family: 'Lobster', cursive;
+      color: lighten($graphite, 20%);
+    }
+    p {
+      color: lighten($graphite, 5%);
+    }
 
     .signupLink {
       @include fonts($color: rgb(14, 92, 122), $weight: 700);
@@ -180,30 +220,68 @@ export default {
     }
   }
 
-  input {
-    @include boxSize($width: 250px);
-    padding: 0.3rem 0;
-    background-color: transparent;
-    border-bottom: 1px solid darken($color: $graphite, $amount: 20%);
-    @include fonts(
-      $size: 0.9rem,
-      $color: darken($color: $graphite, $amount: 30%)
-    );
-    /*       -webkit-transition: all 2s ease-in-out;
-      transition: all 0.2s ease-in-out;
-      &:-webkit-autofill,
-      &:focus:-webkit-autofill {
-        box-shadow: 0 0 0 100px rgb(250, 255, 189) inset;
-        -webkit-box-shadow: 0 0 0 100px rgb(250, 255, 189) inset;
-      } */
-  }
+  .formGroup {
+    @include alignment($textAlign: left);
+    .labelWrapper {
+      position: relative;
+      input {
+        @include boxSize($width: 250px);
+        padding: 0.3rem 0;
+        background-color: transparent;
+        border-bottom: 1px solid darken($color: $graphite, $amount: 20%);
+        @include fonts($size: 0.9rem, $color: lighten($graphite, 5%));
 
+        &:valid,
+        &:focus {
+          border-bottom-color: $white;
+          outline: none;
+        }
+      }
+
+      label {
+        position: absolute;
+        @include fonts(
+          $size: 0.9rem,
+          $color: lighten($graphite, 10%),
+          $weight: 100
+        );
+        top: -25px;
+        left: 0;
+        pointer-events: none;
+        transform: translateY(30px);
+        transition: all 0.3s ease-in-out;
+      }
+
+      input:valid + label,
+      input:focus + label {
+        @include fonts($size: 0.7rem, $color: lighten($graphite, 80%));
+        transform: translateY(0);
+      }
+    }
+    .userIcons {
+      @include fonts($size: 1.1rem, $color: lighten($graphite, 20%));
+      margin-right: 10px;
+    }
+  }
   .messageWrapper {
     @include boxSize($height: 40px);
   }
+
+   .btnAction {
+     @include fonts($size: 1.2rem);
+     border-radius: initial;
+   }
+
+  .loginBtn {
+    background: $blueGradient;
+  }
+
+  .signUpBtn {
+    background-image: $greenGradient;
+  }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 576px) {
   .formWrapper {
     //@include boxSize($width: 400px);
     @include alignment($justify: center, $align: center);
@@ -212,13 +290,30 @@ export default {
       @include boxSize($width: 450px, $maxHeight: 600px);
     }
 
-    button {
+    /* button {
       @include boxSize($width: 300px);
-    }
+    } */
     .formGroup {
-      input {
-        @include boxSize($width: 300px);
+      .labelWrapper {
+        input {
+          @include boxSize($width: 300px);
+          @include fonts($size: 1.1rem);
+        }
+
+        label {
+          font-size: 1rem;
+        }
+
+        input:valid + label,
+        input:focus + label {
+          //color: #ee6e73;
+          font-size: 0.9rem;
+        }
       }
+      /*     .userIcons {
+      @include fonts($size: 1.1rem, $color: lighten($graphite, 20%));
+      margin-right: 10px;
+    } */
     }
   }
 }

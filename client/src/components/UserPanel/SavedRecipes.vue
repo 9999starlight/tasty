@@ -12,14 +12,16 @@
         @sortDateAsc="sortDateAscending(savedRecipes)"
         @sortDateDesc="sortDateDescending(savedRecipes)"
       />
+      <transition-group name="list-complete" tag="div">
       <Recipe
         v-for="recipe in savedRecipes"
         :key="recipe._id"
-        class="renderRecipes"
+        class="renderRecipes sortingItem"
         :recipe="recipe"
         :usersRecipes="usersRecipes"
         @deletedFromFavorites="currentUserFavorites"
       />
+      </transition-group>
     </div>
   </div>
 </template>

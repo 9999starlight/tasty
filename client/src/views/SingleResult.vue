@@ -222,7 +222,7 @@ export default {
         this.$route.params.id
       )
       if (result) {
-        this.resultRecipe = Object.assign({}, this.getSingleRecipe)
+        this.resultRecipe = JSON.parse(JSON.stringify(this.getSingleRecipe))
         this.ready = true
       }
     } catch (error) {
@@ -361,6 +361,15 @@ export default {
         }
       }
     }
+
+    /* beforeRouteLeave (to, from, next) {
+    try {
+      source.token.cancel('Requests canceled')
+      next()
+    } catch (error) {
+      console.log(error)
+    }
+  } */
   }
 }
 </script>

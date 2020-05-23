@@ -103,18 +103,21 @@ exports.updateRecipeValidation = (req, res, next) => {
     mealName: Joi.string()
       .min(4)
       .max(50)
-      .regex(/^(?!\s*$).{4,50}/i),
+      .regex(/^(?!\s*$).{4,50}/i)
+      .required(),
     intro: Joi.string()
       .min(4)
       .max(150)
-      .regex(/^(?!\s*$).{4,150}/i),
+      .regex(/^(?!\s*$).{4,150}/i)
+      .required(),
     dishType: Joi.string()
       .min(3)
       .max(40)
-      .regex(/^(?!\s*$).{3,40}/i),
+      .regex(/^(?!\s*$).{3,40}/i)
+      .required(),
     level: Joi.string(),
-    timing: Joi.number(),
-    persons: Joi.number(),
+    timing: Joi.number().required(),
+    persons: Joi.number().required(),
     regional: Joi.string(),
     vegetarian: Joi.boolean(),
     glutenFree: Joi.boolean(),
@@ -123,8 +126,7 @@ exports.updateRecipeValidation = (req, res, next) => {
       .items({
         ingredient: Joi.string().required(),
         amount: Joi.string()
-      })
-      .required(),
+      }).required(),
     steps: Joi.array().items({ step: Joi.string().required() }).required()
   })
   const { error } = updateRecipeSchema.validate(req.body)

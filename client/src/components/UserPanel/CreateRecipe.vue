@@ -1,9 +1,12 @@
 <template>
   <div class="createRecipe flex flexCenter">
-    <h1 id="createRecipeHeading" class="mg1">Create new recipe</h1>
-    <form enctype="multipart/form-data" class="flex pd1">
-      <div class="inputsWrapper flex flexCenter">
-        <div class="inner">
+    <h1 id="createRecipeHeading" class="mg1">
+      {{ !getEditState ? 'Create new recipe' : 'Edit recipe' }}
+    </h1>
+    <form class="flex pd1">
+      <fieldset class="inputsWrapper mgb1">
+        <legend>Basic Data</legend>
+        <div class="inner center">
           <!-- mealName -->
           <label for="mealName"
             ><span class="required">*</span> Meal Name</label
@@ -18,9 +21,11 @@
             maxlength="50"
             @blur="validateMealName"
           />
-          <p class="warn" v-show="!mealNameWarn">
-            Title: 4-50 characters required!
-          </p>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!mealNameWarn">
+              Title: 4-50 characters required!
+            </p>
+          </div>
           <!-- description -->
           <label for="intro"><span class="required">*</span> Description</label>
           <textarea
@@ -32,26 +37,36 @@
             maxlength="150"
             @blur="validateIntro"
           ></textarea>
-          <p class="warn" v-show="!introWarn">
-            Description: 4-150 characters required!
-          </p>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!introWarn">
+              Description: 4-150 characters required!
+            </p>
+          </div>
           <!-- select options -->
           <label for="dishType"
             ><span class="required">*</span> Dish Type</label
           >
           <Select
             :options="dishTypeOptions"
+            :preloaded="preloadedDishType"
             id="dishType"
             ref="dishType"
             @checkValue="validateDishType"
           />
-          <p class="warn" v-show="!dishTypeWarn">
-            Please select dish type from menu!
-          </p>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!dishTypeWarn">
+              Please select dish type from menu!
+            </p>
+          </div>
           <label for="level">Difficulty</label>
-          <Select :options="difficultyOptions" id="level" ref="level" />
+          <Select
+            :options="difficultyOptions"
+            :preloaded="preloadedLevel"
+            id="level"
+            ref="level"
+          />
           <!-- timing -->
-          <label for="timing"
+          <label for="timing" class="timingLabel"
             ><span class="required">*</span> Preparation Time (in
             minutes)</label
           >
@@ -62,7 +77,11 @@
             title="Preparation time in minutes"
             @blur="validateTiming"
           />
-          <p class="warn" v-show="!timingWarn">Minutes (number) is required!</p>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!timingWarn">
+              Minutes (number) is required!
+            </p>
+          </div>
           <!-- persons -->
           <label for="persons"
             ><span class="required">*</span> Number of persons</label
@@ -75,9 +94,11 @@
             title="Amount is enough for entered number of persons"
             @blur="validatePersons"
           />
-          <p class="warn" v-show="!personsWarn">
-            Number of persons is required!
-          </p>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!personsWarn">
+              Number of persons is required!
+            </p>
+          </div>
           <!-- regional -->
           <label for="regional">Regional</label>
           <input
@@ -113,94 +134,125 @@
             </label>
           </div>
         </div>
-      </div>
+      </fieldset>
       <!-- Upload photo -->
-      <div class="photoUpload mgt1 flex flexCenter">
-        <div class="inner">
-          <figure>
-            <img v-if="preview" :src="preview" />
-          </figure>
-          <small class="block selected" v-show="filename"
-            >Image preview: {{ filename }}</small
-          >
+      <fieldset class="photoUpload mgb1">
+        <legend>Image Upload</legend>
+        <div class="inner center">
+          <div class="images flex">
+            <figure v-if="preview" class="flex flexCenter">
+              <img :src="preview" :alt="filename" />
+              <figcaption>Image preview: {{ filename }}</figcaption>
+            </figure>
+            <figure
+              v-if="getEditState && getSingleRecipe.image"
+              class="flex flexCenter"
+            >
+              <img
+                :src="getSingleRecipe.image.url"
+                :alt="getSingleRecipe.mealName"
+              />
+              <figcaption>Current image</figcaption>
+            </figure>
+            <p v-if="getEditState && getSingleRecipe.image === undefined">
+              No current image
+            </p>
+            <!-- </div> -->
+          </div>
           <label for="file" class="block">Select recipe image</label>
           <div class="uploadBtnWrapper">
             <input type="file" ref="recipeImage" @change="selectRecipeImage" />
             <button class="chooseImage">Choose image</button>
           </div>
+          <button @click.prevent="removeSelectedImage">Cancel</button>
           <div class="small">
             <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
             <small>Maximum upload file size 2Mb</small>
           </div>
-          <p class="warn" v-if="!valImg">{{ valMessage }}</p>
+          <div class="warnWrapper">
+            <p class="warn" v-if="!valImg">{{ valMessage }}</p>
+          </div>
         </div>
-      </div>
+      </fieldset>
       <!-- ingredients -->
-      <div class="ingredients mgt1 flex flexCenter">
-        <div class="inner">
-          <h4>Ingredients</h4>
-          <div
-            class="singleIngredient"
-            v-for="(ingred, index) in ingredients"
-            :key="index"
-          >
-            <label :for="'ingred' + index"
-              ><span class="required">*</span> Ingredient</label
+      <fieldset class="ingredients mgb1">
+        <legend>Ingredients</legend>
+        <div class="inner center">
+          <transition-group name="scale-in-tl">
+            <div
+              class="singleIngredient"
+              v-for="(ingred, index) in ingredients"
+              :key="'ing' + index"
             >
-            <input
-              type="text"
-              placeholder="At least one ingredient required"
-              required
-              title="Enter ingredient"
-              :id="'ingred' + index"
-              v-model="ingred.ingredient"
-              @blur="validateIngredients"
-            />
-            <label :for="'amount' + index">Amount</label>
-            <input
-              type="text"
-              :id="'amount' + index"
-              placeholder="Ingredient Amount"
-              title="Enter amount of this ingredient"
-              v-model="ingred.amount"
-            />
-            <button
-              @click="removeIngredient(index)"
-              :disabled="ingredients.length === 1"
-            >
-              Remove ingr
-            </button>
+              <label :for="'ingred' + index"
+                ><span class="required">*</span> Ingredient</label
+              >
+              <input
+                type="text"
+                placeholder="At least one ingredient required"
+                required
+                title="Enter ingredient"
+                :id="'ingred' + index"
+                v-model="ingred.ingredient"
+                @blur="validateIngredients"
+              />
+              <label :for="'amount' + index">Amount</label>
+              <input
+                type="text"
+                :id="'amount' + index"
+                placeholder="Ingredient Amount"
+                title="Enter amount of this ingredient"
+                v-model="ingred.amount"
+              />
+              <button
+                @click.prevent="removeIngredient(index)"
+                :disabled="ingredients.length === 1"
+              >
+                Remove ingr
+              </button>
+            </div>
+          </transition-group>
+          <button @click="addIngredient">Add ingredient</button>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!ingredientsWarn">
+              At least one ingredient entry is required!
+            </p>
           </div>
-          <button @click="addIngredient">Add another ingredient</button>
-          <p class="warn" v-show="!ingredientsWarn">
-            At least one ingredient entry is required!
-          </p>
         </div>
-      </div>
+      </fieldset>
       <!-- steps -->
-      <div class="steps mgt1 flex flexCenter mgb1">
-        <div class="inner">
-          <h4>Preparation steps</h4>
-          <div class="singleStep" v-for="(st, index) in steps" :key="index">
-            <label :for="'step' + index"
-              ><span class="required">*</span> Step {{ index + 1 }}</label
-            >
-            <textarea
-              :id="'step' + index"
-              required
-              v-model="st.step"
-              placeholder="At least one preparation step required"
-              title="Enter the step of preparation"
-              @blur="validateSteps"
-            ></textarea>
-            <button @click="removeStep(index)" :disabled="steps.length === 1">Remove step</button>
+      <fieldset class="steps">
+        <legend>Preparation</legend>
+        <div class="inner center">
+          <transition-group name="scale-in-tl">
+            <div class="singleStep" v-for="(st, index) in steps" :key="'st'+index">
+              <label :for="'step' + index"
+                ><span class="required">*</span> Step {{ index + 1 }}</label
+              >
+              <textarea
+                :id="'step' + index"
+                required
+                v-model="st.step"
+                placeholder="At least one preparation step required"
+                title="Enter the step of preparation"
+                @blur="validateSteps"
+              ></textarea>
+              <button
+                @click.prevent="removeStep(index)"
+                :disabled="steps.length === 1"
+              >
+                Remove step
+              </button>
+            </div>
+          </transition-group>
+          <button @click="addStep" class="mgt1">Add step</button>
+          <div class="warnWrapper">
+            <p class="warn" v-show="!stepsWarn">
+              At least one preparation step required!
+            </p>
           </div>
-          <button @click="addStep" class="mgt1">Add next step</button>
-          <p class="warn" v-show="!stepsWarn">
-            At least one preparation step required!
-          </p>
         </div>
-      </div>
+      </fieldset>
       <!-- message -->
       <div class="messageWrapper center">
         <transition name="expand" mode="out-in">
@@ -213,8 +265,15 @@
         </transition>
       </div>
       <Loader :bigLoader="bigLoader" v-show="isLoading" />
-      <button @click.prevent="validation" class="submitBtn">
+      <button
+        v-if="!getEditState"
+        @click.prevent="validation"
+        class="submitBtn"
+      >
         Submit Recipe
+      </button>
+      <button v-else @click.prevent="validation" class="submitBtn">
+        Submit Changes
       </button>
     </form>
   </div>
@@ -228,7 +287,7 @@ import Loader from '../sharedComponents/Loader'
 import fileValidation from '../../mixins/fileValidation'
 import loaderMixin from '../../mixins/loaderMixin'
 import axios from 'axios'
-import { recipesUrl, source } from '../../apiData'
+import { recipesUrl } from '../../apiData'
 export default {
   name: 'create_recipe',
 
@@ -276,6 +335,8 @@ export default {
       glutenFree: false,
       ingredients: [{ ingredient: '', amount: '' }],
       steps: [{ step: '' }],
+      preloadedDishType: 0,
+      preloadedLevel: 0,
       mealNameWarn: true,
       introWarn: true,
       dishTypeWarn: true,
@@ -289,6 +350,31 @@ export default {
 
   mixins: [fileValidation, loaderMixin],
 
+  beforeMount() {
+    // console.log(this.getEditState, this.getSingleRecipe)
+    if (this.getEditState) {
+      this.mealName = this.getSingleRecipe.mealName
+      this.intro = this.getSingleRecipe.intro
+      this.timing = this.getSingleRecipe.timing
+      this.persons = this.getSingleRecipe.persons
+      this.regional = this.getSingleRecipe.regional
+      this.vegetarian = this.getSingleRecipe.vegetarian
+      this.glutenFree = this.getSingleRecipe.glutenFree
+      this.ingredients = JSON.parse(
+        JSON.stringify(this.getSingleRecipe.ingredients)
+      )
+      this.steps = JSON.parse(JSON.stringify(this.getSingleRecipe.steps))
+      const recipeDishType = this.dishTypeOptions.findIndex(
+        (op) => op.toLowerCase() === this.getSingleRecipe.dishType
+      )
+      this.preloadedDishType = recipeDishType
+      const recipeLevel = this.difficultyOptions.findIndex(
+        (op) => op.toLowerCase() === this.getSingleRecipe.level
+      )
+      this.preloadedLevel = recipeLevel
+    }
+  },
+
   mounted() {
     this.$scrollTo('#createRecipeHeading', 200, {
       easing: 'linear',
@@ -297,7 +383,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getCurrentUser']),
+    ...mapGetters(['getCurrentUser', 'getEditState', 'getSingleRecipe']),
 
     dishTypeSelected() {
       return this.$refs['dishType'].selected.toLowerCase()
@@ -326,6 +412,13 @@ export default {
       this.preview = URL.createObjectURL(this.recipeImage)
     },
 
+    removeSelectedImage() {
+      this.$refs.recipeImage.value = ''
+      this.recipeImage = ''
+      this.filename = ''
+      this.preview = null
+    },
+
     addIngredient() {
       this.ingredients.push({
         ingredient: '',
@@ -345,8 +438,7 @@ export default {
       this.steps.splice(index, 1)
     },
 
-    // validations
-
+    // @blur validations
     validateMealName() {
       const nameTest = /^(?!\s*$).{4,50}/i
       if (!nameTest.test(this.mealName)) {
@@ -424,8 +516,8 @@ export default {
         return true
       }
     },
-    
-    // validate fields
+
+    // validate all fields
     validation() {
       if (
         this.validateMealName() &&
@@ -440,7 +532,11 @@ export default {
       }
       if (this.isValid && this.valImg) {
         this.updateMessage('')
-        this.submitRecipe()
+        if (!this.getEditState) {
+          this.submitRecipe()
+        } else {
+          this.submitChanges()
+        }
       } else {
         this.isValid = false
         this.messageStatus = false
@@ -449,40 +545,49 @@ export default {
       }
     },
 
+    configureFormData() {
+      const formData = new FormData()
+      if (this.recipeImage) {
+        formData.append('image', this.recipeImage)
+      }
+      formData.append('mealName', this.mealName)
+      if (!this.getEditState) {
+        formData.append('author', this.getCurrentUser.userId)
+      }
+      formData.append('intro', this.intro)
+      formData.append('dishType', this.dishTypeSelected)
+      formData.append('level', this.difficultySelected)
+      formData.append('timing', this.timing)
+      formData.append('persons', this.persons)
+      if (this.regional) {
+        formData.append('regional', this.regional)
+      }
+      formData.append('vegetarian', this.vegetarian)
+      formData.append('glutenFree', this.glutenFree)
+      // form data - append arrays of objects (ingredients and steps)
+      for (let i = 0; i < this.ingredients.length; i++) {
+        for (let prop in this.ingredients[i]) {
+          formData.append(
+            `ingredients[${i}][${prop}]`,
+            this.ingredients[i][prop]
+          )
+        }
+      }
+      for (let i = 0; i < this.steps.length; i++) {
+        for (let prop in this.steps[i]) {
+          formData.append(`steps[${i}][${prop}]`, this.steps[i][prop])
+        }
+      }
+      return formData
+    },
+
     async submitRecipe() {
       try {
         this.toggleLoader()
-        const formData = new FormData()
-        if (this.recipeImage) {
-          formData.append('image', this.recipeImage)
-        }
-        formData.append('mealName', this.mealName)
-        formData.append('author', this.getCurrentUser.userId)
-        formData.append('intro', this.intro)
-        formData.append('dishType', this.dishTypeSelected)
-        formData.append('level', this.difficultySelected)
-        formData.append('timing', this.timing)
-        formData.append('persons', this.persons)
-        if (this.regional) {
-          formData.append('regional', this.regional)
-        }
-        formData.append('vegetarian', this.vegetarian)
-        formData.append('glutenFree', this.glutenFree)
-        // form data - append arrays of objects (ingredients and steps)
-        for (let i = 0; i < this.ingredients.length; i++) {
-          for (let prop in this.ingredients[i]) {
-            formData.append(`ingredients[${i}][${prop}]`, this.ingredients[i][prop])
-          }
-        }
-        for (let i = 0; i < this.steps.length; i++) {
-          for (let prop in this.steps[i]) {
-            formData.append(`steps[${i}][${prop}]`, this.steps[i][prop])
-          }
-        }
-        // post recipe
-        const response = await axios.post(`${recipesUrl}`, formData, {
-          cancelToken: source.token,
-          timeout: 5000
+        const fd = this.configureFormData()
+        const response = await axios.post(`${recipesUrl}`, fd, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          timeout: 7000
         })
         if (response) {
           console.log(response)
@@ -492,21 +597,59 @@ export default {
           this.updateMessage(response.data.message)
         }
       } catch (error) {
-         (thrown) => {
-          this.messageStatus = false
-          if (axios.isCancel(thrown)) {
-            console.log('Request canceled', thrown.message)
-          }
-        }
         this.toggleLoader()
-        if (error.response) {
-          this.updateMessage(error.response.data.message)
+        if (error.response === undefined) {
+          this.updateMessage(`Please check and fill in required fields!`)
+        } else if (error.response.status === 500) {
+          this.updateMessage('Something went wrong, try again later!')
           console.log(error.response.data.message)
         } else {
           this.updateMessage(error.message)
           console.log(error.message)
         }
       }
+    },
+
+    // patch recipe
+    async submitChanges() {
+      try {
+        this.toggleLoader()
+        const fd = this.configureFormData()
+        const response = await axios.patch(
+          `${recipesUrl}/${this.getSingleRecipe._id}`,
+          fd,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            timeout: 7000
+          }
+        )
+        if (response) {
+          console.log(response.data)
+          this.toggleLoader()
+          this.$router.push(`/userpanel/user_recipes`)
+        }
+      } catch (error) {
+        this.toggleLoader()
+        if (error.response === undefined) {
+          this.updateMessage(`Please check and fill in required fields!`)
+        } else if (error.response.status === 500) {
+          this.updateMessage('Something went wrong, try again later!')
+          console.log(error.response.data.message)
+        } else {
+          this.updateMessage(error.message)
+          console.log(error.message)
+        }
+      }
+    }
+  },
+
+  async beforeRouteLeave(to, from, next) {
+    try {
+      await this.$store.dispatch('changeEditState', false)
+      await this.$store.dispatch('clearSingleRecipe', '')
+      next()
+    } catch (error) {
+      console.log(error)
     }
   }
 }
@@ -555,6 +698,10 @@ form {
 
   label {
     margin: 1rem 0 0.3rem 0;
+
+    &.timingLabel {
+      margin: 2rem 0 0.3rem 0;
+    }
   }
 
   textarea {
@@ -565,13 +712,20 @@ form {
     padding: 0.7rem;
   }
 
-  .inputsWrapper,
-  .photoUpload,
-  .ingredients,
-  .steps {
+  fieldset {
     border: 1px solid lightgray;
     padding: 0.6rem;
-    @include boxSize($width: 100%);
+    @include boxSize($width: 100%, $minWidth: 280px);
+
+    legend {
+      margin: 0 auto;
+      border: 2px inset white;
+      background-color: complement($gray);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 30%;
+      font-family: 'Lobster', cursive;
+    }
   }
 
   .inner {
@@ -583,17 +737,31 @@ form {
     width: 100px;
   }
 
-  .warn {
-    @include fonts($color: crimson, $size: 0.9rem);
-    padding: 0.4rem;
+  .warnWrapper {
+    @include boxSize($width: 100%, $height: 1rem);
+    padding: 0.2rem 0;
+    .warn {
+      @include fonts($color: crimson, $size: 0.9rem);
+    }
   }
 
   // upload
   .photoUpload {
-    //@include alignment($direction: column, $textAlign: left);
-    img {
-      @include boxSize($maxWidth: 100%, $height: 250px);
-      margin: 1rem auto;
+    //@include alignment($textAlign: left);
+
+    .images {
+      @include alignment($justify: center, $align: flex-start);
+      figure {
+        @include alignment($direction: column);
+        img {
+          @include boxSize($maxWidth: 100%, $height: 100px);
+          //margin: 1rem auto;
+        }
+
+        figcaption {
+          @include fonts($size: 0.8rem);
+        }
+      }
     }
     .uploadBtnWrapper {
       position: relative;
@@ -630,10 +798,7 @@ form {
 
 @media (min-width: 576px) {
   form {
-    .inputsWrapper,
-    .photoUpload,
-    .ingredients,
-    .steps {
+    fieldset {
       @include boxSize($width: 550px);
     }
 
@@ -645,6 +810,21 @@ form {
       textarea {
         @include fonts($color: $graphite);
         @include boxSize($maxWidth: initial);
+      }
+
+      .images {
+        @include alignment($justify: space-evenly);
+        figure {
+          //@include alignment($direction: column);
+          img {
+            @include boxSize($height: 200px);
+            //margin: 1rem auto;
+          }
+
+          figcaption {
+            @include fonts($size: 0.9rem);
+          }
+        }
       }
     }
   }

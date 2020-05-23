@@ -210,19 +210,42 @@ exports.updateRecipe = async (req, res, next) => {
         id: imageresult.public_id
       }
     }
-    const result = await Recipe.updateOne(
+    const updated = await Recipe.findByIdAndUpdate(
       {
         _id: id
       },
       {
         $set: req.body
-      }
+      },
+      { new: true }
     )
     res.status(200).json({
       message: 'Updated successfully',
-      result
+      updatedRecipe: {
+        _id: updated._id,
+        createdAt: updated.createdAt,
+        mealName: updated.mealName,
+        author: updated.author,
+        intro: updated.intro,
+        dishType: updated.dishType,
+        level: updated.level,
+        timing: updated.timing,
+        persons: updated.persons,
+        regional: updated.regional,
+        vegetarian: updated.vegetarian,
+        glutenFree: updated.glutenFree,
+        image: {
+          url: imageresult.secure_url,
+          id: imageresult.public_id
+        },
+        ingredients: updated.ingredients,
+        steps: updated.steps,
+        rates: updated.rates,
+        rating: updated.rating,
+        comments: updated.comments
+      }
     })
-    console.log(result)
+    console.log(updated)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({
