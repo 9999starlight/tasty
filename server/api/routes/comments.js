@@ -30,6 +30,6 @@ router.post('/', authUser, commentValidation, addComment)
 // @access  Private
 router.delete('/:commentId', authUser, deleteSingleComment)
 
-// router.delete('/delmany/:commentauthor', authUser, deleteMultipleComments)
+/* router.delete('/delmany/:commentauthor', authUser, deleteMultipleComments) */
 
 module.exports = router

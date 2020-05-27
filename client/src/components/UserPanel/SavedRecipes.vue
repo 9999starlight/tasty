@@ -13,14 +13,14 @@
         @sortDateDesc="sortDateDescending(savedRecipes)"
       />
       <transition-group name="list-complete" tag="div">
-      <Recipe
-        v-for="recipe in savedRecipes"
-        :key="recipe._id"
-        class="renderRecipes sortingItem"
-        :recipe="recipe"
-        :usersRecipes="usersRecipes"
-        @deletedFromFavorites="currentUserFavorites"
-      />
+        <Recipe
+          v-for="recipe in savedRecipes"
+          :key="recipe._id"
+          class="renderRecipes sortingItem"
+          :recipe="recipe"
+          :usersRecipes="usersRecipes"
+          @deletedFromFavorites="currentUserFavorites"
+        />
       </transition-group>
     </div>
   </div>
@@ -97,13 +97,14 @@ export default {
   @include boxSize($width: 100%);
   @include alignment($direction: column);
   // border-top: 2px solid rgb(233, 231, 231);
-  .listContainer {
-    @include alignment($direction: column);
+
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
   }
-}
+  .listContainer {
+    @include alignment($direction: column);
+  }
 }
 @media (min-width: 992px) {
   .savedRecipes {
@@ -111,7 +112,7 @@ export default {
       @include alignment($direction: column);
       @include boxSize($width: 900px);
 
-     /*  .renderRecipes {
+      /*  .renderRecipes {
         @include boxSize($maxWidth: 900px);
       } */
     }

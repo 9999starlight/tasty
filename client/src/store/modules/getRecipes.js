@@ -14,37 +14,38 @@ const state = {
 const actions = {
   fetchSliderRecipes: async ({ commit }) => {
     try {
-      const response = await axios.get(`${recipesUrl}?sort=-rating`)
-      //console.log(response)
+      const result = await axios.get(`${recipesUrl}?sort=-rating`)
+      //console.log(result)
       let resultsArray = []
-      if (response.data.recipes.length) {
-        response.data.recipes.forEach((d) => resultsArray.push(d))
+      if (result.data.response.recipes.length) {
+        result.data.response.recipes.forEach((d) => resultsArray.push(d))
         const popularArray = resultsArray.slice(0, 5)
         commit('setSliderRecipes', popularArray)
       }
     } catch (error) {
-      console.log(error.response.data.message)
+      console.log(error.result.data.message)
       //commit('setSliderRecipes', error.message)
     }
   },
 
   fetchQueriedRecipes: async ({ commit }, payload) => {
     try {
-      const response = await axios.get(`${recipesUrl}`, {
+      const results = await axios.get(`${recipesUrl}`, {
         params: payload
       })
-      console.log(response)
+      console.log(results)
       let resultsArray = []
-      if (!response.data.recipes.length) {
+      if (!results.data.response.recipes.length) {
         commit('setQueriedRecipes', [])
         commit('setSuccess', false)
       } else {
-        response.data.recipes.forEach((d) => resultsArray.push(d))
+        results.data.response.recipes.forEach((d) => resultsArray.push(d))
         commit('setQueriedRecipes', resultsArray)
         commit('setSuccess', true)
       }
+      // console.log(results.data.docsCount)
     } catch (error) {
-      console.log(error.response.data.message)
+      console.log(error.results.data.message)
     }
   },
 
@@ -80,6 +81,10 @@ const actions = {
   clearSingleRecipe({ commit }, payload) {
     commit('setSingleRecipe', payload)
   }
+
+  /* clearQuery({ commit }, payload) {
+    commit('setQueriedRecipes', payload)
+  } */
 }
 
 const mutations = {

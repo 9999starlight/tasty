@@ -4,6 +4,7 @@ const authUser = require('../middlewares/auth_user')
 const {
   registerUser,
   loginUser,
+  getAllUsers,
   getSingleUser,
   deleteUser,
   updateUserImage,
@@ -31,6 +32,11 @@ router.post(
 // @route   POST /users/login
 // @access  PUBLIC
 router.post('/login', loginValidation, loginUser)
+
+// @desc    GET get all users
+// @route   GET /users
+// @access  ADMIN
+router.get('/', authUser, getAllUsers)
 
 // @desc    GET get single user
 // @route   GET /users/:userId

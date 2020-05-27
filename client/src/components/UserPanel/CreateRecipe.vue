@@ -662,7 +662,6 @@ export default {
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
-    //color: $white;
   }
 }
 
@@ -747,7 +746,6 @@ form {
 
   // upload
   .photoUpload {
-    //@include alignment($textAlign: left);
 
     .images {
       @include alignment($justify: center, $align: flex-start);

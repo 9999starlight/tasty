@@ -137,6 +137,54 @@ exports.loginUser = async (req, res, next) => {
   }
 }
 
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    if (!req.userData.isAdmin) {
+      return res.status(401).json({
+        message: `Unauthorized - access denied!`
+      })
+    }
+    const queryObj = {
+      ...req.query
+    } // copy query object and then exclude fields
+    const excludedFields = ['page', 'sort', 'limit', 'fields']
+    excludedFields.forEach((el) => delete queryObj[el])
+    let query = User.find(queryObj)
+
+    // Sorting
+    if (req.query.sort) {
+      query = query.sort(req.query.sort)
+    }
+
+    const docs = await query.populate({
+      // Get author's createdRecipes
+      path: 'createdRecipes',
+      select: '_id mealName image createdAt dishType level rating'
+    })
+    const response = {
+      users: docs.map((doc) => {
+        return {
+          username: doc.username,
+          userId: doc._id,
+          isAdmin: doc.isAdmin,
+          createdAt: doc.createdAt,
+          favorites: doc.favorites,
+          createdRecipes: doc.createdRecipes,
+          userImage: doc.user_image
+        }
+      })
+    }
+    const docsCount = await query.countDocuments()
+    res.status(200).json({ response, docsCount })
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({
+      error,
+      message: error.message
+    })
+  }
+}
+
 exports.getSingleUser = async (req, res, next) => {
   try {
     const id = req.params.userId

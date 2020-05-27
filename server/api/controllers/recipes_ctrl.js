@@ -48,7 +48,8 @@ exports.getRecipes = async (req, res, next) => {
         }
       })
     }
-    res.status(200).json(response)
+    const docsCount = await query.countDocuments()
+    res.status(200).json({ response, docsCount })
   } catch (error) {
     console.log(error.message)
     res.status(500).json({

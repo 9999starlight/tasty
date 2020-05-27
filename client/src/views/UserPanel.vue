@@ -32,7 +32,7 @@
           <div class="upload flex">
             <div class="buttons flex">
               <div class="uploadBtnWrapper">
-                <input type="file" ref="image" @change="selectImageFile" />
+                <input type="file" ref="userImageUpload" @change="selectImageFile" />
                 <button class="chooseImage">Browse image</button>
               </div>
               <button
@@ -158,13 +158,13 @@ export default {
     },
 
     selectImageFile() {
-      this.image = this.$refs.image.files[0]
-      this.filename = this.$refs.image.files[0].name
+      this.image = this.$refs.userImageUpload.files[0]
+      this.filename = this.$refs.userImageUpload.files[0].name
       this.preview = URL.createObjectURL(this.image)
     },
 
     removeSelectedImage() {
-      this.$refs.image.value = ''
+      this.$refs.userImageUpload.value = ''
       this.image = ''
       this.filename = ''
       this.preview = null
@@ -289,70 +289,6 @@ export default {
       background-color: white;
       color: $graphite;
 
-      .upload {
-        @include alignment($justify: space-evenly, $align: center);
-        @include boxSize($width: 100%, $height: 110px);
-        .buttons {
-          @include alignment(
-            $direction: column,
-            $justify: space-evenly,
-            $align: center
-          );
-          @include boxSize($height: 100%);
-        }
-
-        .cancelBtn {
-          padding: 0.3rem;
-          width: 100px;
-          background-color: $white;
-          @include fonts($color: lighten($graphite, 30%));
-          border: 1px solid lighten($graphite, 30%);
-        }
-
-        figure {
-          @include alignment($direction: column, $justify: center);
-          @include boxSize($width: 100px, $height: 80px);
-
-          img {
-            // @include boxSize($maxHeight: 100%, $width: 80px);
-            box-shadow: $shadowSmall;
-          }
-
-          figcaption {
-            @include fonts($size: 0.8rem);
-            padding: 0.2rem 0;
-          }
-        }
-      }
-
-      // hide default upload button and change style
-      .uploadBtnWrapper {
-        position: relative;
-        overflow: hidden;
-        display: inline-block;
-        box-shadow: $shadowSmall;
-
-        input[type='file'] {
-          position: absolute;
-          left: 0;
-          top: 0;
-          opacity: 0;
-        }
-
-        button,
-        input[type='file'],
-        .uploadBtnWrapper {
-          padding: 0.3rem;
-          width: 100px;
-          cursor: pointer;
-        }
-
-        button {
-          background: lighten($graphite, 40%);
-          @include fonts($color: $white);
-        }
-      }
-
       .imageSubmit {
         background: $orangeGradient;
         @include fonts($color: $white, $weight: 600);
@@ -360,16 +296,6 @@ export default {
         padding: 0.4rem;
         @include boxSize($width: 150px);
         box-shadow: $shadowSmall;
-      }
-
-      small {
-        margin-top: 0.5rem;
-        @include fonts($color: $graphite, $size: 0.7rem);
-
-        &.selected {
-          text-align: center;
-          color: mediumblue;
-        }
       }
 
       .messageWrapper {
@@ -467,12 +393,6 @@ export default {
         padding: 0.8rem 1rem;
       }
     }
-
-    .uploadBtnWrapper {
-      &:hover {
-        filter: brightness(80%);
-      }
-    }
   }
 }
 
@@ -526,30 +446,6 @@ export default {
           margin-bottom: 1rem;
         }
 
-        .upload {
-          .cancelBtn {
-            width: 110px;
-            padding: 0.4rem;
-          }
-
-          .uploadBtnWrapper {
-            width: 110px;
-
-            button,
-            input[type='file'] {
-              width: 110px;
-              padding: 0.4rem;
-            }
-
-            button {
-              @include fonts($size: 0.9rem);
-            }
-          }
-        }
-
-        small {
-          @include fonts($size: 0.8rem);
-        }
         .imageSubmit {
           //margin: 2rem auto;
           padding: 0.6rem;

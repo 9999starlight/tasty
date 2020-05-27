@@ -1,7 +1,7 @@
 <template>
   <div class="formWrapper container">
     <form class="loginForm flex pd1" enctype="multipart/form-data">
-      <div class="formHeader flex">
+      <div class="formHeader flex mgb1">
         <h1 v-if="!showSignUp" class="mgb1">Login</h1>
         <h1 v-else class="mgb1">Sign Up</h1>
         <p v-if="!showSignUp">
@@ -13,7 +13,7 @@
           <span @click="toggleSignUp" class="signupLink">Sign in</span>
         </p>
       </div>
-      <div class="formGroup flex flexCenter">
+      <div class="formGroup flex flexCenter mgb1">
         <font-awesome-icon
           :icon="['fa', 'user']"
           class="userIcons"
@@ -23,7 +23,7 @@
           <label for="username">Username</label>
         </div>
       </div>
-      <div class="formGroup flex flexCenter">
+      <div class="formGroup flex flexCenter mgb1">
         <font-awesome-icon
           :icon="['fa', 'lock']"
           class="userIcons"
@@ -38,10 +38,38 @@
           <label for="password">Password</label>
         </div>
       </div>
-      <div v-if="showSignUp" class="formGroup center">
+      <!-- <div v-if="showSignUp" class="formGroup center">
         <label for="file" class="block">Upload Image</label>
         <input type="file" ref="image" @change="selectFile" />
+      </div> -->
+      <!--  -->
+      <div v-if="showSignUp" class="formGroup flex flexCenter uploadSection">
+        <h4 class="block mgb1">Upload profile image</h4>
+        <div class="upload flex">
+          <div class="buttons flex">
+            <div class="uploadBtnWrapper">
+              <input type="file" ref="image" @change="selectFile" />
+              <button class="chooseImage">Browse image</button>
+            </div>
+            <button
+              @click.prevent="removeSelectedImage"
+              v-if="preview"
+              class="cancelBtn"
+            >
+              Cancel image
+            </button>
+          </div>
+          <figure v-if="preview" class="flex">
+            <img :src="preview" alt="preview" class="imageFit" />
+          </figure>
+        </div>
+        <div class="small">
+          <small class="selected block">{{ filename }}</small>
+          <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
+          <small>Maximum upload file size 2Mb</small>
+        </div>
       </div>
+      <!--  -->
       <div class="messageWrapper center">
         <transition name="expand" mode="out-in">
           <InfoMessage
@@ -75,6 +103,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
+import fileValidation from '../mixins/fileValidation'
 export default {
   name: 'login',
 
@@ -88,14 +117,26 @@ export default {
       username: '',
       password: '',
       image: '',
+      filename: '',
+      preview: null,
       errorMessage: '',
       messageStatus: false
     }
   },
 
+  mixins: [fileValidation],
+
   computed: {
     ...mapActions(['loginUser', 'signUpUser']),
-    ...mapGetters(['getUserToken', 'getErrorMessage', 'getIsLogged'])
+    ...mapGetters(['getUserToken', 'getErrorMessage', 'getIsLogged']),
+
+    valImg() {
+      if (this.preview && !this.imageValidation(this.image)) {
+        return false
+      } else {
+        return true
+      }
+    }
   },
 
   methods: {
@@ -119,14 +160,28 @@ export default {
 
     selectFile() {
       this.image = this.$refs.image.files[0]
+      this.filename = this.$refs.image.files[0].name
+      this.preview = URL.createObjectURL(this.image)
+    },
+
+    removeSelectedImage() {
+      this.$refs.image.value = ''
+      this.image = ''
+      this.filename = ''
+      this.preview = null
     },
 
     // DODATI REFRESH TOKEN
     signUp() {
       const isValid = this.validation()
       if (!isValid) return
+      if (isValid && !this.valImg) {
+        this.messageStatus = false
+        this.errorMessage = this.valMessage
+        return
+      }
       const formData = new FormData()
-      if (this.image) {
+      if (this.image && this.valImg) {
         formData.append('user_image', this.image)
       }
       formData.append('username', this.username)
@@ -136,8 +191,7 @@ export default {
         .then((res) => {
           if (res) {
             //console.log(res)
-            location.reload()
-            //this.$router.push("home")
+            this.$router.push("home")
           } else {
             this.errorMessage = this.getErrorMessage
             this.updateMessage(this.errorMessage)
@@ -158,8 +212,7 @@ export default {
         })
         .then((res) => {
           if (res) {
-            // console.log(res);
-            location.reload()
+            this.$router.push('home')
           } else {
             this.errorMessage = this.getErrorMessage
             this.updateMessage(this.errorMessage)
@@ -183,7 +236,7 @@ export default {
       rgba(41, 35, 35, 0.349) 0%,
       rgba(27, 26, 26, 0.425) 100%
     ),
-    url('../assets/table.jpg'),
+    url('../assets/backgrounds/wood-back.jpg'),
     $backConfig
   );
   background-attachment: fixed;
@@ -207,6 +260,7 @@ export default {
     h1 {
       font-family: 'Lobster', cursive;
       color: lighten($graphite, 20%);
+      text-shadow: -1px -1px 1px rgba(255, 254, 254, 0.65), 1px 1px 1px rgba(0, 0, 0, 0.91);
     }
     p {
       color: lighten($graphite, 5%);
@@ -220,6 +274,7 @@ export default {
     }
   }
 
+  // floating labels & input style
   .formGroup {
     @include alignment($textAlign: left);
     .labelWrapper {
@@ -263,14 +318,34 @@ export default {
       margin-right: 10px;
     }
   }
+
+  // additional style for upload section
+  .uploadSection {
+    @include alignment($direction: column);
+    @include boxSize($width: 280px);
+    background-color: rgba(255, 255, 255, 0.3);
+
+    h4 {
+      color: lighten($graphite, 13%);
+    }
+
+    .upload {
+      @include boxSize($height: auto);
+    }
+
+    .small {
+      text-align: center;
+    }
+  }
+
   .messageWrapper {
     @include boxSize($height: 40px);
   }
 
-   .btnAction {
-     @include fonts($size: 1.2rem);
-     border-radius: initial;
-   }
+  .btnAction {
+    @include fonts($size: 1.2rem);
+    border-radius: initial;
+  }
 
   .loginBtn {
     background: $blueGradient;
@@ -290,9 +365,6 @@ export default {
       @include boxSize($width: 450px, $maxHeight: 600px);
     }
 
-    /* button {
-      @include boxSize($width: 300px);
-    } */
     .formGroup {
       .labelWrapper {
         input {
@@ -310,10 +382,9 @@ export default {
           font-size: 0.9rem;
         }
       }
-      /*     .userIcons {
-      @include fonts($size: 1.1rem, $color: lighten($graphite, 20%));
-      margin-right: 10px;
-    } */
+    }
+    .uploadSection {
+      @include boxSize($width: 350px);
     }
   }
 }
@@ -324,6 +395,15 @@ export default {
       .signupLink:hover {
         filter: brightness(60%);
       }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .loginForm {
+    .cancelBtn {
+      width: 110px;
+      padding: 0.4rem;
     }
   }
 }

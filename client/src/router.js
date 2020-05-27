@@ -4,14 +4,20 @@ import { store } from './store/store'
 // views
 import Home from './views/Home'
 import FoodFacts from './views/FoodFacts'
-import UserPanel from './views/UserPanel'
-import AdminPanel from './views/AdminPanel'
 import Login from './views/Login'
 import Wines from './views/Wines'
 import SingleResult from './views/SingleResult'
+// UserPanel & children
+import UserPanel from './views/UserPanel'
 import UserRecipes from './components/UserPanel/UserRecipes'
 import CreateRecipe from './components/UserPanel/CreateRecipe'
 import SavedRecipes from './components/UserPanel/SavedRecipes'
+// AdminPanel & children
+import AdminPanel from './views/AdminPanel'
+// import Overview from './components/AdminPanel/Overview'
+import AdminUsers from './components/AdminPanel/AdminUsers'
+import AdminRecipes from './components/AdminPanel/AdminRecipes'
+import AdminComments from './components/AdminPanel/AdminComments'
 import ErrorPage from './views/ErrorPage'
 
 Vue.use(Router)
@@ -67,8 +73,26 @@ let router = new Router({
       path: '/adminpanel',
       name: 'adminpanel',
       component: AdminPanel,
+      children: [
+        {
+          path: '/adminpanel/admin_users',
+          name: 'admin_users',
+          component: AdminUsers
+        },
+        {
+          path: '/adminpanel/admin_recipes',
+          name: 'admin_recipes',
+          component: AdminRecipes
+        },
+        {
+          path: '/adminpanel/admin_comments',
+          name: 'admin_comments',
+          component: AdminComments
+        }
+      ],
       meta: {
-        requiresAdmin: true
+        requiresAdmin: true,
+        requiresAuth: true
       }
     },
     {
@@ -97,11 +121,6 @@ let router = new Router({
       component: SingleResult,
       props: true
     },
-    /*     {
-      path: '/BrowseResults',
-      name: 'BrowseResults',
-      component: BrowseResults
-    }, */
     {
       path: '/error404',
       name: 'error404',

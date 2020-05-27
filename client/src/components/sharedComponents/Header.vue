@@ -45,7 +45,7 @@
         >
         <!-- if loggedIn -->
         <router-link
-          v-if="authUser == true"
+          v-if="getIsLogged===true"
           :to="{ name: 'userpanel' }"
           tag="li"
           active-class="active"
@@ -77,7 +77,7 @@
             >&nbsp;
             <font-awesome-icon :icon="['fa', 'user-shield']" class="userIcon">
             </font-awesome-icon
-            >Admin
+            >Admin Panel
           </a></router-link
         >
         <li class="flex" v-if="getIsLogged">
@@ -143,11 +143,11 @@ export default {
     ...mapActions(['logoutUser']),
     ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
 
-    authUser() {
+   /*  authUser() {
       return (
         this.getCurrentUser !== null && this.getCurrentUser.isAdmin == false
       )
-    },
+    }, */
     authAdmin() {
       return this.getCurrentUser !== null && this.getCurrentUser.isAdmin == true
     }
@@ -245,7 +245,7 @@ header {
     ul {
       @include alignment($direction: column, $align: center);
       position: absolute;
-      animation: slideLeft 1.2s;
+      //animation: slideLeft 1.2s;
       @include fonts($size: 1.3rem);
     }
 
@@ -256,10 +256,6 @@ header {
 
       &.active {
         background-color: rgba(250, 128, 114, 0.123);
-      }
-
-      &:hover {
-        background-color: rgba(133, 104, 101, 0.452);
       }
 
       a,
