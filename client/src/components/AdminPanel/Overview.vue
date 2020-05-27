@@ -93,13 +93,8 @@ export default {
         const results = await axios.get(`${recipesUrl}`, {
           params: payload
         })
-        console.log(results)
-        let resultsArray = []
-        if (results.data.response.recipes.length) {
-          results.data.response.recipes.forEach((d) => resultsArray.push(d))
-        }
         return {
-          resultsArray,
+          resultsArray: results.data.response.recipes,
           count: results.data.docsCount
         }
       } catch (error) {
@@ -112,13 +107,8 @@ export default {
         const results = await axios.get(`${usersUrl}`, {
           params: payload
         })
-        console.log(results)
-        let usersArray = []
-        if (results.data.response.users.length) {
-          results.data.response.users.forEach((d) => usersArray.push(d))
-        }
         return {
-          usersArray,
+          usersArray: results.data.response.users,
           count: results.data.docsCount
         }
       } catch (error) {
@@ -131,13 +121,8 @@ export default {
         const results = await axios.get(`${commentsUrl}`, {
           params: payload
         })
-        console.log(results)
-        let commentsArray = []
-        if (results.data.response.comments.length) {
-          results.data.response.comments.forEach((d) => commentsArray.push(d))
-        }
         return {
-          commentsArray,
+          commentsArray: results.data.response.comments,
           count: results.data.docsCount
         }
       } catch (error) {
