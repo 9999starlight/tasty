@@ -76,7 +76,7 @@
 
 <script>
 import Select from '../sharedComponents/Select'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 // import paginationOptions from '../../mixins/paginationOptions'
 
 export default {
@@ -120,7 +120,7 @@ export default {
 
   computed: {
     ...mapActions(['fetchQueriedRecipes']),
-    ...mapGetters(['getQueriedRecipes']),
+    //...mapGetters(['getQueriedRecipes']),
 
     basicSelected() {
       if (this.$refs['basicSelect'].selected === 'Any Category') return ''

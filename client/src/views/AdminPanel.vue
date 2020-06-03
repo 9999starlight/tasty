@@ -1,33 +1,29 @@
 <template>
-  <div class="adminContainer container">
+  <div
+    :class="[
+      getEditState
+        ? 'adminContainer container disableScrolling'
+        : 'adminContainer container'
+    ]"
+  >
     <AdminMenu />
-    <Overview />
-    <div class="adminRouterView" id="adminRouterView">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import AdminMenu from '../components/AdminPanel/AdminMenu'
-import Overview from '../components/AdminPanel/Overview'
 
 export default {
   name: 'adminpanel',
 
-  /* data() {
-    return {
-    }
-  }, */
-
   components: {
-    AdminMenu,
-    Overview
+    AdminMenu
   },
 
   computed: {
-    ...mapGetters(['getCurrentUser', 'getDefaultUserImage'])
+    ...mapGetters(['getCurrentUser', 'getEditState'])
   }
 }
 </script>
@@ -39,15 +35,13 @@ export default {
   margin-top: 0;
   padding: 0 0.5rem 0.5rem 0.5rem;
 }
+.disableScrolling {
+  overflow: hidden;
+}
 
 @media (min-width: 768px) {
   .adminContainer {
     padding: 2rem 1rem 1rem 0;
-  }
-
-  .adminRouterView {
-    @include boxSize($width: calc(100% - 4rem));
-    align-self: flex-end;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="singleResultContainer container">
-    <div v-if="ready" class="singleResultWrapper">
+  <div class="singleResultContainer container" v-if="ready">
+    <div class="singleResultWrapper">
       <h1 class="mgb1">{{ resultRecipe.mealName }}</h1>
       <section class="favorites flex">
         <div class="messageWrapper center">
@@ -84,14 +84,14 @@
         <div class="userInfoRating flex mgb1">
           <p class="userInfo flex flexCenter">
             <img
-              v-if="resultRecipe.author.user_image.url"
-              :src="resultRecipe.author.user_image.url"
+              v-if="resultRecipe.author.user_image === undefined"
+              :src="getDefaultUserImage"
               alt="user image"
               class="authorImage"
             />
             <img
               v-else
-              :src="getDefaultUserImage"
+              :src="resultRecipe.author.user_image.url"
               alt="user image"
               class="authorImage"
             />
@@ -180,10 +180,9 @@
         @updating="updateRecipe"
       />
     </div>
-    <div class="messagewrapper" v-else>
-      <NotFound :message="'No result for reqested recipe'" />
-    </div>
   </div>
+  <NotFound v-else-if="displayNotFound" :message="'No result for reqested recipe'" />
+  <Loader v-else :bigLoader="true" />
 </template>
 
 <script>
@@ -192,6 +191,7 @@ import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
 import dateFormat from './../mixins/dateFormat'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
+import Loader from '../components/sharedComponents/Loader'
 import Rating from '../components/SingleResult/Rating'
 import axios from 'axios'
 import { usersUrl, source } from '../apiData'
@@ -202,7 +202,8 @@ export default {
     NotFound,
     Rating,
     Comments,
-    InfoMessage
+    InfoMessage,
+    Loader
   },
 
   data() {
@@ -210,7 +211,8 @@ export default {
       ready: false,
       resultRecipe: {},
       message: '',
-      messageStatus: false
+      messageStatus: false,
+      displayNotFound: false
     }
   },
 
@@ -224,6 +226,8 @@ export default {
       if (result) {
         this.resultRecipe = JSON.parse(JSON.stringify(this.getSingleRecipe))
         this.ready = true
+      } else {
+        this.displayNotFound = true
       }
     } catch (error) {
       console.log(error.message)

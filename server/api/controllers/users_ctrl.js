@@ -327,6 +327,10 @@ exports.addToFavorites = async (req, res, next) => {
       },
       { new: true }
     )
+    let userImage = ''
+    if (result.user_image) {
+      userImage = result.user_image.url
+    }
     res.status(200).json({
       message: 'Added to your saved recipes',
       updatedUser: {
@@ -336,7 +340,7 @@ exports.addToFavorites = async (req, res, next) => {
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
-        userImage: result.user_image.url
+        userImage
       }
     })
     // console.log(result)
@@ -379,6 +383,10 @@ exports.removeFromFavorites = async (req, res, next) => {
       },
       { new: true }
     )
+    let userImage = ''
+    if (result.user_image) {
+      userImage = result.user_image.url
+    }
     res.status(200).json({
       message: 'Removed from saved recipes',
       updatedUser: {
@@ -388,7 +396,7 @@ exports.removeFromFavorites = async (req, res, next) => {
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
-        userImage: result.user_image.url
+        userImage
       }
     })
     // console.log(result)

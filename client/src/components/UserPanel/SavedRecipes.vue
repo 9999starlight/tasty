@@ -81,7 +81,7 @@ export default {
           params: { _id: this.getCurrentUser.favorites }
         })
         console.log(result)
-        this.savedRecipes = [...result.data.recipes]
+        this.savedRecipes = [...result.data.response.recipes]
         // console.log(this.savedRecipes)
         this.toggleLoader()
       } catch (error) {

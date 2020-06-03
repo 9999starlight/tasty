@@ -17,5 +17,7 @@ props: {
 </script>
 
 <style lang="scss" scoped>
-
+  .notFoundBox {
+    margin: auto;
+  }
 </style>

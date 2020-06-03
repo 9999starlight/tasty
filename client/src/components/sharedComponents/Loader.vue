@@ -1,5 +1,5 @@
 <template>
-  <div class="loaderContainer flex flexCenter mg1">
+  <div :class="[!bigLoader ? 'loaderContainer flex flexCenter mg1': 'loaderContainer flex flexCenter mgAuto']">
     <div :class="[!bigLoader ? 'small progress' : 'large progress']">
       <div>Loading…</div>
     </div>
@@ -29,9 +29,10 @@ export default {
 
   &.small {
     font-size: 6px;
+    //margin: 1rem;
   }
   &.large {
-    font-size: 20px;
+    font-size: 15px;
   }
 
   &:before,
@@ -68,5 +69,9 @@ export default {
     transform: rotate(-135deg);
     background: #bbb;
   }
+}
+
+.mgAuto {
+  margin: auto;
 }
 </style>

@@ -191,7 +191,8 @@ export default {
         .then((res) => {
           if (res) {
             //console.log(res)
-            this.$router.push("home")
+            // this.$router.push("home")
+            location.reload()
           } else {
             this.errorMessage = this.getErrorMessage
             this.updateMessage(this.errorMessage)
@@ -212,7 +213,8 @@ export default {
         })
         .then((res) => {
           if (res) {
-            this.$router.push('home')
+            // this.$router.push('home')
+            location.reload()
           } else {
             this.errorMessage = this.getErrorMessage
             this.updateMessage(this.errorMessage)

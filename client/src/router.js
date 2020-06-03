@@ -14,7 +14,7 @@ import CreateRecipe from './components/UserPanel/CreateRecipe'
 import SavedRecipes from './components/UserPanel/SavedRecipes'
 // AdminPanel & children
 import AdminPanel from './views/AdminPanel'
-// import Overview from './components/AdminPanel/Overview'
+import Overview from './components/AdminPanel/Overview'
 import AdminUsers from './components/AdminPanel/AdminUsers'
 import AdminRecipes from './components/AdminPanel/AdminRecipes'
 import AdminComments from './components/AdminPanel/AdminComments'
@@ -71,9 +71,14 @@ let router = new Router({
     },
     {
       path: '/adminpanel',
-      name: 'adminpanel',
+     /*  name: 'adminpanel', */
       component: AdminPanel,
       children: [
+        {
+          path: '',
+          name: 'overview',
+          component: Overview
+        },
         {
           path: '/adminpanel/admin_users',
           name: 'admin_users',

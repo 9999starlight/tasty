@@ -125,7 +125,7 @@ exports.updateRecipeValidation = (req, res, next) => {
     ingredients: Joi.array()
       .items({
         ingredient: Joi.string().required(),
-        amount: Joi.string()
+        amount: Joi.string().allow('')
       }).required(),
     steps: Joi.array().items({ step: Joi.string().required() }).required()
   })

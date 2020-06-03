@@ -45,7 +45,7 @@
         >
         <!-- if loggedIn -->
         <router-link
-          v-if="getIsLogged===true"
+          v-if="getIsLogged"
           :to="{ name: 'userpanel' }"
           tag="li"
           active-class="active"
@@ -69,7 +69,7 @@
         ></router-link>
         <router-link
           v-if="authAdmin == true"
-          :to="{ name: 'adminpanel' }"
+          :to="{ name: 'overview' }"
           tag="li"
           active-class="active"
           class="flex"
@@ -133,7 +133,7 @@ export default {
 
   watch: {
     $route() {
-      window.innerWidth > 767
+      window.innerWidth > 991
         ? (this.displayMenu = true)
         : (this.displayMenu = false)
     }
@@ -159,7 +159,7 @@ export default {
     },
 
     onResize() {
-      if (window.innerWidth > 767) {
+      if (window.innerWidth > 991) {
         this.burgerIcon = false
         this.displayMenu = true
       } else {
@@ -183,7 +183,7 @@ header {
   width: 100%;
   top: 0;
   background-color: $white;
-  z-index: 5;
+  z-index: 7;
   box-shadow: $shadowSmall;
 
   filter {
@@ -300,7 +300,7 @@ header {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   header {
     @include alignment($direction: row, $justify: space-between);
 
@@ -309,7 +309,7 @@ header {
     }
 
     nav {
-      @include boxSize($width: 80%);
+      @include boxSize($width: 80%, $height: 50px);
       @include alignment($justify: flex-end);
 
       ul {

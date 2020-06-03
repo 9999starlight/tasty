@@ -84,7 +84,7 @@ export default {
         const result = await axios.get(`${recipesUrl}`, {
           params: { author: this.getCurrentUser.userId }
         })
-        this.fetchedRecipes = [...result.data.recipes]
+        this.fetchedRecipes = [...result.data.response.recipes]
         this.toggleLoader()
       } catch (error) {
         console.log(error.message)

@@ -149,6 +149,24 @@ a {
   color: crimson;
 }
 
+// scroll
+.scrolling {
+  scrollbar-width: thin;
+  scrollbar-color: lighten($graphite, 20%) lighten($graphite, 60%);
+  &::-webkit-scrollbar {
+    width: 11px;
+  }
+  &::-webkit-scrollbar-track {
+    background: lighten($graphite, 60%);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: lighten($graphite, 20%);
+    border-radius: 6px;
+    border: 3px solid lighten($graphite, 60%);
+  }
+
+}
+
 // checkboxes, home page form, create/edit recipe form
 .checkBoxes {
   @include alignment($justify: space-around);

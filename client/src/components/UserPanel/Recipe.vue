@@ -27,12 +27,11 @@
       ><a>Details</a></router-link
     >
     <div class="editDelete flex">
-      <button v-if="usersRecipes">
+      <button v-if="usersRecipes" @click="editingStateSettings">
         <font-awesome-icon
           :icon="['fa', 'edit']"
           class="edit"
           title="Edit recipe"
-          @click="editingStateSettings"
         ></font-awesome-icon>
       </button>
       <!-- user info conditonal render -->
@@ -201,10 +200,12 @@ export default {
       @include fonts($size: 1.5rem);
       .edit {
         @include fonts($color: rgb(136, 187, 54));
+        filter: drop-shadow(2px 1px #393b39);
       }
 
       .delete {
         @include fonts($color: crimson);
+        filter: drop-shadow(2px 1px #661313);
       }
     }
 
