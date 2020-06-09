@@ -52,7 +52,7 @@ export default {
 
   h3 {
     background-color: lighten($graphite, 20%);
-    @include fonts($color: $white);
+    @include fonts($color: $light);
     margin: auto;
     @include boxSize($width: 100%);
     padding: 0.5rem;

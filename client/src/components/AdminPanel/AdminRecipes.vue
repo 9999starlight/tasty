@@ -3,24 +3,26 @@
     :class="[
       getEditState ? 'adminRecipes mgt3 disableScrolling' : 'adminRecipes mgt3'
     ]"
-  v-if="!isLoading">
-    <div class="editFormOverlay" v-if="getEditState" @click.self="cancelEdit">
-      <div class="editWrapper" v-if="getEditState">
-        <header class="flex flexCenter">
-          <h2>Edit Recipe</h2>
-          <button @click="cancelEdit">
-            <font-awesome-icon
-              :icon="['fa', 'times']"
-              class="del"
-              title="Cancel and close form"
-            ></font-awesome-icon>
-          </button>
-        </header>
-        <div class="editInner">
-          <CreateEditForm class="editForm" />
+    v-if="!isLoading"
+  >
+    <transition name="fade" mode="out-in">
+      <div class="modalOverlay" v-if="getEditState" @click.self="cancelEdit">
+        <div class="modalWrapper" v-if="getEditState">
+          <header class="flex flexCenter">
+            <h2>Edit Recipe</h2>
+            <button @click="cancelEdit" class="del">
+              <font-awesome-icon
+                :icon="['fa', 'times']"
+                title="Cancel and close form"
+              ></font-awesome-icon>
+            </button>
+          </header>
+          <div class="editInner">
+            <CreateEditForm class="editForm" />
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
     <h1 class="mgb1 slim">Recipes</h1>
     <section class="recipesOverview center grid">
       <StatisticBox
@@ -300,51 +302,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.editFormOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  @include boxSize($width: 100%, $height: 100%);
-  background-color: rgba(15, 15, 15, 0.932);
-  z-index: 8;
-}
-
-.editWrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  @include boxSize($width: 100%, $height: 100%);
-  background-color: rgba(15, 15, 15, 0.832);
-  z-index: 8;
-
-  header {
-    @include boxSize($height: 60px);
-    background-color: lighten($graphite, 20%);
-    @include fonts($color: $white);
-    position: relative;
-
-    button {
-      position: absolute;
-      right: 0;
-      top: 0;
-      padding: 0.2rem 0.4rem;
-      font-size: 1.2rem;
-      color: $white;
-      background-color: transparent;
-    }
-  }
-  .editInner {
-    @include boxSize($height: calc(100% - 60px));
-    overflow: auto;
-  }
-}
-.disableScrolling {
-  overflow: hidden;
-  position: absolute;
-  height: 100%;
-  padding: 0;
-  width: 100%;
-}
 .searchSection {
   @include alignment($direction: column);
   h2 {
@@ -359,7 +316,7 @@ export default {
   header {
     @include alignment($direction: column, $justify: space-evenly);
     background-color: lighten($graphite, 20%);
-    @include fonts($color: $white);
+    @include fonts($color: $light);
     @include boxSize($width: 100%, $height: 100px);
     position: sticky;
     top: 0;
@@ -433,6 +390,10 @@ export default {
         background-color: transparent;
         padding: 0.8rem;
         @include fonts($size: 1.5rem);
+        .edit, .delete {
+          position: relative;
+          z-index: -1;
+        }
         .edit {
           @include fonts($color: rgb(136, 187, 54));
           filter: drop-shadow(2px 1px #393b39);
@@ -480,26 +441,6 @@ export default {
     align-self: flex-end;
   }
 
-  .editWrapper {
-    // overflow: auto;
-    @include boxSize($height: 600px, $width: 650px);
-    flex-direction: column;
-    justify-content: flex-start;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9;
-
-    header {
-      .headerInner {
-        h2 {
-          margin-top: 1rem;
-        }
-      }
-    }
-  }
-
   .searchRecipes {
     @include boxSize($width: 680px);
     margin: auto;
@@ -507,10 +448,7 @@ export default {
     header {
       @include alignment($direction: row);
       @include boxSize($height: 60px);
-      /* h4 {
-        margin-right: 1rem;
-      }
- */
+
       input {
         padding: 0.4rem;
         @include boxSize($width: 300px);

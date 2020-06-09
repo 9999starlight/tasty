@@ -75,9 +75,8 @@
 </template>
 
 <script>
-import Select from '../sharedComponents/Select'
+import Select from './Select'
 import { mapActions } from 'vuex'
-// import paginationOptions from '../../mixins/paginationOptions'
 
 export default {
   name: 'BrowseRecipes',
@@ -112,15 +111,19 @@ export default {
     }
   },
 
+  props: {
+    renderPage: {
+      type: Boolean,
+      default: true
+    }
+  },
+
   components: {
     Select
   },
 
-  // mixins:[paginationOptions],
-
   computed: {
     ...mapActions(['fetchQueriedRecipes']),
-    //...mapGetters(['getQueriedRecipes']),
 
     basicSelected() {
       if (this.$refs['basicSelect'].selected === 'Any Category') return ''
@@ -175,8 +178,11 @@ export default {
         await this.$store.dispatch('fetchQueriedRecipes', params)
         // console.log(this.getQueriedRecipes)
         this.queryParams = {}
-        //this.$router.push("query_results")
-        this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
+        if (this.renderPage) {
+          this.$router.push({ name: 'render_results' })
+        } else {
+          this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
+        }
       } catch (error) {
         console.log(error.message)
       }
@@ -194,7 +200,7 @@ export default {
 .searchContainer {
   @include boxSize($width: 100%);
   flex: 1;
-  overflow: auto;
+  //overflow: auto;
 
   form {
     @include alignment($direction: column);
@@ -216,7 +222,7 @@ export default {
         @include boxSize($width: 60px, $height: 2rem);
         background-color: #fbab7e;
         background: $orangeGradient;
-        @include fonts($color: $white);
+        @include fonts($color: $light);
         border-radius: 0 6px 6px 0;
       }
     }

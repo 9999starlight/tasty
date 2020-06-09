@@ -73,7 +73,7 @@ export default {
 <style lang="scss" scoped>
 .tagsWrapper {
   @include boxSize($maxWidth: 500px);
-  grid-area: tags;
+  //grid-area: tags;
   .tagsInner {
     @include alignment($justify: space-evenly);
     flex-wrap: wrap;

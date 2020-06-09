@@ -94,13 +94,14 @@ export default {
   @include boxSize($minWidth: 260px, $maxWidth: 300px, $height: 2rem);
   @include alignment($textAlign: left);
   line-height: 2rem;
-  @include fonts($color: $white);
+  @include fonts($color: $light);
 
   .selected {
     @include boxSize($height: 2rem);
-    background-color: $gray;
+    //background-color: $midTextColor;
+    background: $darkSteel;
     border-radius: 6px;
-    border: 1px solid #423f37ef;
+    //border: 1px solid #423f37ef;
     padding-left: 0.5rem;
     cursor: pointer;
     user-select: none;
@@ -123,7 +124,8 @@ export default {
     max-height: 120px;
     overflow-y: auto;
     position: absolute;
-    background-color: $gray;
+    //background-color: $midTextColor;
+    background: $darkSteel;
     left: 0;
     right: 0;
     z-index: 2;
@@ -134,10 +136,11 @@ export default {
       user-select: none;
     }
     .active-option {
-      background-color: lighten($gray, 10%);
+      // background-color: lighten($midTextColor, 10%);
+      background: #7a7b7a;
     }
     .option:hover {
-      background-color: lighten($gray, 8%);
+      background-color: lighten(#7a7b7a, 8%);
     }
   }
 }

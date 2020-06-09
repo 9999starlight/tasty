@@ -98,7 +98,7 @@ export default {
         position: absolute;
         bottom: 0;
         background-color: rgba(29, 28, 28, 0.774);
-        @include fonts($color: $white, $size: 1.2rem);
+        @include fonts($color: $light, $size: 1.2rem);
         @include boxSize($width: 100%);
         padding: 0.5rem;
       }

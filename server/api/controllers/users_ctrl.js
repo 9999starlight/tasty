@@ -49,6 +49,7 @@ exports.registerUser = async (req, res, next) => {
       _id: savedUser._id,
       username: savedUser.username,
       isAdmin: savedUser.isAdmin,
+      isDisabled: savedUser.isDisabled,
       createdAt: savedUser.createdAt,
       createdRecipes: savedUser.createdRecipes,
       favorites: savedUser.favorites,
@@ -101,6 +102,12 @@ exports.loginUser = async (req, res, next) => {
         })
       }
       if (result) {
+        // if user exists, deny access if disabled
+        if (user[0].isDisabled) {
+          return res.status(401).json({
+            message: `Unauthorized - access denied!`
+          })
+        }
         let userImage = ''
         if (!user[0].user_image) userImage = ''
         else userImage = user[0].user_image.url
@@ -109,6 +116,7 @@ exports.loginUser = async (req, res, next) => {
             username: user[0].username,
             userId: user[0]._id,
             isAdmin: user[0].isAdmin,
+            isDisabled: user[0].isDisabled,
             createdAt: user[0].createdAt,
             createdRecipes: user[0].createdRecipes,
             favorites: user[0].favorites,
@@ -163,14 +171,19 @@ exports.getAllUsers = async (req, res, next) => {
     })
     const response = {
       users: docs.map((doc) => {
+        let userImage = ''
+        if (doc.user_image) {
+          userImage = doc.user_image.url
+        }
         return {
           username: doc.username,
           userId: doc._id,
           isAdmin: doc.isAdmin,
+          isDisabled: doc.isDisabled,
           createdAt: doc.createdAt,
           favorites: doc.favorites,
           createdRecipes: doc.createdRecipes,
-          userImage: doc.user_image
+          userImage
         }
       })
     }
@@ -273,6 +286,7 @@ exports.updateUserImage = async (req, res, next) => {
         username: result.username,
         userId: result._id,
         isAdmin: result.isAdmin,
+        isDisabled: result.isDisabled,
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
@@ -337,6 +351,7 @@ exports.addToFavorites = async (req, res, next) => {
         username: result.username,
         userId: result._id,
         isAdmin: result.isAdmin,
+        isDisabled: result.isDisabled,
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
@@ -393,6 +408,7 @@ exports.removeFromFavorites = async (req, res, next) => {
         username: result.username,
         userId: result._id,
         isAdmin: result.isAdmin,
+        isDisabled: result.isDisabled,
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
@@ -409,8 +425,98 @@ exports.removeFromFavorites = async (req, res, next) => {
   }
 }
 
+exports.changeAdminStatus = async (req, res, next) => {
+  try {
+    const id = req.params.userId
+    if (!req.userData.isAdmin) {
+      return res.status(401).json({
+        message: `Unauthorized - access denied!`
+      })
+    }
+    const result = await User.findByIdAndUpdate(
+      {
+        _id: id
+      },
+      {
+        $set: {
+          isAdmin: req.body.adminStatus
+        }
+      },
+      { new: true }
+    )
+    /* let userImage = ''
+    if (result.user_image) {
+      userImage = result.user_image.url
+    } */
+    res.status(200).json({
+      message: `User admin status is changed to ${result.isAdmin}`
+      /* updatedUser: {
+        username: result.username,
+        userId: result._id,
+        isAdmin: result.isAdmin,
+        createdAt: result.createdAt,
+        createdRecipes: result.createdRecipes,
+        favorites: result.favorites,
+        userImage
+      } */
+    })
+    // console.log(result)
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({
+      error,
+      message: error.message
+    })
+  }
+}
+
+exports.changeDisableStatus = async (req, res, next) => {
+  try {
+    const id = req.params.userId
+    if (!req.userData.isAdmin) {
+      return res.status(401).json({
+        message: `Unauthorized - access denied!`
+      })
+    }
+    const result = await User.findByIdAndUpdate(
+      {
+        _id: id
+      },
+      {
+        $set: {
+          isDisabled: req.body.disableStatus
+        }
+      },
+      { new: true }
+    )
+    /* let userImage = ''
+    if (result.user_image) {
+      userImage = result.user_image.url
+    } */
+    res.status(200).json({
+      message: `User status is changed to isDisabled: ${result.isDisabled}`
+      /* updatedUser: {
+        username: result.username,
+        userId: result._id,
+        isAdmin: result.isAdmin,
+        createdAt: result.createdAt,
+        createdRecipes: result.createdRecipes,
+        favorites: result.favorites,
+        userImage
+      } */
+    })
+    // console.log(result)
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({
+      error,
+      message: error.message
+    })
+  }
+}
+
 // ??? brisati i sve njegove recepte i komentare??? // samo za admin
-exports.deleteUser = async (req, res, next) => {
+/* exports.deleteUser = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin) {
@@ -439,4 +545,4 @@ exports.deleteUser = async (req, res, next) => {
       message: error.message
     })
   }
-}
+} */

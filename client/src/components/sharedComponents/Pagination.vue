@@ -118,7 +118,7 @@ export default {
 
     li {
       background-color: rgba(29, 28, 28, 0.774);
-      border-right: 1px solid darken($gray, 10%);
+      border-right: 1px solid darken($midTone, 10%);
 
       &:first-of-type {
         border-radius: 50% 0px 0px 50%;
@@ -135,7 +135,7 @@ export default {
         @include fonts($color: saturate($lightOrange, 70%));
 
         &.active {
-          background-color: lighten($gray, 5%);
+          background-color: lighten($midTone, 5%);
         }
 
         &.prev.disabled,
@@ -153,7 +153,7 @@ export default {
   .paginationWrapper {
     ul {
       li:hover {
-        background-color: darken($gray, 25%);
+        background-color: darken($midTone, 25%);
       }
     }
   }

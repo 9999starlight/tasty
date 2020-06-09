@@ -5,14 +5,17 @@
       <Tags />
     </div>
     <Forms class="browse" />
-    <QueryResults />
+    <!-- <QueryResults /> -->
+<!--     <div id="rwContainer" class="rwContainer flex flexCenter">
+    <router-view></router-view>
+    </div>  -->
   </div>
 </template>
 
 <script>
 import Popular from '../components/Home/Popular/Popular'
-import Forms from '../components/Home/Forms'
-import QueryResults from '../components/Home/QueryResults/QueryResults'
+import Forms from '../components/sharedComponents/Forms'
+//import QueryResults from '../components/sharedComponents/QueryResults/QueryResults'
 import Tags from '../components/Home/Tags/Tags'
 
 export default {
@@ -20,9 +23,16 @@ export default {
   components: {
     Popular,
     Forms,
-    QueryResults,
+    // QueryResults,
     Tags
-  }
+  },
+
+/*   methods: {
+    viewResults() {
+      //this.$router.push({ name: 'query_results' })
+      this.$scrollTo('#rwContainer', 200, { easing: 'linear', offset: 0 })
+    }
+  } */
 }
 </script>
 
@@ -46,15 +56,29 @@ export default {
 
   .popularTags {
     @include alignment($direction: column);
+    grid-area: popularTags;
+  }
+
+  .resultsWrapper {
+    margin-top: 2rem;
   }
 }
+
+/* .rwContainer {
+  @include boxSize($width: 100%, $height: 100%);
+  //margin: 0 auto;
+  @include alignment(
+    $direction: column
+  );
+  grid-area: results;
+} */
 
 @media (min-width: 996px) {
   .homeContainer {
     @include alignment($display: grid, $justifyGrid: center);
-    grid-template-columns: 1fr, 1fr;
-    grid-template-rows: 3, 2fr, 1fr, auto;
-    grid-template-areas: 'popularTags popularTags' 'forms forms' 'results results';
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    grid-template-areas: 'popularTags popularTags' 'forms forms';
 
     .popularTags {
       @include alignment($direction: row, $justify: space-evenly);

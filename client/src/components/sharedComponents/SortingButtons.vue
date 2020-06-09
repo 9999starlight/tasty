@@ -28,7 +28,7 @@
         ></font-awesome-icon>
       </button>
     </div>
-    <div class="buttonPair">
+    <div class="buttonPair" v-if="rating">
       <button class="sortBtn btnAsc" @click="$emit('sortRatingAsc')">
         Rating<font-awesome-icon
           :icon="['fa', 'arrow-down']"
@@ -47,7 +47,14 @@
 
 <script>
 export default {
-  name: 'SortingButtons'
+  name: 'SortingButtons',
+
+  props: {
+    rating: {
+      type: Boolean,
+      default: true
+    }
+  }
 }
 </script>
 
@@ -65,21 +72,21 @@ export default {
       //margin: 0.3rem 0;
 
       &:focus {
-          //background-color: $graphite, 10%;
-          outline: 1px inset saturate($lightOrange, 80%);
-          box-shadow: 0 5px gray;
-          color: $lightOrange;
+        //background-color: $graphite, 10%;
+        outline: 1px inset saturate($lightOrange, 80%);
+        box-shadow: 0 5px gray;
+        color: $lightOrange;
       }
 
       &.btnAsc {
         background-color: lighten($graphite, 20%);
-        @include fonts($color: $white);
-        border: 2px inset $white;
+        @include fonts($color: $light);
+        border: 2px inset $light;
         margin-bottom: 0.1rem;
       }
 
       &.btnDesc {
-        background-color: $white;
+        background-color: $light;
         @include fonts($color: lighten($graphite, 20%));
         border: 2px inset lighten($graphite, 20%);
       }
@@ -95,8 +102,8 @@ export default {
     @include boxSize($maxWidth: 750px);
     .buttonPair {
       .sortBtn:hover {
-          transform: scale(1.02);
-          transition: 0.5s;
+        transform: scale(1.02);
+        transition: 0.5s;
       }
     }
   }

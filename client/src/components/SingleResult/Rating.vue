@@ -147,7 +147,7 @@ export default {
 
   .addRate {
     @include boxSize($height: 40px);
-    @include fonts($color: $white);
+    @include fonts($color: $light);
     background-color: lighten($graphite, 15%);
     border-bottom: 1px solid lighten($graphite, 50%);
     cursor: pointer;

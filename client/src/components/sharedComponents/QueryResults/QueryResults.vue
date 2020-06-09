@@ -1,7 +1,7 @@
 <template>
-  <div class="resultsWrapper flex flexCenter mgt2" id="searchResults">
+  <div class="resultsWrapper flex flexCenter" id="searchResults">
     <div class="inner flex flexCenter" v-if="getSuccess">
-      <h2 class="slim pd1">Search Results</h2>
+      <h2 class="slim pd1" id="searchHeading">Search Results</h2>
       <h5>Number of results: {{ this.results.length }}</h5>
       <SortingButtons
         @sortTitleAsc="sortTitleAscending(results)"
@@ -32,26 +32,22 @@
       />
       <a
         v-if="getSuccess === true"
-        href="#searchContainer"
-        v-scroll-to="'#searchContainer'"
+        href="#searchHeading"
+        v-scroll-to="'#searchHeading'"
         class="block hashLink mg2"
-        >Back to search &nbsp;<font-awesome-icon
+        >Back to top &nbsp;<font-awesome-icon
           :icon="['fa', 'hand-point-up']"
           font-size="15px"
         ></font-awesome-icon
       ></a>
     </div>
-    <!--     <div class="messagewrapper" v-else>
-      <NotFound :message="'No result for your search'" />
-    </div> -->
   </div>
 </template>
 
 <script>
 import SingleQueryResult from './SingleQueryResult'
-//import NotFound from './../../sharedComponents/NotFound'
-import Pagination from './../../sharedComponents/Pagination'
-import SortingButtons from './../../sharedComponents/SortingButtons'
+import Pagination from '../Pagination'
+import SortingButtons from '../SortingButtons'
 import { mapGetters } from 'vuex'
 import paginationOptions from '../../../mixins/paginationOptions'
 import sortingResults from '../../../mixins/sortingResults'
@@ -68,13 +64,13 @@ export default {
   components: {
     SingleQueryResult,
     Pagination,
-    //NotFound,
     SortingButtons
   },
 
   mixins: [paginationOptions, sortingResults],
 
   created() {
+    //console.log(this.getQueriedRecipes)
     this.results = [...this.getQueriedRecipes]
   },
 

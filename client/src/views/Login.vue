@@ -233,11 +233,7 @@ export default {
   margin: 0;
   padding: 0;
   @include background(
-    radial-gradient(
-      ellipse at center,
-      rgba(41, 35, 35, 0.349) 0%,
-      rgba(27, 26, 26, 0.425) 100%
-    ),
+    $lightFilter,
     url('../assets/backgrounds/wood-back.jpg'),
     $backConfig
   );
@@ -252,7 +248,7 @@ export default {
   );
   @include boxSize($minHeight: 400px, $width: 100%);
   box-shadow: $shadowBox;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.49);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.459),
     0 5px 10px -3px rgba(0, 0, 0, 0.322);
 
@@ -290,7 +286,7 @@ export default {
 
         &:valid,
         &:focus {
-          border-bottom-color: $white;
+          border-bottom-color: $light;
           outline: none;
         }
       }

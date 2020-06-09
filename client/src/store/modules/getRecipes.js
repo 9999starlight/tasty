@@ -33,7 +33,7 @@ const actions = {
       const results = await axios.get(`${recipesUrl}`, {
         params: payload
       })
-      console.log(results)
+      // console.log(results)
       let resultsArray = []
       if (!results.data.response.recipes.length) {
         commit('setQueriedRecipes', [])
@@ -46,6 +46,7 @@ const actions = {
       // console.log(results.data.docsCount)
     } catch (error) {
       console.log(error.results.data.message)
+      //console.log(error.message)
     }
   },
 

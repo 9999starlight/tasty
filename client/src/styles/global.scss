@@ -110,16 +110,16 @@ a {
   background-color: #fbab7e;
   background: $orangeGradient;
   ;
-  @include fonts($color: $white, $size: 1rem);
+  @include fonts($color: $light, $size: 1rem);
   border-radius: 6px;
 }
 
 .starIcon {
-  @include fonts($color: $staryellow, $size: 0.9rem);
+  @include fonts($color: $starColor, $size: 0.9rem);
 }
 
 .starEntity {
-  @include fonts($color: $staryellow, $size: 1.5rem);
+  @include fonts($color: $starColor, $size: 1.5rem);
   margin-left: 0.3rem;
 }
 
@@ -232,7 +232,7 @@ a {
 
   button {
     background: lighten($graphite, 40%);
-    @include fonts($color: $white);
+    @include fonts($color: $light);
   }
 }
 
@@ -262,7 +262,7 @@ small {
   .cancelBtn {
     padding: 0.3rem;
     width: 100px;
-    background-color: $white;
+    background-color: $light;
     @include fonts($color: lighten($graphite, 30%));
     border: 1px solid lighten($graphite, 30%);
   }
@@ -281,6 +281,52 @@ small {
       padding: 0.2rem 0;
     }
   }
+}
+
+// modal box & overlay
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  @include boxSize($width: 100%, $height: 100%);
+  background-color: rgba(15, 15, 15, 0.832);
+  z-index: 8;
+}
+
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  @include boxSize($width: 100%, $height: 100%);
+  background-color: rgba(15, 15, 15, 0.832);
+  z-index: 8;
+
+  header {
+    @include boxSize($height: 60px);
+    background-color: lighten($graphite, 20%);
+    @include fonts($color: $light);
+    position: relative;
+
+    .del {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 0.2rem 0.4rem;
+      font-size: 1.2rem;
+      color: $light;
+      background-color: transparent;
+    }
+  }
+  .editInner {
+    @include boxSize($height: calc(100% - 60px));
+    overflow: auto;
+  }
+}
+.disableScrolling {
+  overflow: hidden;
+  position: absolute;
+  @include boxSize($width: 100%, $height: 100%);
 }
 
 // sorting
@@ -350,6 +396,26 @@ small {
 // global media queries
 
 @media(min-width: 768px) {
+
+  .modalWrapper {
+    // overflow: auto;
+    @include boxSize($height: 600px, $width: 650px);
+    flex-direction: column;
+    justify-content: flex-start;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+
+    header {
+      .headerInner {
+        h2 {
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
 
   a:hover,
   button:hover,

@@ -649,7 +649,7 @@ form {
   );
   @include boxSize($width: 100%);
   // background-color: lighten($graphite, 10%);
-  background-color: $white;
+  background-color: $light;
   color: lighten($graphite, 10%);
   padding: 1rem 0;
 
@@ -694,7 +694,7 @@ form {
     legend {
       margin: 0 auto;
       border: 2px inset white;
-      background-color: complement($gray);
+      background-color: complement($midTone);
       color: white;
       padding: 0.5rem;
       border-radius: 30%;
@@ -744,7 +744,7 @@ form {
       margin: 0.8rem 0;
       button {
         background: lighten($graphite, 40%);
-        @include fonts($color: $white);
+        @include fonts($color: $light);
       }
 
       input[type='file'] {
@@ -762,7 +762,7 @@ form {
 
   .submitBtn {
     background: $orangeGradient;
-    @include fonts($color: $white, $weight: 600);
+    @include fonts($color: $light, $weight: 600);
     padding: 0.4rem;
     @include boxSize($width: 150px);
     box-shadow: $shadowSmall;

@@ -5,7 +5,7 @@
         v-model="commentText"
         name=""
         id=""
-        placeholder="Your comment..."
+        placeholder="Add your comment here..."
         maxlength="300"
         required
         class="block center"
@@ -106,13 +106,17 @@ export default {
 <style lang="scss" scoped>
 .addComment {
   @include alignment($direction: column, $align: center);
-  @include boxSize($width: 100%);
+  @include boxSize($maxWidth: 280px);
+  margin: auto;
+  form {
+    @include boxSize($width: 100%);
+  }
   textarea {
     resize: none;
     overflow: auto;
-    @include boxSize($width: 250px, $height: 120px);
+    @include boxSize($width: 100%, $height: 120px);
     border: 1px solid lightgray;
-    padding: 0.7rem;
+    padding: 0.8rem;
     &:focus {
       outline: 1px solid rgb(158, 192, 90);
     }
@@ -121,8 +125,17 @@ export default {
     @include boxSize($height: 40px);
   }
   button {
-    @include boxSize($width: 250px);
+    @include boxSize($width: 100%);
     border-radius: 0;
+  }
+}
+
+@media (min-width: 576px) {
+  .addComment {
+    @include boxSize($maxWidth: 400px);
+    button {
+      @include boxSize($maxWidth: 400px);
+    }
   }
 }
 </style>

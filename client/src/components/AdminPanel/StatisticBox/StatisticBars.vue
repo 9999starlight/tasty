@@ -45,7 +45,7 @@ export default {
 
       span {
         display: inline-block;
-        @include fonts($color: $white, $size: 0.8rem, $weight: 700);
+        @include fonts($color: $light, $size: 0.8rem, $weight: 700);
         margin-right: 0.7rem;
         width: 100%;
         text-align: right;

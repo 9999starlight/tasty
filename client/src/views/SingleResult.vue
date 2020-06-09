@@ -82,7 +82,11 @@
       </figure>
       <section class="underImage flex mgb1">
         <div class="userInfoRating flex mgb1">
-          <p class="userInfo flex flexCenter">
+          <p
+            class="userInfo flex flexCenter"
+            @click="allUserRecipes(resultRecipe.author._id)"
+            title="See all user's recipes"
+          >
             <img
               v-if="resultRecipe.author.user_image === undefined"
               :src="getDefaultUserImage"
@@ -181,7 +185,10 @@
       />
     </div>
   </div>
-  <NotFound v-else-if="displayNotFound" :message="'No result for reqested recipe'" />
+  <NotFound
+    v-else-if="displayNotFound"
+    :message="'No result for reqested recipe'"
+  />
   <Loader v-else :bigLoader="true" />
 </template>
 
@@ -190,11 +197,12 @@ import { mapActions, mapGetters } from 'vuex'
 import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
 import dateFormat from './../mixins/dateFormat'
+import apiCalls from './../mixins/apiCalls'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
 import Loader from '../components/sharedComponents/Loader'
 import Rating from '../components/SingleResult/Rating'
 import axios from 'axios'
-import { usersUrl, source } from '../apiData'
+import { usersUrl } from '../apiData'
 
 export default {
   name: 'SingleResult',
@@ -290,7 +298,7 @@ export default {
         this.resultRecipe.author._id !== this.getCurrentUser.userId &&
         this.checkRatedBy.length
       ) {
-        console.log(this.checkRatedBy)
+        //console.log(this.checkRatedBy)
         return this.checkRatedBy[0].rate
       } else {
         return null
@@ -298,7 +306,7 @@ export default {
     }
   },
 
-  mixins: [dateFormat],
+  mixins: [dateFormat, apiCalls],
 
   methods: {
     updateMessage(message) {
@@ -335,10 +343,7 @@ export default {
         }
         const response = await axios.patch(
           `${usersUrl}/favorites/${this.getCurrentUser.userId}`,
-          { favoriteId: this.resultRecipe._id },
-          {
-            cancelToken: source.token
-          }
+          { favoriteId: this.resultRecipe._id }
         )
         if (response) {
           console.log(response)
@@ -348,32 +353,19 @@ export default {
           this.updateMessage(response.data.message)
         }
       } catch (error) {
-         (thrown, error) => {
-          this.updateMessageStatus(false)
-          if (axios.isCancel(thrown)) {
-            console.log('Request canceled', thrown.message)
-          } else {
-            if (
-              error.response &&
-              (error.response.status === 401 || error.response.status === 409)
-            ) {
-              console.log(error.response.data.message)
-              this.updateMessageStatus(false)
-              this.updateMessage(error.response.data.message)
-            }
-          }
+        this.updateMessageStatus(false)
+        if (
+          error.response &&
+          (error.response.status === 401 || error.response.status === 409)
+        ) {
+          console.log(error.response.data.message)
+          this.updateMessage(error.response.data.message)
+        } else {
+          this.updateMessage(error.message)
+          console.log(error.message)
         }
       }
     }
-
-    /* beforeRouteLeave (to, from, next) {
-    try {
-      source.token.cancel('Requests canceled')
-      next()
-    } catch (error) {
-      console.log(error)
-    }
-  } */
   }
 }
 </script>
@@ -421,7 +413,7 @@ export default {
     }
 
     .addToFavorites {
-      @include fonts($color: $white);
+      @include fonts($color: $light);
       @include alignment($display: inline-block);
       background: linear-gradient(270deg, #38a16a, #16604d, #7cd49a);
       background-size: 600% 600%;
@@ -510,6 +502,10 @@ export default {
     .userInfoRating {
       @include boxSize($width: 100%);
       @include alignment($justify: space-between, $align: center);
+
+      .userInfo {
+        cursor: pointer;
+      }
 
       .authorImage {
         @include boxSize($width: 40px, $height: 40px);

@@ -6,10 +6,12 @@ const {
   loginUser,
   getAllUsers,
   getSingleUser,
-  deleteUser,
+  // deleteUser,
   updateUserImage,
   addToFavorites,
-  removeFromFavorites
+  removeFromFavorites,
+  changeAdminStatus,
+  changeDisableStatus
 } = require('../controllers/users_ctrl')
 const {
   registerValidation,
@@ -68,9 +70,27 @@ router.patch(
   removeFromFavorites
 )
 
+// @desc    PATCH change user admin status
+// @route   PATCH /users/adminStatus/:userId
+// @access  ADMIN
+router.patch(
+  '/adminStatus/:userId',
+  authUser,
+  changeAdminStatus
+)
+
+// @desc    PATCH disable/enable user
+// @route   PATCH /users/disableStatus/:userId
+// @access  ADMIN
+router.patch(
+  '/disableStatus/:userId',
+  authUser,
+  changeDisableStatus
+)
+
 // @desc    DELETE remove user
 // @route   DELETE /users/:userId
 // @access  ADMIN
-router.delete('/:userId', authUser, deleteUser)
+// router.delete('/:userId', authUser, deleteUser)
 
 module.exports = router

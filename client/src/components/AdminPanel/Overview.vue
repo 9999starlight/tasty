@@ -194,7 +194,7 @@ export default {
 
     header {
       background-color: lighten($graphite, 20%);
-      @include fonts($color: $white);
+      @include fonts($color: $light);
       @include boxSize($width: 100%, $height: 20%);
     }
 
@@ -255,7 +255,7 @@ export default {
 
     header {
       background-color: lighten($graphite, 20%);
-      @include fonts($color: $white);
+      @include fonts($color: $light);
       @include boxSize($width: 100%, $height: 40px);
       position: sticky;
       top: 0;

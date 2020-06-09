@@ -182,7 +182,7 @@ header {
   position: sticky;
   width: 100%;
   top: 0;
-  background-color: $white;
+  background-color: $light;
   z-index: 7;
   box-shadow: $shadowSmall;
 
@@ -221,7 +221,7 @@ header {
         transition: 0.5s;
 
         &.transformMenu {
-          background-color: $white;
+          background-color: $light;
         }
 
         &.transformMenu:first-of-type {
@@ -262,7 +262,7 @@ header {
       button {
         padding: 0.8rem;
         // margin-left: 1rem;
-        color: $white;
+        color: $light;
         @include boxSize($width: 100%);
         @include alignment($textAlign: left);
       }

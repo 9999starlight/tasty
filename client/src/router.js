@@ -3,10 +3,12 @@ import Router from 'vue-router'
 import { store } from './store/store'
 // views
 import Home from './views/Home'
+//import QueryResults from './components/Home/QueryResults/QueryResults'
 import FoodFacts from './views/FoodFacts'
 import Login from './views/Login'
 import Wines from './views/Wines'
 import SingleResult from './views/SingleResult'
+import RenderResults from './views/RenderResults'
 // UserPanel & children
 import UserPanel from './views/UserPanel'
 import UserRecipes from './components/UserPanel/UserRecipes'
@@ -127,15 +129,18 @@ let router = new Router({
       props: true
     },
     {
+      path: '/render_results',
+      name: 'render_results',
+      component: RenderResults
+    },
+    {
       path: '/error404',
       name: 'error404',
       component: ErrorPage
     },
     {
       path: '*',
-      redirect: {
-        name: 'home'
-      }
+      component: ErrorPage 
     }
   ]
 })

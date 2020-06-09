@@ -256,7 +256,7 @@ export default {
     @include boxSize($width: 250px);
     box-shadow: $shadowSmall;
     background-color: lighten($graphite, 20%);
-    color: $white;
+    color: $light;
 
     h1,
     h3,
@@ -291,7 +291,7 @@ export default {
 
       .imageSubmit {
         background: $orangeGradient;
-        @include fonts($color: $white, $weight: 600);
+        @include fonts($color: $light, $weight: 600);
         margin: 0 auto;
         padding: 0.4rem;
         @include boxSize($width: 150px);
@@ -329,7 +329,7 @@ export default {
         a {
           @include boxSize($width: 100%);
           padding: 0.3rem 0.8rem;
-          @include fonts($color: $white);
+          @include fonts($color: $light);
         }
       }
     }

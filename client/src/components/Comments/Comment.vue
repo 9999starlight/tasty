@@ -64,7 +64,7 @@ export default {
     @include fonts($size: 0.8rem);
   }
 }
-@media (min-width: 500px) {
+@media (min-width: 576px) {
   .singleCommentWrapper {
     @include boxSize($width: 400px);
   }
