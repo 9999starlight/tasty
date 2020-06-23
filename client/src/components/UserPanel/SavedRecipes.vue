@@ -85,7 +85,7 @@ export default {
         // console.log(this.savedRecipes)
         this.toggleLoader()
       } catch (error) {
-        console.log(error.message)
+        console.log(error.response.data.message)
       }
     }
   }

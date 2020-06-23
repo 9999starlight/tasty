@@ -1,7 +1,9 @@
 <template>
   <div class="container singleUserRecipes">
-      <button @click="showForms=!showForms">Browse Recipes</button>
-    <Forms v-show="showForms" :renderPage="false" />
+    <button @click="showForms = !showForms">Browse Recipes</button>
+    <transition name="slide-down" mode="out-in">
+      <Forms v-show="showForms" :renderPage="false" />
+    </transition>
     <QueryResults />
   </div>
 </template>
@@ -24,6 +26,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  
-</style>
+<style lang="scss" scoped></style>

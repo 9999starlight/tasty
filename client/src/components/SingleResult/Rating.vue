@@ -2,10 +2,7 @@
   <div class="ratingContainer">
     <div v-show="ratingDropdown" class="overlay" @click="toggleRating"></div>
     <div class="ratingWrapper">
-      <div
-        @click="toggleRating"
-        class="addRate flex flexCenter"
-      >
+      <div @click="toggleRating" class="addRate flex flexCenter">
         <p class="flex flexCenter">
           Rate recipe &nbsp;<span class="starEntity">&#x2605;</span>
         </p>
@@ -62,7 +59,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getCurrentUser', 'getIsLogged']),
+    ...mapGetters(['getCurrentUser', 'getIsLogged'])
 
     /* disableRating() {
       const checkRatedBy = this.resultRecipe.rates.filter(

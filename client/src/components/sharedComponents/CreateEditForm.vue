@@ -583,7 +583,6 @@ export default {
           console.log(response)
           this.$store.dispatch('updateUser', response.data.updatedUser)
           this.toggleLoader()
-          // this.$router.push(`/userpanel/user_recipes`)
           this.$router.push(`/SingleResult/${response.data.createdRecipe._id}`)
         }
       } catch (error) {
@@ -592,11 +591,11 @@ export default {
           this.updateMessage(`Please check and fill in required fields!`)
         } else if (error.response.status === 500) {
           this.updateMessage('Something went wrong, try again later!')
-          console.log(error.response.data.message)
-          console.log(error.response)
+          // console.log(error.response.data.message)
+          // console.log(error.response)
         } else {
-          this.updateMessage(error.message)
-          console.log(error.message)
+          this.updateMessage(error.response.data.message)
+          console.log(error.response.data.message)
         }
       }
     },
@@ -617,7 +616,6 @@ export default {
         if (response) {
           console.log(response.data)
           this.toggleLoader()
-          // this.$router.push(`/userpanel/user_recipes`)
           this.$router.push(`/SingleResult/${this.getSingleRecipe._id}`)
         }
       } catch (error) {
@@ -628,8 +626,8 @@ export default {
           this.updateMessage('Something went wrong, try again later!')
           console.log(error.response.data.message)
         } else {
-          this.updateMessage(error.message)
-          console.log(error.message)
+          this.updateMessage(error.response.data.message)
+          console.log(error.response.data.message)
         }
       }
     }

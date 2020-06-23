@@ -24,8 +24,7 @@
               ><strong v-else>disabled</strong>
             </h3>
             <div class="adminUserCheckBox">
-              <label for="adminCheck" class="flex flexCenter"
-                >Change user admin status
+              <label for="adminCheck" class="flex flexCenter">
                 <input
                   type="checkbox"
                   id="adminCheck"
@@ -37,15 +36,14 @@
                 <p class="flex flexCenter">
                   <font-awesome-icon
                     :icon="['fa', 'user-shield']"
-                    class="userShield userSvg"
-                    v-if="userForEdit.isAdmin"
-                  ></font-awesome-icon>
-                  <font-awesome-icon
-                    :icon="['fa', 'user']"
-                    class="user userSvg"
-                    v-else
+                    :class="[
+                      userForEdit.isAdmin ? 'user userSvg' : 'inactive userSvg'
+                    ]"
                   ></font-awesome-icon>
                 </p>
+                <span
+                  :class="[userForEdit.isAdmin ? 'rightPosition' : '']"
+                ></span>
               </label>
             </div>
             <button @click="changeAdminStatus" class="btnAction">
@@ -59,8 +57,7 @@
               ><strong v-else>active</strong>
             </h3>
             <div class="adminUserCheckBox">
-              <label for="disableCheck" class="flex flexCenter"
-                >Enable or disable user
+              <label for="disableCheck" class="flex flexCenter">
                 <input
                   type="checkbox"
                   id="disableCheck"
@@ -71,16 +68,17 @@
                 />
                 <p class="flex flexCenter">
                   <font-awesome-icon
-                    :icon="['fa', 'user-slash']"
-                    class="userSlash userSvg"
-                    v-if="userForEdit.isDisabled"
-                  ></font-awesome-icon>
-                  <font-awesome-icon
                     :icon="['fa', 'user']"
-                    class="user userSvg"
-                    v-else
+                    :class="[
+                      userForEdit.isDisabled
+                        ? 'inactive userSvg'
+                        : 'user userSvg'
+                    ]"
                   ></font-awesome-icon>
                 </p>
+                <span
+                  :class="[!userForEdit.isDisabled ? 'rightPosition' : '']"
+                ></span>
               </label>
             </div>
             <button @click="changeDisableStatus" class="btnAction">
@@ -179,21 +177,21 @@
             <div class="buttonsUser flex">
               <button @click="openUserEdit(user.userId)">
                 <font-awesome-icon
-                  v-if="!user.isDisabled"
+                  v-if="user.isDisabled"
                   :icon="['fa', 'user-slash']"
                   class="delete"
-                  title="Disable user"
+                  title="Enable user"
                 ></font-awesome-icon>
                 <font-awesome-icon
-                  v-if="user.isDisabled"
+                  v-else
                   :icon="['fa', 'user']"
                   class="edit"
-                  title="Enable user"
+                  title="Disable user"
                 ></font-awesome-icon>
               </button>
               <button @click="adminEditing(user.userId)">
                 <font-awesome-icon
-                  :icon="['fa', 'edit']"
+                  :icon="['fa', 'user-shield']"
                   class="edit"
                   title="Change admin status"
                 ></font-awesome-icon>
@@ -218,7 +216,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-//import StatisticBox from './StatisticBox/StatisticBox'
 import Loader from '../sharedComponents/Loader'
 import Select from '../sharedComponents/Select'
 import SortingButtons from '../sharedComponents/SortingButtons'
@@ -230,7 +227,6 @@ export default {
   name: 'admin_users',
 
   components: {
-    //StatisticBox,
     Loader,
     Select,
     SortingButtons
@@ -285,7 +281,7 @@ export default {
         if (fetchedUsers) {
           this.allUsers = [...fetchedUsers.usersArray]
           this.usersCount = fetchedUsers.count
-          console.log(this.allUsers, this.usersCount)
+          // console.log(this.allUsers, this.usersCount)
           this.toggleLoader()
         }
       } catch (error) {
@@ -296,7 +292,7 @@ export default {
     async changeDisableStatus() {
       try {
         if (window.confirm('Change status for this user?')) {
-          console.log(this.userForEdit._id, this.userForEdit.isDisabled)
+          // console.log(this.userForEdit._id, this.userForEdit.isDisabled)
           const res = await this.editUser(
             this.userForEdit._id,
             'disableStatus',
@@ -331,11 +327,6 @@ export default {
       }
     },
 
-    adminEditing(id) {
-      this.editAdmin = true
-      this.openUserEdit(id)
-    },
-
     async openUserEdit(id) {
       try {
         const user = await this.fetchSingleUser(id)
@@ -345,6 +336,11 @@ export default {
       } catch (error) {
         console.log(error.message)
       }
+    },
+
+    adminEditing(id) {
+      this.editAdmin = true
+      this.openUserEdit(id)
     },
 
     closeUserEdit() {
@@ -400,27 +396,58 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        height: 2rem;
-        width: 2rem;
+        height: 2.2rem;
+        width: 4rem;
         background-color: lightgray;
-        border-radius: 5px;
+        border-radius: 1rem;
         cursor: pointer;
 
         .userSvg {
           font-size: 1.2rem;
+          position: absolute;
+          @include fonts($color: rgb(178, 178, 189));
         }
 
         .user {
           @include fonts($color: rgb(136, 187, 54));
+          left: 0.4rem;
         }
 
-        .userSlash {
-          @include fonts($color: crimson);
+        .inactive {
+          right: 0.4rem;
         }
+      }
+      span {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
 
-        .userShield {
-          @include fonts($color: rgb(55, 55, 189));
+        &.rightPosition {
+          right: 0;
+          left: initial;
+
+          &.rightPosition:before {
+            background-color: rgb(136, 187, 54);
+          }
         }
+      }
+      span:before {
+        position: absolute;
+        content: '';
+        height: 1.8rem;
+        width: 1.8rem;
+        left: 0;
+        bottom: 0;
+        background-color: rgb(178, 178, 189);
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        top: 0.2rem;
+        border-radius: 50%;
       }
     }
   }
@@ -444,7 +471,6 @@ export default {
     }
   }
   .usersListWrapper {
-    /* @include boxSize($height: calc(100% - 80px)); */
     overflow-y: auto;
     @include alignment($direction: column, $align: center);
     padding: 0.5rem;
@@ -503,7 +529,6 @@ export default {
     .recipesFavorites {
       grid-area: recipesFavorites;
       @include alignment($justify: space-evenly);
-      //grid-column-gap: 2px;
       margin-top: 0.5rem;
       div:first-of-type {
         border-right: 2px solid white;
@@ -577,7 +602,6 @@ export default {
       @include alignment($direction: row);
     }
     .usersListWrapper {
-      /* @include boxSize($height: calc(100% - 60px)); */
       @include alignment($direction: row, $justify: center);
       flex-wrap: wrap;
     }
@@ -630,10 +654,15 @@ export default {
   }
 }
 @media (min-width: 768px) {
-  .adminUsers {
+  .adminUsers,
+  .loaderContainer {
     margin-top: 0;
     @include boxSize($width: calc(100% - 4rem));
     align-self: flex-end;
+  }
+
+  .loaderContainer {
+    margin: auto 0;
   }
 }
 

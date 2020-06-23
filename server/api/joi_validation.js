@@ -126,7 +126,8 @@ exports.updateRecipeValidation = (req, res, next) => {
       .items({
         ingredient: Joi.string().required(),
         amount: Joi.string().allow('')
-      }).required(),
+      })
+      .required(),
     steps: Joi.array().items({ step: Joi.string().required() }).required()
   })
   const { error } = updateRecipeSchema.validate(req.body)

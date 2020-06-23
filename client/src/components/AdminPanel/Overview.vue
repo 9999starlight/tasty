@@ -24,31 +24,33 @@
           <h3>Latest recipes</h3>
         </header>
         <div class="inner scrolling">
-        <router-link
-          :to="{ name: 'SingleResult', params: { id: recipe._id } }"
-          tag="div"
-          class="recipe grid link"
-          v-for="recipe in latestRecipes"
-          :key="recipe._id"
-        >
-          <figure>
-            <img
-              v-if="recipe.image === undefined"
-              :src="getDefaultImage"
-              :alt="recipe.mealName"
-              class="imageFit"
-            />
-            <img
-              v-else
-              :src="recipe.image"
-              :alt="recipe.mealName"
-              class="imageFit"
-            />
-          </figure>
-          <h5 class="center">{{ recipe.mealName }}</h5>
-          <p class="lightItalic created">{{ convertDate(recipe.createdAt) }}</p>
-          <p class="author">{{ recipe.author.username }}</p>
-        </router-link>
+          <router-link
+            :to="{ name: 'SingleResult', params: { id: recipe._id } }"
+            tag="div"
+            class="recipe grid link"
+            v-for="recipe in latestRecipes"
+            :key="recipe._id"
+          >
+            <figure>
+              <img
+                v-if="recipe.image === undefined"
+                :src="getDefaultImage"
+                :alt="recipe.mealName"
+                class="imageFit"
+              />
+              <img
+                v-else
+                :src="recipe.image"
+                :alt="recipe.mealName"
+                class="imageFit"
+              />
+            </figure>
+            <h5 class="center">{{ recipe.mealName }}</h5>
+            <p class="lightItalic created">
+              {{ convertDate(recipe.createdAt) }}
+            </p>
+            <p class="author">{{ recipe.author.username }}</p>
+          </router-link>
         </div>
       </div>
       <div class="latestComments">
@@ -56,21 +58,21 @@
           <h3>Latest comments</h3>
         </header>
         <div class="inner scrolling">
-        <div
-          class="comment"
-          v-for="comment in latestComments"
-          :key="comment._id"
-        >
-          <h5>{{ comment.author.username }}</h5>
-          <p class="lightItalic created">
-            {{ convertDate(comment.createdAt) }}
-          </p>
-          <p>{{ comment.commentBody }}</p>
-          <small class="lightItalic"
-            >Recipe id: {{ comment.commentedRecipeId }}</small
+          <div
+            class="comment"
+            v-for="comment in latestComments"
+            :key="comment._id"
           >
+            <h5>{{ comment.author.username }}</h5>
+            <p class="lightItalic created">
+              {{ convertDate(comment.createdAt) }}
+            </p>
+            <p>{{ comment.commentBody }}</p>
+            <small class="lightItalic"
+              >Recipe id: {{ comment.commentedRecipeId }}</small
+            >
+          </div>
         </div>
-      </div>
       </div>
       <StatisticBox
         :title="'Most commented recipes'"
@@ -79,7 +81,7 @@
       <StatisticBox :title="'Most active Users'" :dataArray="mostActiveUsers" />
     </section>
   </div>
-    <Loader v-else :bigLoader="true" />
+  <Loader v-else :bigLoader="true" />
 </template>
 
 <script>
@@ -240,7 +242,7 @@ export default {
     // scrollbar styling
     /* scrollbar-width: thin;
     scrollbar-color: lighten($graphite, 20%) lighten($graphite, 60%); */
-   /*  &::-webkit-scrollbar {
+    /*  &::-webkit-scrollbar {
       width: 11px;
     }
 
@@ -262,8 +264,8 @@ export default {
     }
 
     .inner {
-         overflow: auto;
-   @include boxSize($height: calc(100% - 40px));
+      overflow: auto;
+      @include boxSize($height: calc(100% - 40px));
     }
   }
 
@@ -324,10 +326,15 @@ export default {
 }
 
 @media (min-width: 768px) {
-  .overview {
+  .overview/* ,
+  .loaderContainer  */{
     margin-top: 0;
     @include boxSize($width: calc(100% - 4rem));
     align-self: flex-end;
+
+    /* .loaderContainer {
+      margin: auto 0;
+    } */
 
     section {
       grid-template-columns: repeat(2, 1fr);

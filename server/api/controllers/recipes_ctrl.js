@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const Recipe = require('../models/recipe')
 const Comment = require('../models/comment')
 const User = require('../models/user')
-// const sharp = require('sharp')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
+const { returnUserImage } = require('../helpers/imageFunction')
 
 exports.getRecipes = async (req, res, next) => {
   try {
@@ -28,14 +28,14 @@ exports.getRecipes = async (req, res, next) => {
     //console.log("getting recipes ", docs)
     const response = {
       recipes: docs.map((doc) => {
-        let image = ''
+        /* let image = ''
         if (doc.author.user_image) {
           image = doc.author.user_image.url
-        }
+        } */
         return {
           author: {
             username: doc.author.username,
-            image
+            image: returnUserImage(doc.author)
           },
           mealName: doc.mealName,
           intro: doc.intro,
@@ -145,10 +145,10 @@ exports.addNewRecipe = async (req, res, next) => {
       },
       { new: true }
     )
-    let userImage = ''
+    /* let userImage = ''
     if (updateUserRecipes.user_image) {
       userImage = updateUserRecipes.user_image.url
-    }
+    } */
     //console.log(result)
     res.status(201).json({
       message: 'New recipe created successfully!',
@@ -161,7 +161,7 @@ exports.addNewRecipe = async (req, res, next) => {
         createdAt: updateUserRecipes.createdAt,
         createdRecipes: updateUserRecipes.createdRecipes,
         favorites: updateUserRecipes.favorites,
-        userImage
+        user_image: returnUserImage(updateUserRecipes)
       }
     })
   } catch (error) {
@@ -378,10 +378,10 @@ exports.deleteRecipe = async (req, res) => {
     )
 
     await recipe.remove()
-    let userImage = ''
+    /* let userImage = ''
     if (updatedUser.user_image) {
       userImage = updatedUser.user_image.url
-    }
+    } */
     res.status(200).json({
       message: recipe.mealName + ' deleted!',
       userUpdate: {
@@ -392,7 +392,7 @@ exports.deleteRecipe = async (req, res) => {
         createdAt: updatedUser.createdAt,
         createdRecipes: updatedUser.createdRecipes,
         favorites: updatedUser.favorites,
-        userImage
+        user_image: returnUserImage(updatedUser)
       }
     })
   } catch (error) {

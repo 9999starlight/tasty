@@ -29,20 +29,6 @@
           class="flex"
           ><a>Recipes</a></router-link
         > -->
-        <router-link
-          :to="{ name: 'foodfacts' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>Food Facts</a></router-link
-        >
-        <router-link
-          :to="{ name: 'wines' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>Wines</a></router-link
-        >
         <!-- if loggedIn -->
         <router-link
           v-if="getIsLogged"
@@ -52,8 +38,8 @@
           class="flex"
           ><a>
             <img
-              v-if="getCurrentUser.userImage"
-              :src="getCurrentUser.userImage"
+              v-if="getCurrentUser.user_image"
+              :src="getCurrentUser.user_image"
               :alt="getCurrentUser.username"
             />
             <img

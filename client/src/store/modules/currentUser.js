@@ -40,6 +40,7 @@ const actions = {
       const response = await axios.post(`${usersUrl}/login`, credentials)
       // console.log(response.data);
       if (response.data.token) {
+        // console.log(jwt.decode(response.data.token))
         localStorage.setItem('userToken', response.data.token)
       }
       userSettings(
@@ -47,7 +48,7 @@ const actions = {
         localStorage.getItem('userToken'),
         jwt.decode(localStorage.getItem('userToken'))
       )
-      // console.log(response.data)
+      //console.log(this.state.currentUser)
       return response.data
     } catch (error) {
       if (error.response && error.response.status === 401) {

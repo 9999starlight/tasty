@@ -2,32 +2,14 @@ import { recipesUrl, source } from '../../apiData'
 import axios from 'axios'
 
 const state = {
-  sliderRecipes: [],
   queriedRecipes: [],
   defaultImage: require('@/assets/default_recipe.jpg'),
   singleRecipe: '',
   success: null,
   editState: false
-  // recipeForEdit: null
 }
 
 const actions = {
-  fetchSliderRecipes: async ({ commit }) => {
-    try {
-      const result = await axios.get(`${recipesUrl}?sort=-rating`)
-      //console.log(result)
-      let resultsArray = []
-      if (result.data.response.recipes.length) {
-        result.data.response.recipes.forEach((d) => resultsArray.push(d))
-        const popularArray = resultsArray.slice(0, 5)
-        commit('setSliderRecipes', popularArray)
-      }
-    } catch (error) {
-      console.log(error.result.data.message)
-      //commit('setSliderRecipes', error.message)
-    }
-  },
-
   fetchQueriedRecipes: async ({ commit }, payload) => {
     try {
       const results = await axios.get(`${recipesUrl}`, {
@@ -45,7 +27,7 @@ const actions = {
       }
       // console.log(results.data.docsCount)
     } catch (error) {
-      console.log(error.results.data.message)
+      console.log(error.response.data.message)
       //console.log(error.message)
     }
   },
@@ -89,10 +71,6 @@ const actions = {
 }
 
 const mutations = {
-  setSliderRecipes(state, payload) {
-    state.sliderRecipes = payload
-  },
-
   setQueriedRecipes(state, payload) {
     state.queriedRecipes = payload
   },
@@ -111,10 +89,6 @@ const mutations = {
 }
 
 const getters = {
-  getSliderRecipes(state) {
-    return state.sliderRecipes
-  },
-
   getQueriedRecipes(state) {
     return state.queriedRecipes
   },

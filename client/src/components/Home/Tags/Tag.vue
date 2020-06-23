@@ -23,10 +23,9 @@ export default {
   methods: {
     async fetchTaggedRecipes(params) {
       params = this.tag.tagParams
-      console.log(params)
+      // console.log(params)
       try {
         await this.$store.dispatch('fetchQueriedRecipes', params)
-        // this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
         this.$router.push({name: 'render_results'})
       } catch (error) {
         console.log(error.message)

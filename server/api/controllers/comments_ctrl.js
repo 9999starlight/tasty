@@ -170,26 +170,3 @@ exports.deleteSingleComment = async (req, res, next) => {
   }
 }
 
-/* exports.deleteMultipleComments = async (req, res, next) => {
-  try {
-    if (!req.userData.isAdmin) {
-      return res.status(401).json({
-        message: `Unauthorized - access denied!`
-      })
-    }
-
-    //
-    const result = Comment.deleteMany({
-      author: req.params.author
-    })
-    res.status(200).json({
-      message: `All ${result.author}'s comments are deleted!`
-    })
-  } catch (error) {
-    console.log(error.message)
-    res.status(500).json({
-      error,
-      message: error.message
-    })
-  }
-} */

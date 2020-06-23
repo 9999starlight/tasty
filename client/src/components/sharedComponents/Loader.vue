@@ -17,6 +17,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
 .progress {
   position: relative;
   display: inline-block;

@@ -87,7 +87,7 @@ export default {
         this.fetchedRecipes = [...result.data.response.recipes]
         this.toggleLoader()
       } catch (error) {
-        console.log(error.message)
+        console.log(error.response.data.message)
       }
     }
   }

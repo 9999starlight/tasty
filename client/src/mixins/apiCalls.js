@@ -1,6 +1,6 @@
 import { recipesUrl, usersUrl, commentsUrl } from '../apiData'
-
 import axios from 'axios'
+
 const apiCalls = {
   methods: {
     async fetchDbRecipes(payload) {
@@ -13,7 +13,7 @@ const apiCalls = {
           count: results.data.docsCount
         }
       } catch (error) {
-        console.log(error.results.data.message)
+        console.log(error.response.data.message)
       }
     },
 
@@ -27,7 +27,7 @@ const apiCalls = {
           count: results.data.docsCount
         }
       } catch (error) {
-        console.log(error.results.data.message)
+        console.log(error.response.data.message)
       }
     },
 
@@ -39,28 +39,31 @@ const apiCalls = {
         }
         await this.$store.dispatch('fetchQueriedRecipes', params)
         //console.log(res)
-        this.$router.push({name: 'render_results'})
+        this.$router.push({ name: 'render_results' })
       } catch (error) {
-        console.log(error.message)
+        console.log(error.response.data.message)
       }
     },
 
     async fetchSingleUser(id) {
       try {
         const singleUser = await axios.get(`${usersUrl}/${id}`)
-        //console.log(singleUser)
+        // console.log(singleUser)
         return singleUser
       } catch (error) {
-        console.log(error.message)
+        console.log(error.response.data.message)
       }
     },
 
     async editUser(id, endpoint, payload) {
       try {
-        const response = await axios.patch(`${usersUrl}/${endpoint}/${id}`, payload)
+        const response = await axios.patch(
+          `${usersUrl}/${endpoint}/${id}`,
+          payload
+        )
+        console.log(response)
         return response
       } catch (error) {
-        console.log(error.message)
         console.log(error.response.data.message)
       }
     },
@@ -75,7 +78,7 @@ const apiCalls = {
           count: results.data.docsCount
         }
       } catch (error) {
-        console.log(error.results.data.message)
+        console.log(error.response.data.message)
       }
     }
   }

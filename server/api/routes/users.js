@@ -73,20 +73,12 @@ router.patch(
 // @desc    PATCH change user admin status
 // @route   PATCH /users/adminStatus/:userId
 // @access  ADMIN
-router.patch(
-  '/adminStatus/:userId',
-  authUser,
-  changeAdminStatus
-)
+router.patch('/adminStatus/:userId', authUser, changeAdminStatus)
 
 // @desc    PATCH disable/enable user
 // @route   PATCH /users/disableStatus/:userId
 // @access  ADMIN
-router.patch(
-  '/disableStatus/:userId',
-  authUser,
-  changeDisableStatus
-)
+router.patch('/disableStatus/:userId', authUser, changeDisableStatus)
 
 // @desc    DELETE remove user
 // @route   DELETE /users/:userId

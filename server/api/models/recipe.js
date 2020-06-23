@@ -36,7 +36,7 @@ const recipeSchema = mongoose.Schema({
   },
   timing: {
     type: Number,
-    required: true,
+    required: true
   },
   persons: {
     type: Number,
@@ -108,7 +108,7 @@ const recipeSchema = mongoose.Schema({
       ref: 'Comment',
       required: true
     }
-  ] // attach related comments to recipe via ref
+  ] // attached related comments to recipe via ref
 })
 
 module.exports = mongoose.model('Recipe', recipeSchema)

@@ -93,10 +93,9 @@ export default {
           }
         }
       } catch (error) {
-        console.log(error.message)
-        console.log(error.response.data)
+        console.log(error.response.data.message)
         this.messageStatus = false
-        this.updateMessage(error.response.data)
+        this.updateMessage(error.response.data.message)
       }
     }
   }

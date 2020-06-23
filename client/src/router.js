@@ -4,9 +4,7 @@ import { store } from './store/store'
 // views
 import Home from './views/Home'
 //import QueryResults from './components/Home/QueryResults/QueryResults'
-import FoodFacts from './views/FoodFacts'
 import Login from './views/Login'
-import Wines from './views/Wines'
 import SingleResult from './views/SingleResult'
 import RenderResults from './views/RenderResults'
 // UserPanel & children
@@ -42,11 +40,6 @@ let router = new Router({
       component: Home
     },
     {
-      path: '/foodfacts',
-      name: 'foodfacts',
-      component: FoodFacts
-    },
-    {
       path: '/userpanel',
       name: 'userpanel',
       component: UserPanel,
@@ -73,7 +66,6 @@ let router = new Router({
     },
     {
       path: '/adminpanel',
-     /*  name: 'adminpanel', */
       component: AdminPanel,
       children: [
         {
@@ -99,7 +91,7 @@ let router = new Router({
       ],
       meta: {
         requiresAdmin: true,
-        requiresAuth: true
+        //requiresAuth: true
       }
     },
     {
@@ -116,11 +108,6 @@ let router = new Router({
           })
         }
       }
-    },
-    {
-      path: '/wines',
-      name: 'wines',
-      component: Wines
     },
     {
       path: '/SingleResult/:id',
@@ -149,6 +136,7 @@ let router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (store.getters['getIsLogged'] == false) {
+      //if(store.getters['getCurrentUser'] == null){
       next({
         path: '/login',
         query: { redirect: to.fullPath }
@@ -170,7 +158,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: '/',
+        path: '/login',
         query: { redirect: to.fullPath }
       })
     }

@@ -213,7 +213,7 @@ export default {
         })
         .then((res) => {
           if (res) {
-            // this.$router.push('home')
+            // this.$router.push('/')
             location.reload()
           } else {
             this.errorMessage = this.getErrorMessage

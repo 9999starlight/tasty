@@ -6,8 +6,9 @@ const Recipe = require('../models/recipe')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
 
+const { returnUserImage } = require('../helpers/imageFunction')
+
 exports.registerUser = async (req, res, next) => {
-  // console.log(req.body)
   try {
     const checkUsername = await User.find({
       username: req.body.username
@@ -41,10 +42,6 @@ exports.registerUser = async (req, res, next) => {
       }
     })
     const savedUser = await user.save()
-    // console.log(savedUser)
-    let userImage = ''
-    if (!savedUser.user_image) userImage = ''
-    else userImage = savedUser.user_image.url
     const payload = {
       _id: savedUser._id,
       username: savedUser.username,
@@ -53,7 +50,7 @@ exports.registerUser = async (req, res, next) => {
       createdAt: savedUser.createdAt,
       createdRecipes: savedUser.createdRecipes,
       favorites: savedUser.favorites,
-      userImage
+      user_image: returnUserImage(savedUser)
     }
 
     await jwt.sign(
@@ -108,9 +105,6 @@ exports.loginUser = async (req, res, next) => {
             message: `Unauthorized - access denied!`
           })
         }
-        let userImage = ''
-        if (!user[0].user_image) userImage = ''
-        else userImage = user[0].user_image.url
         const token = jwt.sign(
           {
             username: user[0].username,
@@ -120,11 +114,11 @@ exports.loginUser = async (req, res, next) => {
             createdAt: user[0].createdAt,
             createdRecipes: user[0].createdRecipes,
             favorites: user[0].favorites,
-            userImage
+            user_image: returnUserImage(user[0])
           },
           process.env.JWT_KEY,
           {
-            expiresIn: '12h'
+            expiresIn: '1m'
           }
         )
         return res.status(200).json({
@@ -171,10 +165,6 @@ exports.getAllUsers = async (req, res, next) => {
     })
     const response = {
       users: docs.map((doc) => {
-        let userImage = ''
-        if (doc.user_image) {
-          userImage = doc.user_image.url
-        }
         return {
           username: doc.username,
           userId: doc._id,
@@ -183,7 +173,7 @@ exports.getAllUsers = async (req, res, next) => {
           createdAt: doc.createdAt,
           favorites: doc.favorites,
           createdRecipes: doc.createdRecipes,
-          userImage
+          user_image: returnUserImage(doc)
         }
       })
     }
@@ -213,7 +203,6 @@ exports.getSingleUser = async (req, res, next) => {
       .populate({
         path: 'favorites'
       })
-    // console.log('getting user: ', doc)
     if (doc) res.status(200).json(doc)
     else
       res.status(404).json({
@@ -293,10 +282,7 @@ exports.updateUserImage = async (req, res, next) => {
         userImage: result.user_image.url
       }
     })
-    //res.status(200).json(result);
-    // console.log(result)
   } catch (error) {
-    // console.log("server upload function: ", error.message)
     res.status(500).json({
       error,
       message: error.message
@@ -341,10 +327,6 @@ exports.addToFavorites = async (req, res, next) => {
       },
       { new: true }
     )
-    let userImage = ''
-    if (result.user_image) {
-      userImage = result.user_image.url
-    }
     res.status(200).json({
       message: 'Added to your saved recipes',
       updatedUser: {
@@ -355,10 +337,9 @@ exports.addToFavorites = async (req, res, next) => {
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
-        userImage
+        user_image: returnUserImage(result)
       }
     })
-    // console.log(result)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({
@@ -398,10 +379,6 @@ exports.removeFromFavorites = async (req, res, next) => {
       },
       { new: true }
     )
-    let userImage = ''
-    if (result.user_image) {
-      userImage = result.user_image.url
-    }
     res.status(200).json({
       message: 'Removed from saved recipes',
       updatedUser: {
@@ -412,10 +389,9 @@ exports.removeFromFavorites = async (req, res, next) => {
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
-        userImage
+        user_image: returnUserImage(result)
       }
     })
-    // console.log(result)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({
@@ -444,23 +420,9 @@ exports.changeAdminStatus = async (req, res, next) => {
       },
       { new: true }
     )
-    /* let userImage = ''
-    if (result.user_image) {
-      userImage = result.user_image.url
-    } */
     res.status(200).json({
       message: `User admin status is changed to ${result.isAdmin}`
-      /* updatedUser: {
-        username: result.username,
-        userId: result._id,
-        isAdmin: result.isAdmin,
-        createdAt: result.createdAt,
-        createdRecipes: result.createdRecipes,
-        favorites: result.favorites,
-        userImage
-      } */
     })
-    // console.log(result)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({
@@ -489,23 +451,9 @@ exports.changeDisableStatus = async (req, res, next) => {
       },
       { new: true }
     )
-    /* let userImage = ''
-    if (result.user_image) {
-      userImage = result.user_image.url
-    } */
     res.status(200).json({
       message: `User status is changed to isDisabled: ${result.isDisabled}`
-      /* updatedUser: {
-        username: result.username,
-        userId: result._id,
-        isAdmin: result.isAdmin,
-        createdAt: result.createdAt,
-        createdRecipes: result.createdRecipes,
-        favorites: result.favorites,
-        userImage
-      } */
     })
-    // console.log(result)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({
@@ -515,7 +463,7 @@ exports.changeDisableStatus = async (req, res, next) => {
   }
 }
 
-// ??? brisati i sve njegove recepte i komentare??? // samo za admin
+// samo za admin
 /* exports.deleteUser = async (req, res, next) => {
   try {
     const id = req.params.userId

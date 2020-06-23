@@ -390,7 +390,8 @@ export default {
         background-color: transparent;
         padding: 0.8rem;
         @include fonts($size: 1.5rem);
-        .edit, .delete {
+        .edit,
+        .delete {
           position: relative;
           z-index: -1;
         }
@@ -435,10 +436,15 @@ export default {
 }
 
 @media (min-width: 768px) {
-  .adminRecipes {
+  .adminRecipes,
+  .loaderContainer {
     margin-top: 0;
     @include boxSize($width: calc(100% - 4rem));
     align-self: flex-end;
+  }
+
+  .loaderContainer {
+    margin: auto 0;
   }
 
   .searchRecipes {

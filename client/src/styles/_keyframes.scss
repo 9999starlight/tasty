@@ -18,15 +18,47 @@
   }
 }
 
-/* @keyframes fade-out {
+@keyframes fadePartial {
   0% {
+    filter: brightness(40%);
+  }
+  100% {
+    filter: brightness(100%);
+  }
+}
+
+ @-webkit-keyframes slide-down {
+  0% {
+    -webkit-transform: scaleY(0);
+            transform: scaleY(0);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
     opacity: 1;
   }
-
   100% {
-    opacity: 0;
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+    opacity: 1;
   }
-} */
+}
+@keyframes slide-down {
+  0% {
+    -webkit-transform: scaleY(0);
+            transform: scaleY(0);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+    -webkit-transform-origin: 100% 0%;
+            transform-origin: 100% 0%;
+    opacity: 1;
+  }
+}
 
 @-webkit-keyframes expand {
   0% {
