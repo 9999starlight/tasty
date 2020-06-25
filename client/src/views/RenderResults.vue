@@ -1,8 +1,7 @@
 <template>
   <div class="container singleUserRecipes">
-    <button @click="showForms = !showForms">Browse Recipes</button>
     <transition name="slide-down" mode="out-in">
-      <Forms v-show="showForms" :renderPage="false" />
+      <Forms v-show="getOpenSearch" :renderPage="false" />
     </transition>
     <QueryResults />
   </div>
@@ -11,6 +10,7 @@
 <script>
 import QueryResults from '../components/sharedComponents/QueryResults/QueryResults'
 import Forms from '../components/sharedComponents/Forms'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'render_results',
   components: {
@@ -18,10 +18,17 @@ export default {
     QueryResults
   },
 
-  data() {
-    return {
-      showForms: false
+  async beforeCreate() {
+    try {
+      await this.$store.dispatch('toggleSearch', false)
+    } catch (error) {
+      console.log(error)
     }
+  },
+
+  computed: {
+    ...mapGetters(['getOpenSearch']),
+    ...mapActions(['toggleSearch'])
   }
 }
 </script>

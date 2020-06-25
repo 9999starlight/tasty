@@ -120,8 +120,8 @@
           >
             <figure>
               <img
-                v-if="user.userImage"
-                :src="user.userImage"
+                v-if="user.user_image"
+                :src="user.user_image"
                 :alt="user.username"
                 class="imageFit"
               />
@@ -185,7 +185,7 @@
                 <font-awesome-icon
                   v-else
                   :icon="['fa', 'user']"
-                  class="edit"
+                  class="edit userEnabled"
                   title="Disable user"
                 ></font-awesome-icon>
               </button>
@@ -199,15 +199,17 @@
             </div>
           </div>
         </div>
-        <a
-          href="#searchUsers"
-          v-scroll-to="'#searchUsers'"
-          class="block hashLink mg2"
-          >Back to top &nbsp;<font-awesome-icon
-            :icon="['fa', 'hand-point-up']"
-            font-size="15px"
-          ></font-awesome-icon
-        ></a>
+        <Pagination
+          v-show="!searchValue"
+          :resultsPerPage="resultsPerPage"
+          :totalResults="allUsers.length"
+          :currentPage="currentPage"
+          @paginate="changePage"
+          @prev="prevPage"
+          @next="nextPage"
+          @first="firstPage"
+          @last="lastPage"
+        />
       </div>
     </section>
   </div>
@@ -219,20 +221,29 @@ import { mapGetters } from 'vuex'
 import Loader from '../sharedComponents/Loader'
 import Select from '../sharedComponents/Select'
 import SortingButtons from '../sharedComponents/SortingButtons'
+import Pagination from '../sharedComponents/Pagination'
 import loaderMixin from '../../mixins/loaderMixin'
 import apiCalls from '../../mixins/apiCalls'
 import dateFormat from '../../mixins/dateFormat'
 import sortingResults from '../../mixins/sortingResults'
+import paginationOptions from '../../mixins/paginationOptions'
 export default {
   name: 'admin_users',
 
   components: {
     Loader,
     Select,
-    SortingButtons
+    SortingButtons,
+    Pagination
   },
 
-  mixins: [loaderMixin, apiCalls, dateFormat, sortingResults],
+  mixins: [
+    loaderMixin,
+    apiCalls,
+    dateFormat,
+    sortingResults,
+    paginationOptions
+  ],
 
   data() {
     return {
@@ -258,7 +269,10 @@ export default {
     },
 
     filteredUsers() {
-      if (!this.searchValue) return this.allUsers
+      // if there is no search set initial array for pagination
+      if (!this.searchValue) {
+        return this.allUsers.slice(this.firstResultIndex, this.lastResultIndex)
+      }
       return this.allUsers.filter((user) => {
         if (this.selectedValueUsers === 'User ID') {
           return user.userId
@@ -270,6 +284,16 @@ export default {
             .includes(this.searchValue.toLowerCase())
         }
       })
+    },
+
+    // pagination - page settings
+    resultsPerPage() {
+      // check if results are less than initial value of 3
+      if (this.allUsers.length < 3) {
+        return this.allUsers.length
+      } else {
+        return 3
+      }
     }
   },
 
@@ -579,7 +603,12 @@ export default {
       .delete {
         @include fonts($size: 1.2rem);
       }
+
       .edit {
+        @include fonts($color: #45a0dd);
+      }
+
+      .userEnabled {
         @include fonts($color: rgb(136, 187, 54));
       }
 
@@ -588,6 +617,10 @@ export default {
       }
     }
   }
+}
+
+.paginationWrapper {
+  margin: 1rem;
 }
 
 @media (min-width: 576px) {

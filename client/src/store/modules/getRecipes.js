@@ -5,8 +5,7 @@ const state = {
   queriedRecipes: [],
   defaultImage: require('@/assets/default_recipe.jpg'),
   singleRecipe: '',
-  success: null,
-  editState: false
+  success: null
 }
 
 const actions = {
@@ -57,10 +56,6 @@ const actions = {
     }
   },
 
-  changeEditState({ commit }, payload) {
-    commit('setEditState', payload)
-  },
-
   clearSingleRecipe({ commit }, payload) {
     commit('setSingleRecipe', payload)
   }
@@ -81,10 +76,6 @@ const mutations = {
 
   setSuccess(state, payload) {
     state.success = payload
-  },
-
-  setEditState(state, payload) {
-    state.editState = payload
   }
 }
 
@@ -103,10 +94,6 @@ const getters = {
 
   getSuccess(state) {
     return state.success
-  },
-
-  getEditState(state) {
-    return state.editState
   }
 }
 

@@ -76,15 +76,19 @@
                   title="Delete comment"
                 ></font-awesome-icon>
               </button>
-              <!-- <button>
-                <font-awesome-icon
-                  :icon="['fa', 'edit']"
-                  class="edit"
-                  title="Edit comment"
-                ></font-awesome-icon>
-              </button> -->
             </div>
           </div>
+          <Pagination
+            v-show="!searchValue"
+            :resultsPerPage="resultsPerPage"
+            :totalResults="allComments.length"
+            :currentPage="currentPage"
+            @paginate="changePage"
+            @prev="prevPage"
+            @next="nextPage"
+            @first="firstPage"
+            @last="lastPage"
+          />
         </div>
         <a
           href="#commentsHeading"
@@ -106,8 +110,10 @@ import apiCalls from '../../mixins/apiCalls'
 import loaderMixin from '../../mixins/loaderMixin'
 import sortingResults from '../../mixins/sortingResults'
 import dateFormat from '../../mixins/dateFormat'
+import paginationOptions from '../../mixins/paginationOptions'
 import Loader from '../sharedComponents/Loader'
 import SortingButtons from '../sharedComponents/SortingButtons'
+import Pagination from '../sharedComponents/Pagination'
 import Select from '../sharedComponents/Select'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
@@ -119,6 +125,7 @@ export default {
   components: {
     Loader,
     SortingButtons,
+    Pagination,
     Select
   },
 
@@ -135,7 +142,13 @@ export default {
     this.commentsFetch()
   },
 
-  mixins: [apiCalls, loaderMixin, sortingResults, dateFormat],
+  mixins: [
+    apiCalls,
+    loaderMixin,
+    sortingResults,
+    dateFormat,
+    paginationOptions
+  ],
 
   computed: {
     ...mapGetters(['getDefaultUserImage']),
@@ -145,7 +158,12 @@ export default {
     },
 
     filteredComments() {
-      if (!this.searchValue) return this.allComments
+      if (!this.searchValue) {
+        return this.allComments.slice(
+          this.firstResultIndex,
+          this.lastResultIndex
+        )
+      }
       return this.allComments.filter((comment) => {
         if (this.selectedValueComments === 'Comment ID') {
           return comment._id
@@ -161,6 +179,15 @@ export default {
             .includes(this.searchValue.toLowerCase())
         }
       })
+    },
+
+    // pagination - page settings
+    resultsPerPage() {
+      if (this.allComments.length < 10) {
+        return this.allComments.length
+      } else {
+        return 10
+      }
     }
   },
 

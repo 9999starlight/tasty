@@ -37,7 +37,10 @@ let router = new Router({
     {
       path: '',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        showSearch: true
+      }
     },
     {
       path: '/userpanel',
@@ -118,7 +121,10 @@ let router = new Router({
     {
       path: '/render_results',
       name: 'render_results',
-      component: RenderResults
+      component: RenderResults,
+      meta: {
+        showSearch: true
+      }
     },
     {
       path: '/error404',

@@ -42,7 +42,9 @@
       />
     </section>
     <section class="searchSection flex flexCenter">
-      <h2 class="slim">Browse {{ recipesCount }} recipes</h2>
+      <h2 class="slim" id="recipesHeading">
+        Browse {{ recipesCount }} recipes
+      </h2>
       <SortingButtons
         @sortTitleAsc="sortTitleAscending(allRecipes)"
         @sortTitleDesc="sortTitleDescending(allRecipes)"
@@ -64,9 +66,9 @@
             placeholder="Search..."
           />
         </header>
-        <div class="allRecipesContainer scrolling">
+        <div class="allRecipesContainer">
           <div
-            class="recipeSingle grid"
+            class="recipeSingle grid mgb1"
             v-for="recipe in filteredRecipes"
             :key="recipe._id"
           >
@@ -123,7 +125,27 @@
               </button>
             </div>
           </div>
+          <Pagination
+            v-show="!searchValue"
+            :resultsPerPage="resultsPerPage"
+            :totalResults="allRecipes.length"
+            :currentPage="currentPage"
+            @paginate="changePage"
+            @prev="prevPage"
+            @next="nextPage"
+            @first="firstPage"
+            @last="lastPage"
+          />
         </div>
+        <a
+          href="#recipesHeading"
+          v-scroll-to="'#recipesHeading'"
+          class="block hashLink mg1"
+          >Back to top &nbsp;<font-awesome-icon
+            :icon="['fa', 'hand-point-up']"
+            font-size="15px"
+          ></font-awesome-icon
+        ></a>
       </div>
     </section>
   </div>
@@ -135,12 +157,14 @@ import StatisticBox from './StatisticBox/StatisticBox'
 import Select from '../sharedComponents/Select'
 import SortingButtons from '../sharedComponents/SortingButtons'
 import CreateEditForm from '../sharedComponents/CreateEditForm'
+import Pagination from '../sharedComponents/Pagination'
 import Loader from '../sharedComponents/Loader'
 import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
 import apiCalls from '../../mixins/apiCalls'
 import sortingResults from '../../mixins/sortingResults'
 import loaderMixin from '../../mixins/loaderMixin'
+import paginationOptions from '../../mixins/paginationOptions'
 import { recipesUrl } from '../../apiData'
 import axios from 'axios'
 
@@ -151,6 +175,7 @@ export default {
     Select,
     StatisticBox,
     SortingButtons,
+    Pagination,
     CreateEditForm,
     Loader
   },
@@ -172,7 +197,13 @@ export default {
     this.recipeFetch()
   },
 
-  mixins: [dateFormat, apiCalls, sortingResults, loaderMixin],
+  mixins: [
+    dateFormat,
+    apiCalls,
+    sortingResults,
+    loaderMixin,
+    paginationOptions
+  ],
 
   computed: {
     ...mapGetters(['getDefaultImage', 'getEditState']),
@@ -182,7 +213,12 @@ export default {
     },
 
     filteredRecipes() {
-      if (!this.searchValue) return this.allRecipes
+      if (!this.searchValue) {
+        return this.allRecipes.slice(
+          this.firstResultIndex,
+          this.lastResultIndex
+        )
+      }
       return this.allRecipes.filter((recipe) => {
         if (this.selectedSearchOption === 'User') {
           return recipe.author.username
@@ -198,6 +234,15 @@ export default {
             .includes(this.searchValue.toLowerCase())
         }
       })
+    },
+
+    // pagination - page settings
+    resultsPerPage() {
+      if (this.allRecipes.length < 10) {
+        return this.allRecipes.length
+      } else {
+        return 10
+      }
     }
   },
 
@@ -309,7 +354,7 @@ export default {
   }
 }
 .searchRecipes {
-  @include boxSize($width: 280px, $height: 500px);
+  @include boxSize($width: 280px);
   border: 1px solid lightgray;
   position: relative;
 
@@ -330,13 +375,15 @@ export default {
   }
 
   .allRecipesContainer {
-    overflow: auto;
+    // overflow: auto;
     @include boxSize($height: calc(100% - 100px));
+    padding: 0.5rem;
   }
   .recipeSingle {
     @include boxSize($width: 100%);
     @include alignment($align: center, $textAlign: left);
-    border-bottom: 1px solid lighten($graphite, 40%);
+    // border-bottom: 1px solid lighten($graphite, 40%);
+    box-shadow: $shadowBox;
     color: $graphite;
     grid-template-rows: repeat(5, auto);
     grid-template-columns: repeat(3, auto);
@@ -416,6 +463,10 @@ export default {
   .statisticBoxWrapper {
     @include boxSize($height: auto);
   }
+}
+
+.paginationWrapper {
+  margin: 1rem;
 }
 
 @media (min-width: 576px) {

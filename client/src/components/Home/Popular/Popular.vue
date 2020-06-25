@@ -1,6 +1,6 @@
 <template>
-  <div class="popularWrapper flex">
-    <h1 class="slim pd1">Popular recipes</h1>
+  <div class="popularWrapper flex mgt1">
+    <!-- <h1 class="slim pd1">Popular recipes</h1> -->
     <div v-if="this.ready" class="carouselContainer center">
       <button class="carouselBtn btnLeft" @click="previousRecipe">
         &nbsp;<font-awesome-icon

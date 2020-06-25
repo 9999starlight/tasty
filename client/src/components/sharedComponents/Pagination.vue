@@ -27,8 +27,22 @@
           href="#"
           @click.prevent="$emit('paginate', num)"
           :class="{ active: currentPage === num }"
+          v-show="
+            currentPage === num ||
+              currentPage === num - 1 ||
+              currentPage === num + 1
+          "
           >{{ num }}</a
         >
+      </li>
+      <li
+        class="morePagesIndicator"
+        v-show="
+          !toggleNextDisabled &&
+            currentPage < pageNumbers[this.pageNumbers.length - 2]
+        "
+      >
+        ...
       </li>
       <li>
         <a
@@ -111,7 +125,7 @@ export default {
 
 <style lang="scss" scoped>
 .paginationWrapper {
-  @include boxSize($width: 100%);
+  //@include boxSize($width: 100%);
   ul {
     @include boxSize($maxWidth: 100%, $height: 3rem);
     box-shadow: 0px 20px 9px -17px rgba(16, 16, 16, 0.79);
@@ -121,29 +135,43 @@ export default {
       border-right: 1px solid darken($midTone, 10%);
 
       &:first-of-type {
-        border-radius: 50% 0px 0px 50%;
+        border-radius: 40% 0px 0px 40%;
       }
 
       &:last-of-type {
-        border-radius: 0px 50% 50% 0px;
+        border-radius: 0px 40% 40% 0px;
         border: none;
       }
-      a {
-        display: inline-block;
-        @include boxSize($height: 100%);
+    }
+    a,
+    .morePagesIndicator {
+      @include alignment($display: flex, $align: center);
+      @include boxSize($height: 100%);
+      padding: 0.7rem;
+      @include fonts($color: saturate($lightOrange, 70%), $size: 0.9rem);
+      transition: background-color 0.4s;
+
+      &.active {
+        background-color: lighten($midTone, 5%);
+      }
+
+      &.prev.disabled,
+      &.next.disabled {
+        cursor: not-allowed;
+        color: gray;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  .paginationWrapper {
+    ul {
+      a,
+      .morePagesIndicator {
         padding: 0.8rem;
-        @include fonts($color: saturate($lightOrange, 70%));
-
-        &.active {
-          background-color: lighten($midTone, 5%);
-        }
-
-        &.prev.disabled,
-        &.next.disabled {
-          cursor: not-allowed;
-          color: gray;
-          pointer-events: none;
-        }
+        @include fonts($size: 1rem);
       }
     }
   }

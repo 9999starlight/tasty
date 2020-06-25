@@ -108,6 +108,7 @@ a {
   // background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
   background-color: #fbab7e;
   background: $orangeGradient;
+  /* background: linear-gradient(to bottom, #d66d75, #cf6161); */
   ;
   @include fonts($color: $light, $size: 1rem);
   border-radius: 6px;
@@ -148,7 +149,7 @@ a {
   color: crimson;
 }
 
-// scroll
+/* // scroll
 .scrolling {
   scrollbar-width: thin;
   scrollbar-color: lighten($graphite, 20%) lighten($graphite, 60%);
@@ -166,8 +167,7 @@ a {
     border-radius: 6px;
     border: 3px solid lighten($graphite, 60%);
   }
-
-}
+} */
 
 // checkboxes, home page form, create/edit recipe form
 .checkBoxes {

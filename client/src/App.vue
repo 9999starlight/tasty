@@ -31,6 +31,7 @@ export default {
   @include boxSize($width: 100%, $minHeight: 100vh);
   @include alignment($direction: column, $align: center);
   font-family: 'Lato', Arial, sans-serif;
+  /* background: linear-gradient(to top, #efefbb, #d4d3dd); */
   //position: relative;
 }
 </style>

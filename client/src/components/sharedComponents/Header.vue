@@ -6,6 +6,12 @@
     ></div>
     <div class="menuWrapper flex">
       <h2 class="logo">Tasty</h2>
+      <button v-if="$route.meta.showSearch" class="headerSearch" @click="openCloseSearch">
+        <font-awesome-icon
+          :icon="['fa', 'search']"
+          class="search"
+        ></font-awesome-icon>
+      </button>
       <div v-if="burgerIcon" class="menu flex flexCenter" @click="showMenu()">
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
@@ -84,8 +90,8 @@
         >
           <a>
             <font-awesome-icon :icon="['fas', 'sign-in-alt']" class="userIcon">
-            </font-awesome-icon>&nbsp;
-            Login
+            </font-awesome-icon
+            >&nbsp; Login
           </a>
         </router-link>
         <!-- end logged out -->
@@ -126,10 +132,15 @@ export default {
   },
 
   computed: {
-    ...mapActions(['logoutUser']),
-    ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
+    ...mapActions(['logoutUser', 'toggleSearch']),
+    ...mapGetters([
+      'getCurrentUser',
+      'getIsLogged',
+      'getDefaultUserImage',
+      'getOpenSearch'
+    ]),
 
-   /*  authUser() {
+    /*  authUser() {
       return (
         this.getCurrentUser !== null && this.getCurrentUser.isAdmin == false
       )
@@ -142,6 +153,16 @@ export default {
   methods: {
     showMenu() {
       this.displayMenu = !this.displayMenu
+    },
+
+    async openCloseSearch() {
+      try {
+        if (this.getOpenSearch)
+          await this.$store.dispatch('toggleSearch', false)
+        else await this.$store.dispatch('toggleSearch', true)
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     onResize() {
@@ -192,6 +213,17 @@ header {
 
     h2 {
       padding: 0.8rem;
+    }
+
+    .headerSearch {
+      position: absolute;
+      right: 90px;
+      bottom: 20%;
+      font-size: 1.7rem;
+      background-color: transparent;
+      color: $midTone;
+      display: inline-block;
+      outline: none;
     }
 
     .menu {
@@ -291,11 +323,21 @@ header {
     @include alignment($direction: row, $justify: space-between);
 
     .menuWrapper {
-      @include boxSize($width: 20%);
+      flex-grow: 2;
+
+      .headerSearch {
+        position: static;
+        margin-right: 1rem;
+
+        &:hover {
+          transform: scale(1.1);
+          transition: 0.5s ease-in-out;
+        }
+      }
     }
 
     nav {
-      @include boxSize($width: 80%, $height: 50px);
+      @include boxSize($height: 50px);
       @include alignment($justify: flex-end);
 
       ul {

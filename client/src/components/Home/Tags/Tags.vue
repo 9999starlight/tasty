@@ -1,6 +1,6 @@
 <template>
-  <div class="tagsWrapper mgt2">
-    <h3 class="lightItalic">Popular Categories</h3>
+  <div class="tagsWrapper">
+    <!-- <h3 class="lightItalic">Popular Categories</h3> -->
     <div class="tagsInner flex">
       <div
         class="tags flex flexCenter mg1"

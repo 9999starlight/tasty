@@ -89,7 +89,7 @@ function tokenSettings() {
 }
 
 // if token expires redirect to login page before reqest to server
-/* axios.interceptors.request.use(
+axios.interceptors.request.use(
   function (config) {
     if (
       localStorage.getItem('userToken') != null &&
@@ -105,10 +105,10 @@ function tokenSettings() {
     console.log(error)
     return Promise.reject(error.message)
   }
-) */
+)
 
 // response interceptor
-axios.interceptors.response.use(
+/* axios.interceptors.response.use(
   function(response) {
     return response
   },
@@ -124,7 +124,7 @@ axios.interceptors.response.use(
 
     return Promise.reject(error)
   }
-)
+) */
 //
 Vue.config.productionTip = false
 
