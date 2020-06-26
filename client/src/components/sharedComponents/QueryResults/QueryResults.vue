@@ -12,13 +12,11 @@
         @sortDateDesc="sortDateDescending(results)"
       />
       <div class="successful flex">
-        <div
-          class="results flex flexCenter mg1"
+          <SingleQueryResult
           v-for="recipe in currentRecipes"
           :key="recipe._id"
-        >
-          <SingleQueryResult :recipe="recipe" />
-        </div>
+          :recipe="recipe"
+          class="mg1"/>
       </div>
       <Pagination
         :resultsPerPage="resultsPerPage"
@@ -123,23 +121,8 @@ export default {
 
   .successful {
     @include boxSize($width: 100%);
-    // @include alignment($direction: column);
     @include alignment($justify: center, $align: center);
     flex-wrap: wrap;
-
-    .results {
-      @include boxSize($width: 290px);
-    }
-  }
-}
-
-@media (min-width: 500px) {
-  .resultsWrapper {
-    .successful {
-      .results {
-        @include boxSize($width: 320px);
-      }
-    }
   }
 }
 
