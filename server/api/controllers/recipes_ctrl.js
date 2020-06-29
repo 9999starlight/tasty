@@ -10,7 +10,8 @@ exports.getRecipes = async (req, res, next) => {
   try {
     const queryObj = {
       ...req.query
-    } // copy query object and then exclude fields
+    }
+    // copy query object and then exclude fields
     const excludedFields = ['page', 'sort', 'limit', 'fields']
     excludedFields.forEach((el) => delete queryObj[el])
     let query = Recipe.find(queryObj)
@@ -25,13 +26,8 @@ exports.getRecipes = async (req, res, next) => {
       path: 'author',
       select: 'username user_image createdRecipes _id'
     })
-    //console.log("getting recipes ", docs)
     const response = {
       recipes: docs.map((doc) => {
-        /* let image = ''
-        if (doc.author.user_image) {
-          image = doc.author.user_image.url
-        } */
         return {
           author: {
             username: doc.author.username,
@@ -51,7 +47,7 @@ exports.getRecipes = async (req, res, next) => {
           comments: doc.comments,
           request: {
             type: 'GET',
-            url: `${req.protocol}://${req.get('host')}/recipes/${doc._id}` // works wherever deployed
+            url: `${req.protocol}://${req.get('host')}/recipes/${doc._id}`
           }
         }
       })
@@ -69,7 +65,6 @@ exports.getRecipes = async (req, res, next) => {
 
 exports.getSingleRecipe = async (req, res, next) => {
   const id = req.params.recipeId
-  // console.log('server gets this id: ', id)
   try {
     const doc = await Recipe.findById(id)
       .populate({
@@ -85,7 +80,6 @@ exports.getSingleRecipe = async (req, res, next) => {
           select: 'username user_image _id'
         }
       })
-    //console.log("getting single recipe" + doc)
     if (doc) res.status(200).json(doc)
     else
       res.status(404).json({
@@ -102,7 +96,6 @@ exports.getSingleRecipe = async (req, res, next) => {
 
 exports.addNewRecipe = async (req, res, next) => {
   try {
-    // console.log(req.body)
     let imageresult = ''
     if (req.file)
       imageresult = await cloudinary.v2.uploader.upload(
@@ -145,11 +138,6 @@ exports.addNewRecipe = async (req, res, next) => {
       },
       { new: true }
     )
-    /* let userImage = ''
-    if (updateUserRecipes.user_image) {
-      userImage = updateUserRecipes.user_image.url
-    } */
-    //console.log(result)
     res.status(201).json({
       message: 'New recipe created successfully!',
       createdRecipe: result,
@@ -284,7 +272,7 @@ exports.addRating = async (req, res, next) => {
         message: `You can't rate your recipe`
       })
     }
-    // restriction - user can rate single recipe only once
+    // restriction - user is allowed to rate single recipe only once
     let findUserId = recipeForRate.rates.find(
       (rt) => rt.ratedBy == req.userData.userId
     )
@@ -312,8 +300,6 @@ exports.addRating = async (req, res, next) => {
     const summed =
       setRating.rates.reduce((total, rt) => total + rt.rate, 0) /
       setRating.rates.length
-    // console.log(summed)
-
     const summedRating = await Recipe.updateOne(
       {
         _id: id
@@ -324,7 +310,6 @@ exports.addRating = async (req, res, next) => {
         }
       }
     )
-    // console.log('rating: ' + summed)
     res.status(200).json({
       message: 'Recipe has been rated',
       summedRating
@@ -346,7 +331,6 @@ exports.deleteRecipe = async (req, res) => {
         message: 'Recipe not found'
       })
     }
-    // console.log('recipe log: ' + recipe)
     if (!req.userData.isAdmin && req.userData.userId != recipe.author) {
       return res.status(401).json({
         message: `Unauthorized - access denied!`
@@ -378,10 +362,6 @@ exports.deleteRecipe = async (req, res) => {
     )
 
     await recipe.remove()
-    /* let userImage = ''
-    if (updatedUser.user_image) {
-      userImage = updatedUser.user_image.url
-    } */
     res.status(200).json({
       message: recipe.mealName + ' deleted!',
       userUpdate: {

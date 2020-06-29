@@ -80,52 +80,24 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 let VueScrollTo = require('vue-scrollto')
 Vue.use(VueScrollTo)
 
-// set deafult Axios headers for current user's requests
-function tokenSettings() {
-  const token = localStorage.getItem('userToken')
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  }
-}
-
-// if token expires redirect to login page before reqest to server
-axios.interceptors.request.use(
-  function (config) {
-    if (
-      localStorage.getItem('userToken') != null &&
-      (store.state.currentUser.currentUser.exp - Date.now() / 1000) <= 0
-    ) {
-      // console.log(config)
-      store.dispatch('logoutUser')
-      router.push('/login')
-    }
-    return config
-  },
-  function(error) {
-    console.log(error)
-    return Promise.reject(error.message)
-  }
-)
-
-// response interceptor
-/* axios.interceptors.response.use(
+// response interceptor check for invalid/expired token
+axios.interceptors.response.use(
   function(response) {
     return response
   },
   function(error) {
     if (
-      localStorage.getItem('userToken') != null &&
-      error.response.status === 401
+      localStorage.getItem('userToken') !== null &&
+      error.response.status === 403 &&
+      error.response.data.message === 'Unauthorized access or invalid token!'
     ) {
-      // console.log(error.response.data.message)
+      console.log(error.response)
       store.dispatch('logoutUser')
-      router.push('/login')
     }
-
     return Promise.reject(error)
   }
-) */
-//
+)
+
 Vue.config.productionTip = false
 
 new Vue({
@@ -134,4 +106,4 @@ new Vue({
   axios,
   render: (h) => h(App)
 }).$mount('#app')
-tokenSettings()
+//tokenSettings()

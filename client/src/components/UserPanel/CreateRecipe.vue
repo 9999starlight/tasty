@@ -1,9 +1,8 @@
 <template>
   <div class="createRecipe flex flexCenter">
     <h1 id="createRecipeHeading" class="mg1">
-      {{ !getEditState ? 'Create new recipe' : 'Edit recipe' }}
+      Create Recipe
     </h1>
-    
     <CreateEditForm />
   </div>
 </template>
@@ -28,7 +27,7 @@ export default {
 
   computed: {
     ...mapGetters(['getEditState'])
-  },
+  }/* ,
 
   async beforeRouteLeave(to, from, next) {
     try {
@@ -38,7 +37,7 @@ export default {
     } catch (error) {
       console.log(error)
     }
-  }
+  } */
 }
 </script>
 

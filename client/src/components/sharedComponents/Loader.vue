@@ -1,5 +1,9 @@
 <template>
-  <div :class="[!bigLoader ? 'loaderContainer flex flexCenter mg1': 'loaderContainer flex flexCenter mgAuto']">
+  <div
+    :class="[
+      !bigLoader ? 'loaderContainer flex flexCenter mg1' : 'loaderContainer big'
+    ]"
+  >
     <div :class="[!bigLoader ? 'small progress' : 'large progress']">
       <div>Loading…</div>
     </div>
@@ -17,7 +21,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
 .progress {
   position: relative;
   display: inline-block;
@@ -72,7 +75,10 @@ export default {
   }
 }
 
-.mgAuto {
-  margin: auto;
+.big {
+  position: absolute;
+  top: calc(50% - 55px);
+  left: calc(50% + 1rem);
+  transform: translateX(-50%);
 }
 </style>

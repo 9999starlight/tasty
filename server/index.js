@@ -21,7 +21,9 @@ mongoose
   .catch((err) => {
     console.log(`MongoDB connection Error: ${err.message}`)
   })
-mongoose.set('useCreateIndex', true) // to ignore warning: DeprecationWarning: collection.ensureIndex is deprecated
+
+// to ignore warning: DeprecationWarning: collection.ensureIndex is deprecated
+mongoose.set('useCreateIndex', true)
 
 // middlewares
 app.use(morgan('tiny')) //  console - base url, time, etc

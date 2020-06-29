@@ -1,279 +1,274 @@
 <template>
-    <form class="flex pd1">
-      <fieldset class="inputsWrapper mgb1">
-        <legend>Basic Data</legend>
-        <div class="inner center">
-          <!-- mealName -->
-          <label for="mealName"
-            ><span class="required">*</span> Meal Name</label
-          >
-          <input
-            type="text"
-            v-model="mealName"
-            id="mealName"
-            required
-            placeholder="Meal Name, 4-50 characters"
-            minlength="4"
-            maxlength="50"
-            @blur="validateMealName"
-          />
-          <div class="warnWrapper">
-            <p class="warn" v-show="!mealNameWarn">
-              Title: 4-50 characters required!
-            </p>
-          </div>
-          <!-- description -->
-          <label for="intro"><span class="required">*</span> Description</label>
-          <textarea
-            v-model="intro"
-            id="intro"
-            required
-            placeholder="Description, 4-150 characters"
-            minlength="4"
-            maxlength="150"
-            @blur="validateIntro"
-          ></textarea>
-          <div class="warnWrapper">
-            <p class="warn" v-show="!introWarn">
-              Description: 4-150 characters required!
-            </p>
-          </div>
-          <!-- select options -->
-          <label for="dishType"
-            ><span class="required">*</span> Dish Type</label
-          >
-          <Select
-            :options="dishTypeOptions"
-            :preloaded="preloadedDishType"
-            id="dishType"
-            ref="dishType"
-            @checkValue="validateDishType"
-          />
-          <div class="warnWrapper">
-            <p class="warn" v-show="!dishTypeWarn">
-              Please select dish type from menu!
-            </p>
-          </div>
-          <label for="level">Difficulty</label>
-          <Select
-            :options="difficultyOptions"
-            :preloaded="preloadedLevel"
-            id="level"
-            ref="level"
-          />
-          <!-- timing -->
-          <label for="timing" class="timingLabel"
-            ><span class="required">*</span> Preparation Time (in
-            minutes)</label
-          >
-          <input
-            type="number"
-            min="1"
-            v-model="timing"
-            id="timing"
-            title="Preparation time in minutes"
-            @blur="validateTiming"
-          />
-          <div class="warnWrapper">
-            <p class="warn" v-show="!timingWarn">
-              Minutes (number) is required!
-            </p>
-          </div>
-          <!-- persons -->
-          <label for="persons"
-            ><span class="required">*</span> Number of persons</label
-          >
-          <input
-            v-model="persons"
-            type="number"
-            min="1"
-            id="persons"
-            required
-            title="Amount is enough for entered number of persons"
-            @blur="validatePersons"
-          />
-          <div class="warnWrapper">
-            <p class="warn" v-show="!personsWarn">
-              Number of persons is required!
-            </p>
-          </div>
-          <!-- regional -->
-          <label for="regional">Regional</label>
-          <input
-            v-model="regional"
-            type="text"
-            id="regional"
-            placeholder="Regional"
-            title="Enter country or region"
-          />
-          <!-- checkBoxes -->
-          <div class="checkBoxes flex">
-            <label for="vegetarian" class="block"
-              >Vegetarian
-              <input
-                type="checkbox"
-                id="vegetarian"
-                name="vegetarian"
-                value="vegetarian"
-                v-model="vegetarian"
-              />
-              <span tabindex="0"></span>
-            </label>
-            <label for="gluten" class="block"
-              >Gluten Free
-              <input
-                type="checkbox"
-                id="gluten"
-                name="gluten"
-                value="gluten"
-                v-model="glutenFree"
-              />
-              <span tabindex="0"></span>
-            </label>
-          </div>
+  <form class="flex pd1">
+    <fieldset class="inputsWrapper mgb1">
+      <legend>Basic Data</legend>
+      <div class="inner center">
+        <!-- mealName -->
+        <label for="mealName"><span class="required">*</span> Meal Name</label>
+        <input
+          type="text"
+          v-model="mealName"
+          id="mealName"
+          required
+          placeholder="Meal Name, 4-50 characters"
+          minlength="4"
+          maxlength="50"
+          @blur="validateMealName"
+        />
+        <div class="warnWrapper">
+          <p class="warn" v-show="!mealNameWarn">
+            Title: 4-50 characters required!
+          </p>
         </div>
-      </fieldset>
-      <!-- Upload photo -->
-      <fieldset class="photoUpload mgb1">
-        <legend>Image Upload</legend>
-        <div class="inner center">
-          <div class="images flex">
-            <figure v-if="preview" class="flex flexCenter">
-              <img :src="preview" :alt="filename" />
-              <figcaption>Image preview: {{ filename }}</figcaption>
-            </figure>
-            <figure
-              v-if="getEditState && getSingleRecipe.image"
-              class="flex flexCenter"
-            >
-              <img
-                :src="getSingleRecipe.image.url"
-                :alt="getSingleRecipe.mealName"
-              />
-              <figcaption>Current image</figcaption>
-            </figure>
-            <p v-if="getEditState && getSingleRecipe.image === undefined">
-              No current image
-            </p>
-            <!-- </div> -->
-          </div>
-          <label for="file" class="block">Select recipe image</label>
-          <div class="uploadBtnWrapper">
-            <input type="file" ref="recipeImage" @change="selectRecipeImage" />
-            <button class="chooseImage">Choose image</button>
-          </div>
-          <button @click.prevent="removeSelectedImage">Cancel</button>
-          <div class="small">
-            <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
-            <small>Maximum upload file size 2Mb</small>
-          </div>
-          <div class="warnWrapper">
-            <p class="warn" v-if="!valImg">{{ valMessage }}</p>
-          </div>
+        <!-- description -->
+        <label for="intro"><span class="required">*</span> Description</label>
+        <textarea
+          v-model="intro"
+          id="intro"
+          required
+          placeholder="Description, 4-150 characters"
+          minlength="4"
+          maxlength="150"
+          @blur="validateIntro"
+        ></textarea>
+        <div class="warnWrapper">
+          <p class="warn" v-show="!introWarn">
+            Description: 4-150 characters required!
+          </p>
         </div>
-      </fieldset>
-      <!-- ingredients -->
-      <fieldset class="ingredients mgb1">
-        <legend>Ingredients</legend>
-        <div class="inner center">
-          <transition-group name="scale-in-tl">
-            <div
-              class="singleIngredient"
-              v-for="(ingred, index) in ingredients"
-              :key="'ing' + index"
-            >
-              <label :for="'ingred' + index"
-                ><span class="required">*</span> Ingredient</label
-              >
-              <input
-                type="text"
-                placeholder="At least one ingredient required"
-                required
-                title="Enter ingredient"
-                :id="'ingred' + index"
-                v-model="ingred.ingredient"
-                @blur="validateIngredients"
-              />
-              <label :for="'amount' + index">Amount</label>
-              <input
-                type="text"
-                :id="'amount' + index"
-                placeholder="Ingredient Amount"
-                title="Enter amount of this ingredient"
-                v-model="ingred.amount"
-              />
-              <button
-                @click.prevent="removeIngredient(index)"
-                :disabled="ingredients.length === 1"
-              >
-                Remove ingr
-              </button>
-            </div>
-          </transition-group>
-          <button @click="addIngredient">Add ingredient</button>
-          <div class="warnWrapper">
-            <p class="warn" v-show="!ingredientsWarn">
-              At least one ingredient entry is required!
-            </p>
-          </div>
+        <!-- select options -->
+        <label for="dishType"><span class="required">*</span> Dish Type</label>
+        <Select
+          :options="dishTypeOptions"
+          :preloaded="preloadedDishType"
+          id="dishType"
+          ref="dishType"
+          @checkValue="validateDishType"
+        />
+        <div class="warnWrapper">
+          <p class="warn" v-show="!dishTypeWarn">
+            Please select dish type from menu!
+          </p>
         </div>
-      </fieldset>
-      <!-- steps -->
-      <fieldset class="steps">
-        <legend>Preparation</legend>
-        <div class="inner center">
-          <transition-group name="scale-in-tl">
-            <div class="singleStep" v-for="(st, index) in steps" :key="'st'+index">
-              <label :for="'step' + index"
-                ><span class="required">*</span> Step {{ index + 1 }}</label
-              >
-              <textarea
-                :id="'step' + index"
-                required
-                v-model="st.step"
-                placeholder="At least one preparation step required"
-                title="Enter the step of preparation"
-                @blur="validateSteps"
-              ></textarea>
-              <button
-                @click.prevent="removeStep(index)"
-                :disabled="steps.length === 1"
-              >
-                Remove step
-              </button>
-            </div>
-          </transition-group>
-          <button @click="addStep" class="mgt1">Add step</button>
-          <div class="warnWrapper">
-            <p class="warn" v-show="!stepsWarn">
-              At least one preparation step required!
-            </p>
-          </div>
+        <label for="level">Difficulty</label>
+        <Select
+          :options="difficultyOptions"
+          :preloaded="preloadedLevel"
+          id="level"
+          ref="level"
+        />
+        <!-- timing -->
+        <label for="timing" class="timingLabel"
+          ><span class="required">*</span> Preparation Time (in minutes)</label
+        >
+        <input
+          type="number"
+          min="1"
+          v-model="timing"
+          id="timing"
+          title="Preparation time in minutes"
+          @blur="validateTiming"
+        />
+        <div class="warnWrapper">
+          <p class="warn" v-show="!timingWarn">
+            Minutes (number) is required!
+          </p>
         </div>
-      </fieldset>
-      <!-- message -->
-      <div class="messageWrapper center">
-        <transition name="expand" mode="out-in">
-          <InfoMessage
-            v-if="message"
-            :message="message"
-            :messageStatus="messageStatus"
-            @clear="updateMessage('')"
-          />
-        </transition>
+        <!-- persons -->
+        <label for="persons"
+          ><span class="required">*</span> Number of persons</label
+        >
+        <input
+          v-model="persons"
+          type="number"
+          min="1"
+          id="persons"
+          required
+          title="Amount is enough for entered number of persons"
+          @blur="validatePersons"
+        />
+        <div class="warnWrapper">
+          <p class="warn" v-show="!personsWarn">
+            Number of persons is required!
+          </p>
+        </div>
+        <!-- regional -->
+        <label for="regional">Regional</label>
+        <input
+          v-model="regional"
+          type="text"
+          id="regional"
+          placeholder="Regional"
+          title="Enter country or region"
+        />
+        <!-- checkBoxes -->
+        <div class="checkBoxes flex">
+          <label for="vegetarian" class="block"
+            >Vegetarian
+            <input
+              type="checkbox"
+              id="vegetarian"
+              name="vegetarian"
+              value="vegetarian"
+              v-model="vegetarian"
+            />
+            <span tabindex="0"></span>
+          </label>
+          <label for="gluten" class="block"
+            >Gluten Free
+            <input
+              type="checkbox"
+              id="gluten"
+              name="gluten"
+              value="gluten"
+              v-model="glutenFree"
+            />
+            <span tabindex="0"></span>
+          </label>
+        </div>
       </div>
-      <Loader :bigLoader="bigLoader" v-show="isLoading" />
-      <button
-        v-if="!getEditState"
-        @click.prevent="validation"
-        class="submitBtn"
-      >
-        Submit Recipe
-      </button>
-      <button v-else @click.prevent="validation" class="submitBtn">
-        Submit Changes
-      </button>
-    </form>
+    </fieldset>
+    <!-- Upload photo -->
+    <fieldset class="photoUpload mgb1">
+      <legend>Image Upload</legend>
+      <div class="inner center">
+        <div class="images flex">
+          <figure v-if="preview" class="flex flexCenter">
+            <img :src="preview" :alt="filename" />
+            <figcaption>Image preview: {{ filename }}</figcaption>
+          </figure>
+          <figure
+            v-if="getEditState && getSingleRecipe.image"
+            class="flex flexCenter"
+          >
+            <img
+              :src="getSingleRecipe.image.url"
+              :alt="getSingleRecipe.mealName"
+            />
+            <figcaption>Current image</figcaption>
+          </figure>
+          <p v-if="getEditState && getSingleRecipe.image === undefined">
+            No current image
+          </p>
+          <!-- </div> -->
+        </div>
+        <label for="file" class="block">Select recipe image</label>
+        <div class="uploadBtnWrapper">
+          <input type="file" ref="recipeImage" @change="selectRecipeImage" />
+          <button class="chooseImage">Choose image</button>
+        </div>
+        <button @click.prevent="removeSelectedImage">Cancel</button>
+        <div class="small">
+          <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
+          <small>Maximum upload file size 2Mb</small>
+        </div>
+        <div class="warnWrapper">
+          <p class="warn" v-if="!valImg">{{ valMessage }}</p>
+        </div>
+      </div>
+    </fieldset>
+    <!-- ingredients -->
+    <fieldset class="ingredients mgb1">
+      <legend>Ingredients</legend>
+      <div class="inner center">
+        <transition-group name="scale-in-tl">
+          <div
+            class="singleIngredient"
+            v-for="(ingred, index) in ingredients"
+            :key="'ing' + index"
+          >
+            <label :for="'ingred' + index"
+              ><span class="required">*</span> Ingredient</label
+            >
+            <input
+              type="text"
+              placeholder="At least one ingredient required"
+              required
+              title="Enter ingredient"
+              :id="'ingred' + index"
+              v-model="ingred.ingredient"
+              @blur="validateIngredients"
+            />
+            <label :for="'amount' + index">Amount</label>
+            <input
+              type="text"
+              :id="'amount' + index"
+              placeholder="Ingredient Amount"
+              title="Enter amount of this ingredient"
+              v-model="ingred.amount"
+            />
+            <button
+              @click.prevent="removeIngredient(index)"
+              :disabled="ingredients.length === 1"
+            >
+              Remove ingr
+            </button>
+          </div>
+        </transition-group>
+        <button @click="addIngredient">Add ingredient</button>
+        <div class="warnWrapper">
+          <p class="warn" v-show="!ingredientsWarn">
+            At least one ingredient entry is required!
+          </p>
+        </div>
+      </div>
+    </fieldset>
+    <!-- steps -->
+    <fieldset class="steps">
+      <legend>Preparation</legend>
+      <div class="inner center">
+        <transition-group name="scale-in-tl">
+          <div
+            class="singleStep"
+            v-for="(st, index) in steps"
+            :key="'st' + index"
+          >
+            <label :for="'step' + index"
+              ><span class="required">*</span> Step {{ index + 1 }}</label
+            >
+            <textarea
+              :id="'step' + index"
+              required
+              v-model="st.step"
+              placeholder="At least one preparation step required"
+              title="Enter the step of preparation"
+              @blur="validateSteps"
+            ></textarea>
+            <button
+              @click.prevent="removeStep(index)"
+              :disabled="steps.length === 1"
+            >
+              Remove step
+            </button>
+          </div>
+        </transition-group>
+        <button @click="addStep" class="mgt1">Add step</button>
+        <div class="warnWrapper">
+          <p class="warn" v-show="!stepsWarn">
+            At least one preparation step required!
+          </p>
+        </div>
+      </div>
+    </fieldset>
+    <!-- message -->
+    <div class="messageWrapper center">
+      <transition name="expand" mode="out-in">
+        <InfoMessage
+          v-if="message"
+          :message="message"
+          :messageStatus="messageStatus"
+          @clear="updateMessage('')"
+        />
+      </transition>
+    </div>
+    <Loader :bigLoader="bigLoader" v-show="isLoading" />
+    <button v-if="!getEditState" @click.prevent="validation" class="submitBtn">
+      Submit Recipe
+    </button>
+    <button v-else @click.prevent="validation" class="submitBtn">
+      Submit Changes
+    </button>
+  </form>
 </template>
 
 <script>
@@ -587,16 +582,8 @@ export default {
         }
       } catch (error) {
         this.toggleLoader()
-        if (error.response === undefined) {
-          this.updateMessage(`Please check and fill in required fields!`)
-        } else if (error.response.status === 500) {
-          this.updateMessage('Something went wrong, try again later!')
-          // console.log(error.response.data.message)
-          // console.log(error.response)
-        } else {
-          this.updateMessage(error.response.data.message)
-          console.log(error.response.data.message)
-        }
+        this.updateMessage(error.response.data.message)
+        console.log(error.response.data.message)
       }
     },
 
@@ -616,19 +603,13 @@ export default {
         if (response) {
           console.log(response.data)
           this.toggleLoader()
+          await this.$store.dispatch('changeEditState', false)
           this.$router.push(`/SingleResult/${this.getSingleRecipe._id}`)
         }
       } catch (error) {
         this.toggleLoader()
-        if (error.response === undefined) {
-          this.updateMessage(`Please check and fill in required fields!`)
-        } else if (error.response.status === 500) {
-          this.updateMessage('Something went wrong, try again later!')
-          console.log(error.response.data.message)
-        } else {
-          this.updateMessage(error.response.data.message)
-          console.log(error.response.data.message)
-        }
+        this.updateMessage(error.response.data.message)
+        console.log(error.response.data.message)
       }
     }
   }
@@ -636,7 +617,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 form {
   // @include boxSize($width: 100%);
   @include alignment(
@@ -719,7 +699,6 @@ form {
 
   // upload
   .photoUpload {
-
     .images {
       @include alignment($justify: center, $align: flex-start);
       figure {

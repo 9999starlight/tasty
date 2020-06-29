@@ -36,7 +36,7 @@ export default {
         this.randomRecipes = [...results.resultsArray]
           .sort(() => Math.random() - 0.5)
           .slice(0, 12)
-        console.log(this.randomRecipes)
+        //console.log(this.randomRecipes)
       }
     } catch (error) {
       console.log(error.message)

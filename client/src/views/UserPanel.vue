@@ -1,118 +1,122 @@
 <template>
-  <!-- <div class="loggedInContainer" v-if="getCurrentUser !== null"> -->
-    <div class="userPanel grid pd1 center" v-if="getCurrentUser !== null">
-      <h1 class="mgb1">Welcome {{ getCurrentUser.username }}</h1>
-      <section class="profile">
-        <h3 class="italic">Profile</h3>
-        <div class="imageUsername flex">
-          <img
-            v-if="getCurrentUser.user_image"
-            :src="getCurrentUser.user_image"
-            :alt="getCurrentUser.username"
-          />
-          <img
-            v-else
-            :src="getDefaultUserImage"
-            :alt="getCurrentUser.username"
-          />
-          <span>{{ getCurrentUser.username }}</span>
-        </div>
-        <div class="additionalInfo">
-          <p>
-            <span class="italic">Member since:</span>
-            <span>{{ convertDate(getCurrentUser.createdAt) }}</span>
-          </p>
-          <p>
-            <span class="italic">Published recipes:</span>
-            <span>{{ getCurrentUser.createdRecipes.length }}</span>
-          </p>
-        </div>
-        <form enctype="multipart/form-data" class="changePhoto pd1">
-          <label for="file" class="block center">Change profile image</label>
-          <div class="upload flex">
-            <div class="buttons flex">
-              <div class="uploadBtnWrapper">
-                <input type="file" ref="userImageUpload" @change="selectImageFile" />
-                <button class="chooseImage">Browse image</button>
-              </div>
-              <button
-                @click.prevent="removeSelectedImage"
-                v-if="preview"
-                class="cancelBtn"
-              >
-                Cancel image
-              </button>
-            </div>
-            <figure v-if="preview" class="flex">
-              <img :src="preview" alt="preview" class="imageFit" />
-            </figure>
-          </div>
-          <div class="small">
-            <small class="selected block">{{ filename }}</small>
-            <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
-            <small>Maximum upload file size 2Mb</small>
-          </div>
-          <Loader :bigLoader="bigLoader" v-show="isLoading" />
-          <div class="messageWrapper center">
-            <transition name="expand" mode="out-in">
-              <InfoMessage
-                v-if="message"
-                :message="message"
-                :messageStatus="messageStatus"
-                @clear="updateMessage('')"
-              />
-            </transition>
-          </div>
-          <button
-            type="submit"
-            class="imageSubmit block mg1"
-            @click.prevent="submitImage"
-          >
-            Upload image
-          </button>
-        </form>
-      </section>
-      <nav>
-        <ul class="flex flexCenter">
-          <router-link
-            class="block"
-            :to="{ name: 'user_recipes' }"
-            tag="li"
-            active-class="active"
-            exact
-          >
-            <a class="block">
-              My Recipes
-            </a>
-          </router-link>
-          <router-link
-            class="block"
-            :to="{ name: 'create_recipe' }"
-            tag="li"
-            active-class="active"
-          >
-            <a class="block">
-              Create new recipe
-            </a>
-          </router-link>
-          <router-link
-            class="block"
-            :to="{ name: 'saved_recipes' }"
-            tag="li"
-            active-class="active"
-          >
-            <a class="block">
-              Saved recipes
-            </a>
-          </router-link>
-        </ul>
-      </nav>
-      <div class="routerViewContainer container" id="routerViewContainer">
-        <router-view></router-view>
+  <div
+    :class="[
+      getEditState
+        ? 'userPanel container disableScrolling'
+        : 'userPanel container'
+    ]"
+    v-if="getIsLogged === true"
+  >
+    <h1 class="mgb1">Welcome {{ getCurrentUser.username }}</h1>
+    <section class="profile">
+      <h3 class="italic">Profile</h3>
+      <div class="imageUsername flex">
+        <img
+          v-if="getCurrentUser.user_image"
+          :src="getCurrentUser.user_image"
+          :alt="getCurrentUser.username"
+        />
+        <img v-else :src="getDefaultUserImage" :alt="getCurrentUser.username" />
+        <span>{{ getCurrentUser.username }}</span>
       </div>
+      <div class="additionalInfo">
+        <p>
+          <span class="italic">Member since:</span>
+          <span>{{ convertDate(getCurrentUser.createdAt) }}</span>
+        </p>
+        <p>
+          <span class="italic">Published recipes:</span>
+          <span>{{ getCurrentUser.createdRecipes.length }}</span>
+        </p>
+      </div>
+      <form enctype="multipart/form-data" class="changePhoto pd1">
+        <label for="file" class="block center">Change profile image</label>
+        <div class="upload flex">
+          <div class="buttons flex">
+            <div class="uploadBtnWrapper">
+              <input
+                type="file"
+                ref="userImageUpload"
+                @change="selectImageFile"
+              />
+              <button class="chooseImage">Browse image</button>
+            </div>
+            <button
+              @click.prevent="removeSelectedImage"
+              v-if="preview"
+              class="cancelBtn"
+            >
+              Cancel image
+            </button>
+          </div>
+          <figure v-if="preview" class="flex">
+            <img :src="preview" alt="preview" class="imageFit" />
+          </figure>
+        </div>
+        <div class="small">
+          <small class="selected block">{{ filename }}</small>
+          <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
+          <small>Maximum upload file size 2Mb</small>
+        </div>
+        <Loader :bigLoader="false" v-show="isLoading" />
+        <div class="messageWrapper center">
+          <transition name="expand" mode="out-in">
+            <InfoMessage
+              v-if="message"
+              :message="message"
+              :messageStatus="messageStatus"
+              @clear="updateMessage('')"
+            />
+          </transition>
+        </div>
+        <button
+          type="submit"
+          class="imageSubmit block mg1"
+          @click.prevent="submitImage"
+        >
+          Upload image
+        </button>
+      </form>
+    </section>
+    <nav>
+      <ul class="flex flexCenter">
+        <router-link
+          class="block"
+          :to="{ name: 'user_recipes' }"
+          tag="li"
+          active-class="active"
+          exact
+        >
+          <a class="block">
+            My Recipes
+          </a>
+        </router-link>
+        <router-link
+          class="block"
+          :to="{ name: 'create_recipe' }"
+          tag="li"
+          active-class="active"
+        >
+          <a class="block">
+            Create new recipe
+          </a>
+        </router-link>
+        <router-link
+          class="block"
+          :to="{ name: 'saved_recipes' }"
+          tag="li"
+          active-class="active"
+        >
+          <a class="block">
+            Saved recipes
+          </a>
+        </router-link>
+      </ul>
+    </nav>
+    <div class="routerViewContainer container" id="routerViewContainer">
+      <router-view></router-view>
     </div>
- <!--  </div> -->
-  <NotFound v-else :message="'User Not Found'" />
+  </div>
 </template>
 
 <script>
@@ -121,7 +125,6 @@ import dateFormat from '../mixins/dateFormat'
 import fileValidation from '../mixins/fileValidation'
 import loaderMixin from '../mixins/loaderMixin'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
-import NotFound from '../components/sharedComponents/NotFound'
 import Loader from '../components/sharedComponents/Loader'
 import axios from 'axios'
 import { usersUrl } from '../apiData'
@@ -131,13 +134,11 @@ export default {
 
   components: {
     InfoMessage,
-    NotFound,
     Loader
   },
 
   data() {
     return {
-      bigLoader: false,
       message: '',
       messageStatus: false,
       filename: '',
@@ -149,7 +150,12 @@ export default {
   mixins: [dateFormat, loaderMixin, fileValidation],
 
   computed: {
-    ...mapGetters(['getCurrentUser', 'getDefaultUserImage'])
+    ...mapGetters([
+      'getIsLogged',
+      'getCurrentUser',
+      'getDefaultUserImage',
+      'getEditState'
+    ])
   },
 
   methods: {
@@ -215,14 +221,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* .loggedInContainer {
-  @include boxSize($width: 100%);
-} */
-
 .userPanel {
-  @include alignment($justifyGrid: center, $textAlign: center);
-  @include boxSize($width: 100%);
-
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
@@ -341,24 +340,8 @@ export default {
 }
 
 @media (min-width: 768px) {
-/*   .loggedInContainer {
-    @include boxSize($width: 100%);
-  } */
   .userPanel {
-    align-items: center;
-    grid-template-columns: 1fr 1fr;
-    /* grid-template-rows: auto auto auto;
-    grid-template-areas: 'heading heading' 'profile nav' 'router router'; */
-    grid-template-rows: repeat(4, auto);
-    grid-template-areas: "heading heading" "profile profile" "nav nav" "router router";
-
-    h1 {
-      grid-area: heading;
-    }
-
     .profile {
-      grid-area: profile;
-
       @include alignment($display: grid);
       @include boxSize($height: 380px, $width: 600px);
       grid-template-columns: 1fr 1fr;
@@ -405,134 +388,41 @@ export default {
         }
 
         .imageSubmit {
-          //margin: 2rem auto;
           padding: 0.6rem;
           @include fonts($size: 1rem);
         }
       }
-    
-      /* @include boxSize($minWidth: 350px); */
-
-      /* .additionalInfo {
-        span {
-          @include fonts($size: 0.9rem);
-        }
-      }
-
-      .imageUsername {
-        img {
-          width: 70px;
-          height: auto;
-        }
-      } */
     }
 
     nav {
-      grid-area: nav;
       ul {
-      @include alignment($direction: row);
-      box-shadow: $shadowBox;
-      margin-top: 1rem;
-      li {
-        box-shadow: none;
-        margin-top: 0;
-        @include boxSize($width: 200px);
-      @include fonts($size: 1rem);
-      &:nth-of-type(2) {
-        border-left: 1px solid gray;
-        border-right: 1px solid gray;
-      }
-
-      &.active {
-          background-color: lighten($graphite, 20%);
-          outline: none;
+        @include alignment($direction: row);
+        box-shadow: $shadowBox;
+        margin-top: 1rem;
+        li {
           box-shadow: none;
-      }
-       &:hover {
-        background-color: lighten($graphite, 15%);
-      }
-      a {
-        padding: 0.8rem 1rem;
-      }
-    }
-      }
-    }
-    .routerViewContainer {
-      grid-area: router;
-    }
-    /* nav ul li {
-      @include boxSize($width: 200px);
-      @include fonts($size: 1rem);
-      margin-top: 1rem;
-
-      &:hover {
-        background-color: lighten($graphite, 15%);
-      }
-
-      a {
-        padding: 0.8rem 1rem;
-      }
-    } */
-  }
-}
-
-@media (min-width: 992px) {
-  .userPanel {
-    grid-template-columns: 2fr 1fr;
-
-    /* .profile {
-      @include alignment($display: grid);
-      @include boxSize($height: 380px, $width: 600px);
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: repeat(3, auto);
-      grid-template-areas: 'heading3 form' 'imageUsername form' 'additionalInfo form';
-
-      h3,
-      span,
-      p {
-        font-size: 105%;
-      }
-
-      h3 {
-        grid-area: heading3;
-      }
-
-      .imageUsername {
-        grid-area: imageUsername;
-        @include alignment($direction: column);
-
-        img {
-          width: 140px;
-          height: auto;
-          border-radius: 0;
-          margin-bottom: 0.8rem;
-        }
-      }
-
-      .additionalInfo {
-        grid-area: additionalInfo;
-      }
-
-      form {
-        @include boxSize($height: 100%);
-        @include alignment(
-          $display: flex,
-          $direction: column,
-          $justify: space-evenly
-        );
-
-        label {
-          @include fonts($size: 1.2rem);
-          margin-bottom: 1rem;
-        }
-
-        .imageSubmit {
-          //margin: 2rem auto;
-          padding: 0.6rem;
+          margin-top: 0;
+          @include boxSize($width: 200px);
           @include fonts($size: 1rem);
+          &:nth-of-type(2) {
+            border-left: 1px solid gray;
+            border-right: 1px solid gray;
+          }
+
+          &.active {
+            background-color: lighten($graphite, 20%);
+            outline: none;
+            box-shadow: none;
+          }
+          &:hover {
+            background-color: lighten($graphite, 15%);
+          }
+          a {
+            padding: 0.8rem 1rem;
+          }
         }
       }
-    } */
+    }
   }
 }
 

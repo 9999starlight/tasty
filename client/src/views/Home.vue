@@ -14,7 +14,7 @@ import Popular from '../components/Home/Popular/Popular'
 import Forms from '../components/sharedComponents/Forms'
 import Tags from '../components/Home/Tags/Tags'
 import RandomRecipes from '../components/Home/RandomRecipes'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'home',
@@ -25,17 +25,8 @@ export default {
     RandomRecipes
   },
 
-  async beforeCreate() {
-    try {
-      await this.$store.dispatch('toggleSearch', false)
-    } catch (error) {
-      console.log(error)
-    }
-  },
-
   computed: {
-    ...mapGetters(['getOpenSearch']),
-    ...mapActions(['toggleSearch'])
+    ...mapGetters(['getOpenSearch'])
   }
 }
 </script>

@@ -27,7 +27,7 @@
       ><a>Details</a></router-link
     >
     <div class="editDelete flex">
-      <button v-if="usersRecipes" @click="editingStateSettings">
+      <button v-if="usersRecipes" @click="$emit('editing', recipe._id)">
         <font-awesome-icon
           :icon="['fa', 'edit']"
           class="edit"
@@ -76,6 +76,7 @@ import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
 import axios from 'axios'
 import { recipesUrl, usersUrl } from '../../apiData'
+
 export default {
   name: 'UserRecipe',
 
@@ -94,7 +95,11 @@ export default {
   mixins: [dateFormat],
 
   computed: {
-    ...mapGetters(['getDefaultImage', 'getDefaultUserImage', 'getCurrentUser'])
+    ...mapGetters([
+      'getDefaultImage',
+      'getDefaultUserImage',
+      'getCurrentUser'
+    ])
   },
 
   // patch: remove user's recipe, update current user, refresh user's recipes
@@ -131,16 +136,6 @@ export default {
         }
       } catch (error) {
         console.log(error.response.data.message)
-      }
-    },
-
-    async editingStateSettings() {
-      try {
-      await this.$store.dispatch('changeEditState', true),
-      await this.$store.dispatch('fetchSingleRecipe', this.recipe._id)
-      this.$router.push('create_recipe')
-      } catch (error) {
-        console.log(error.message)
       }
     }
   }

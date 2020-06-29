@@ -462,35 +462,3 @@ exports.changeDisableStatus = async (req, res, next) => {
     })
   }
 }
-
-// samo za admin
-/* exports.deleteUser = async (req, res, next) => {
-  try {
-    const id = req.params.userId
-    if (!req.userData.isAdmin) {
-      return res.status(401).json({
-        message: `Unauthorized - access denied!`
-      })
-    }
-    const user = await User.findById(id)
-    // console.log('user log: ' + user)
-    if (user.user_image) {
-      await cloudinary.v2.uploader.destroy(
-        user.user_image.id,
-        (error, result) => {
-          console.log(result, error)
-        }
-      )
-    }
-    await user.remove()
-    res.status(200).json({
-      message: 'User deleted'
-    })
-  } catch (error) {
-    console.log(error.message)
-    res.status(500).json({
-      error,
-      message: error.message
-    })
-  }
-} */

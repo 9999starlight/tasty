@@ -1,6 +1,7 @@
 import { usersUrl } from '../../apiData'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
+import router from '../../router'
 
 const state = {
   userToken: '',
@@ -14,9 +15,12 @@ const actions = {
   async signUpUser({ commit }, credentials) {
     try {
       const response = await axios.post(`${usersUrl}/register`, credentials)
-      // console.log(response);
       if (response.data.token) {
         localStorage.setItem('userToken', response.data.token)
+        // set deafult Axios headers for current user's requests
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${response.data.token}`
       }
       userSettings(
         commit,
@@ -38,17 +42,18 @@ const actions = {
   async loginUser({ commit }, credentials) {
     try {
       const response = await axios.post(`${usersUrl}/login`, credentials)
-      // console.log(response.data);
       if (response.data.token) {
-        // console.log(jwt.decode(response.data.token))
         localStorage.setItem('userToken', response.data.token)
+        // set deafult Axios headers for current user's requests
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${response.data.token}`
       }
       userSettings(
         commit,
         localStorage.getItem('userToken'),
         jwt.decode(localStorage.getItem('userToken'))
       )
-      //console.log(this.state.currentUser)
       return response.data
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -63,6 +68,8 @@ const actions = {
     commit('setCurrentUser', null)
     commit('setIsLogged', false)
     localStorage.removeItem('userToken')
+    delete axios.defaults.headers.common['Authorization']
+    router.push('/login')
   },
 
   updateUser({ commit }, payload) {

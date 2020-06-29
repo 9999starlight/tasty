@@ -5,17 +5,14 @@ const state = {
 const actions = {
   changeEditState({ commit }, payload) {
     commit('setEditState', payload)
-  },
-  toggleSearch({ commit }, payload) {
-    commit('setOpenSearch', payload)
   }
 }
 const mutations = {
   setEditState(state, payload) {
     state.editState = payload
   },
-  setOpenSearch(state, payload) {
-    state.openSearch = payload
+  setOpenSearch(state) {
+    state.openSearch = !state.openSearch
   }
 }
 const getters = {

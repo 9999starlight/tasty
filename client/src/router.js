@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import { store } from './store/store'
 // views
 import Home from './views/Home'
-//import QueryResults from './components/Home/QueryResults/QueryResults'
 import Login from './views/Login'
 import SingleResult from './views/SingleResult'
 import RenderResults from './views/RenderResults'
@@ -93,8 +92,8 @@ let router = new Router({
         }
       ],
       meta: {
-        requiresAdmin: true,
-        //requiresAuth: true
+        requiresAuth: true,
+        requiresAdmin: true
       }
     },
     {
@@ -133,7 +132,7 @@ let router = new Router({
     },
     {
       path: '*',
-      component: ErrorPage 
+      component: ErrorPage
     }
   ]
 })
@@ -141,33 +140,27 @@ let router = new Router({
 // guard for private routes - only for logged in user or admin
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.getters['getIsLogged'] == false) {
-      //if(store.getters['getCurrentUser'] == null){
+    if (localStorage.getItem('userToken') == null) {
       next({
         path: '/login',
         query: { redirect: to.fullPath }
       })
     } else {
-      next()
+      let user = JSON.parse(localStorage.getItem('vuex'))
+      // console.log(user.currentUser.currentUser.isAdmin)
+      if (to.matched.some((record) => record.meta.requiresAdmin)) {
+        if (user.currentUser.currentUser.isAdmin == true) {
+          next()
+        } else {
+          next({ name: 'home' })
+        }
+      } else {
+        next()
+      }
     }
   } else {
     next()
   }
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAdmin)) {
-    if (
-      store.getters['getCurrentUser'] != null &&
-      store.getters['getCurrentUser'].isAdmin == true
-    ) {
-      next()
-    } else {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }
-      })
-    }
-  } else next()
-})
 export default router

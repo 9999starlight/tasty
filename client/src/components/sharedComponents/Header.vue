@@ -2,17 +2,21 @@
   <header class="flex">
     <div
       :class="displayMenu && burgerIcon ? 'filter open' : 'filter'"
-      @click.self="showMenu()"
+      @click.self="showMenu"
     ></div>
     <div class="menuWrapper flex">
       <h2 class="logo">Tasty</h2>
-      <button v-if="$route.meta.showSearch" class="headerSearch" @click="openCloseSearch">
+      <button
+        v-show="$route.name === 'home' || $route.name === 'render_results'"
+        class="headerSearch"
+        @click="setOpenSearch"
+      >
         <font-awesome-icon
           :icon="['fa', 'search']"
           class="search"
         ></font-awesome-icon>
       </button>
-      <div v-if="burgerIcon" class="menu flex flexCenter" @click="showMenu()">
+      <div v-if="burgerIcon" class="menu flex flexCenter" @click="showMenu">
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
         <div :class="!displayMenu ? 'line' : 'line transformMenu'"></div>
@@ -101,8 +105,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-//import axios from 'axios'
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'app-header',
@@ -132,19 +135,10 @@ export default {
   },
 
   computed: {
-    ...mapActions(['logoutUser', 'toggleSearch']),
-    ...mapGetters([
-      'getCurrentUser',
-      'getIsLogged',
-      'getDefaultUserImage',
-      'getOpenSearch'
-    ]),
+    ...mapState(['openSearch']),
+    ...mapActions(['logoutUser']),
+    ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
 
-    /*  authUser() {
-      return (
-        this.getCurrentUser !== null && this.getCurrentUser.isAdmin == false
-      )
-    }, */
     authAdmin() {
       return this.getCurrentUser !== null && this.getCurrentUser.isAdmin == true
     }
@@ -155,14 +149,9 @@ export default {
       this.displayMenu = !this.displayMenu
     },
 
-    async openCloseSearch() {
-      try {
-        if (this.getOpenSearch)
-          await this.$store.dispatch('toggleSearch', false)
-        else await this.$store.dispatch('toggleSearch', true)
-      } catch (error) {
-        console.log(error)
-      }
+    ...mapMutations(['setOpenSearch']),
+    setOpenSearch() {
+      this.$store.commit('setOpenSearch')
     },
 
     onResize() {
@@ -175,9 +164,12 @@ export default {
       }
     },
 
-    logout() {
-      this.$store.dispatch('logoutUser')
-      location.reload()
+    async logout() {
+      try {
+        await this.$store.dispatch('logoutUser')
+      } catch (error) {
+        console.log(error.response.data.message)
+      }
     }
   }
 }
@@ -185,7 +177,6 @@ export default {
 <style lang="scss" scoped>
 header {
   @include alignment($direction: column);
-  // position: relative;
   position: sticky;
   width: 100%;
   top: 0;
@@ -263,7 +254,6 @@ header {
     ul {
       @include alignment($direction: column, $align: center);
       position: absolute;
-      //animation: slideLeft 1.2s;
       @include fonts($size: 1.3rem);
     }
 
@@ -279,7 +269,6 @@ header {
       a,
       button {
         padding: 0.8rem;
-        // margin-left: 1rem;
         color: $light;
         @include boxSize($width: 100%);
         @include alignment($textAlign: left);

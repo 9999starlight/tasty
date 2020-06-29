@@ -38,10 +38,6 @@
           <label for="password">Password</label>
         </div>
       </div>
-      <!-- <div v-if="showSignUp" class="formGroup center">
-        <label for="file" class="block">Upload Image</label>
-        <input type="file" ref="image" @change="selectFile" />
-      </div> -->
       <!--  -->
       <div v-if="showSignUp" class="formGroup flex flexCenter uploadSection">
         <h4 class="block mgb1">Upload profile image</h4>
@@ -79,6 +75,7 @@
             @clear="updateMessage('')"
           />
         </transition>
+        <Loader :bigLoader="false" v-show="isLoading" />
       </div>
       <button
         v-if="!showSignUp"
@@ -103,12 +100,15 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
+import Loader from '../components/sharedComponents/Loader'
 import fileValidation from '../mixins/fileValidation'
+import loaderMixin from '../mixins/loaderMixin'
 export default {
   name: 'login',
 
   components: {
-    InfoMessage
+    InfoMessage,
+    Loader
   },
 
   data() {
@@ -124,7 +124,7 @@ export default {
     }
   },
 
-  mixins: [fileValidation],
+  mixins: [fileValidation, loaderMixin],
 
   computed: {
     ...mapActions(['loginUser', 'signUpUser']),
@@ -171,58 +171,54 @@ export default {
       this.preview = null
     },
 
-    // DODATI REFRESH TOKEN
-    signUp() {
-      const isValid = this.validation()
-      if (!isValid) return
-      if (isValid && !this.valImg) {
-        this.messageStatus = false
-        this.errorMessage = this.valMessage
-        return
+    async signUp() {
+      try {
+        const isValid = this.validation()
+        if (!isValid) return
+        if (isValid && !this.valImg) {
+          this.messageStatus = false
+          this.errorMessage = this.valMessage
+          return
+        }
+        this.toggleLoader()
+        const formData = new FormData()
+        if (this.image && this.valImg) {
+          formData.append('user_image', this.image)
+        }
+        formData.append('username', this.username)
+        formData.append('password', this.password)
+        const res = this.$store.dispatch('signUpUser', formData)
+        this.toggleLoader()
+        if (res) {
+          this.$router.push('/')
+        } else {
+          this.errorMessage = this.getErrorMessage
+          this.updateMessage(this.errorMessage)
+        }
+      } catch (error) {
+        console.log(error.message)
       }
-      const formData = new FormData()
-      if (this.image && this.valImg) {
-        formData.append('user_image', this.image)
-      }
-      formData.append('username', this.username)
-      formData.append('password', this.password)
-      this.$store
-        .dispatch('signUpUser', formData)
-        .then((res) => {
-          if (res) {
-            //console.log(res)
-            // this.$router.push("home")
-            location.reload()
-          } else {
-            this.errorMessage = this.getErrorMessage
-            this.updateMessage(this.errorMessage)
-          }
-        })
-        .catch((err) => {
-          console.log(err.message)
-        })
     },
 
-    login() {
-      const isValid = this.validation()
-      if (!isValid) return
-      this.$store
-        .dispatch('loginUser', {
+    async login() {
+      try {
+        const isValid = this.validation()
+        if (!isValid) return
+        this.toggleLoader()
+        const res = await this.$store.dispatch('loginUser', {
           username: this.username,
           password: this.password
         })
-        .then((res) => {
-          if (res) {
-            // this.$router.push('/')
-            location.reload()
-          } else {
-            this.errorMessage = this.getErrorMessage
-            this.updateMessage(this.errorMessage)
-          }
-        })
-        .catch((err) => {
-          console.log(err.message)
-        })
+        this.toggleLoader()
+        if (res) {
+          this.$router.push('/')
+        } else {
+          this.errorMessage = this.getErrorMessage
+          this.updateMessage(this.errorMessage)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
     }
   }
 }
@@ -258,7 +254,8 @@ export default {
     h1 {
       font-family: 'Lobster', cursive;
       color: lighten($graphite, 20%);
-      text-shadow: -1px -1px 1px rgba(255, 254, 254, 0.65), 1px 1px 1px rgba(0, 0, 0, 0.91);
+      text-shadow: -1px -1px 1px rgba(255, 254, 254, 0.65),
+        1px 1px 1px rgba(0, 0, 0, 0.91);
     }
     p {
       color: lighten($graphite, 5%);
@@ -307,7 +304,7 @@ export default {
 
       input:valid + label,
       input:focus + label {
-        @include fonts($size: 0.7rem, $color: lighten($graphite, 80%));
+        @include fonts($size: 0.7rem, $color: lighten($graphite, 15%));
         transform: translateY(0);
       }
     }
@@ -356,7 +353,6 @@ export default {
 
 @media (min-width: 576px) {
   .formWrapper {
-    //@include boxSize($width: 400px);
     @include alignment($justify: center, $align: center);
 
     .loginForm {
@@ -376,7 +372,6 @@ export default {
 
         input:valid + label,
         input:focus + label {
-          //color: #ee6e73;
           font-size: 0.9rem;
         }
       }

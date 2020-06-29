@@ -4,7 +4,6 @@ const Recipe = require('../models/recipe')
 
 exports.getAllComments = async (req, res, next) => {
   try {
-    // console.log("getting ALL comments from database", docs)
     if (!req.userData.isAdmin) {
       return res.status(401).json({
         message: `Unauthorized - access denied!`
@@ -12,7 +11,8 @@ exports.getAllComments = async (req, res, next) => {
     }
     const queryObj = {
       ...req.query
-    } // copy query object and then exclude fields
+    }
+    // copy query object and then exclude fields
     const excludedFields = ['page', 'sort', 'limit', 'fields']
     excludedFields.forEach((el) => delete queryObj[el])
     let query = Comment.find(queryObj)

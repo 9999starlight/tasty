@@ -1,7 +1,27 @@
 <template>
   <div class="userRecipes flex flexCenter">
+    <!-- modal -->
+    <transition name="fade" mode="out-in">
+      <div class="modalOverlay" v-if="getEditState" @click.self="cancelEdit">
+        <div class="modalWrapper" v-if="getEditState">
+          <header class="flex flexCenter">
+            <h2>Edit Recipe</h2>
+            <button @click="cancelEdit" class="del">
+              <font-awesome-icon
+                :icon="['fa', 'times']"
+                title="Cancel and close form"
+              ></font-awesome-icon>
+            </button>
+          </header>
+          <div class="editInner">
+            <CreateEditForm class="editForm" />
+          </div>
+        </div>
+      </div>
+    </transition>
+    <!-- end modal -->
     <h1 class="mg1">My Recipes</h1>
-    <Loader :bigLoader="bigLoader" v-if="isLoading" />
+    <Loader :bigLoader="false" v-if="isLoading" />
     <NotFound
       v-if="!getCurrentUser.createdRecipes.length"
       :message="noRecipes"
@@ -23,6 +43,7 @@
           :recipe="recipe"
           :usersRecipes="usersRecipes"
           @del="currentUserRecipes"
+          @editing="editingStateSettings"
         />
       </transition-group>
     </div>
@@ -39,6 +60,7 @@ import sortingResults from '../../mixins/sortingResults'
 import Recipe from './Recipe'
 import axios from 'axios'
 import { recipesUrl } from '../../apiData'
+import CreateEditForm from '../sharedComponents/CreateEditForm'
 
 export default {
   name: 'user_recipes',
@@ -47,13 +69,13 @@ export default {
     NotFound,
     Loader,
     Recipe,
-    SortingButtons
+    SortingButtons,
+    CreateEditForm
   },
 
   data() {
     return {
       noRecipes: `You haven't created any recipes yet`,
-      bigLoader: false,
       fetchedRecipes: [],
       usersRecipes: true
     }
@@ -62,11 +84,10 @@ export default {
   mixins: [loaderMixin, sortingResults],
 
   computed: {
-    ...mapGetters(['getCurrentUser'])
+    ...mapGetters(['getCurrentUser', 'getEditState'])
   },
 
   mounted() {
-    //console.log('user recipes mounted')
     this.$scrollTo('#routerViewContainer', 200, {
       easing: 'linear',
       offset: 0
@@ -89,7 +110,32 @@ export default {
       } catch (error) {
         console.log(error.response.data.message)
       }
+    },
+
+    async cancelEdit() {
+      try {
+        await this.$store.dispatch('changeEditState', false)
+        this.$scrollTo('#routerViewContainer', 200, {
+          easing: 'linear',
+          offset: 0
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async editingStateSettings(id) {
+      try {
+        await this.$store.dispatch('fetchSingleRecipe', id)
+        await this.$store.dispatch('changeEditState', true)
+      } catch (error) {
+        console.log(error.message)
+      }
     }
+  },
+
+  beforeDestroy() {
+    this.cancelEdit()
   }
 }
 </script>

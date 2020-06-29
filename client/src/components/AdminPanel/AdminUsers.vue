@@ -305,7 +305,6 @@ export default {
         if (fetchedUsers) {
           this.allUsers = [...fetchedUsers.usersArray]
           this.usersCount = fetchedUsers.count
-          // console.log(this.allUsers, this.usersCount)
           this.toggleLoader()
         }
       } catch (error) {
@@ -316,7 +315,6 @@ export default {
     async changeDisableStatus() {
       try {
         if (window.confirm('Change status for this user?')) {
-          // console.log(this.userForEdit._id, this.userForEdit.isDisabled)
           const res = await this.editUser(
             this.userForEdit._id,
             'disableStatus',
@@ -337,7 +335,6 @@ export default {
     async changeAdminStatus() {
       try {
         if (window.confirm('Change Admin status for this user?')) {
-          //console.log(this.userForEdit._id, this.userForEdit.isAdmin)
           const res = await this.editUser(this.userForEdit._id, 'adminStatus', {
             adminStatus: this.userForEdit.isAdmin
           })
@@ -355,7 +352,6 @@ export default {
       try {
         const user = await this.fetchSingleUser(id)
         this.userForEdit = user.data
-        console.log(this.userForEdit)
         this.editModal = true
       } catch (error) {
         console.log(error.message)

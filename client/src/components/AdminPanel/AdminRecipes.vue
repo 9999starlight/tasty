@@ -273,7 +273,6 @@ export default {
         this.levelArray.push({ name: i, value: reduceLevels[i] })
       }
       this.levelArray.sort((a, b) => b.value - a.value)
-      // console.log(this.levelArray)
 
       // sort recipes by dishType count
       let reducedDishType = this.allRecipes.reduce(
@@ -285,7 +284,6 @@ export default {
         this.dishTypeOverview.push({ name: i, value: reducedDishType[i] })
       }
       this.dishTypeOverview.sort((a, b) => b.value - a.value)
-      // console.log(this.dishTypeOverview)
 
       // all vegetarian & gluten free count
       const vegetarian = this.allRecipes.filter(
@@ -339,9 +337,8 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
+  beforeDestroy() {
     this.cancelEdit()
-    next()
   }
 }
 </script>
