@@ -346,10 +346,8 @@ export default {
           { favoriteId: this.resultRecipe._id }
         )
         if (response) {
-          console.log(response)
           this.$store.dispatch('updateUser', response.data.updatedUser)
           this.updateMessageStatus(true)
-          console.log(this.messageStatus)
           this.updateMessage(response.data.message)
         }
       } catch (error) {

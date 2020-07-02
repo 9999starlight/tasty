@@ -142,7 +142,7 @@ exports.loginUser = async (req, res, next) => {
 exports.getAllUsers = async (req, res, next) => {
   try {
     if (!req.userData.isAdmin) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -192,7 +192,7 @@ exports.getSingleUser = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin && req.userData.userId !== id) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -221,7 +221,7 @@ exports.updateUserImage = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin && req.userData.userId !== id) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -294,7 +294,7 @@ exports.addToFavorites = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin && req.userData.userId !== id) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -353,7 +353,7 @@ exports.removeFromFavorites = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin && req.userData.userId !== id) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -405,7 +405,7 @@ exports.changeAdminStatus = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -436,7 +436,7 @@ exports.changeDisableStatus = async (req, res, next) => {
   try {
     const id = req.params.userId
     if (!req.userData.isAdmin) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }

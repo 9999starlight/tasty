@@ -129,7 +129,7 @@ export default {
             { favoriteId: this.recipe._id }
           )
           if (response) {
-            console.log(response.data.message)
+            // console.log(response.data.message)
             this.$store.dispatch('updateUser', response.data.updatedUser)
             this.$emit('deletedFromFavorites')
           }

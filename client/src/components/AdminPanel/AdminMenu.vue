@@ -123,7 +123,7 @@ nav {
   nav {
     @include boxSize($height: 100%);
     //position: absolute;
-    top: 54px;
+    top: 50px;
     left: 0;
     background-color: rgba(15, 15, 15, 0.859);
     &.iconsWidth {

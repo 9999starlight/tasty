@@ -1,6 +1,6 @@
 <template>
   <figure class="tag flex flexCenter" @click="fetchTaggedRecipes">
-    <img :src="tag.tagSrc" :alt="tag.tagName" class="block" />
+    <img :src="tag.tagSrc" :alt="tag.tagName" class="block imageFit" />
     <figcaption>{{ tag.tagName }}</figcaption>
   </figure>
 </template>
@@ -38,13 +38,14 @@ export default {
 <style lang="scss" scoped>
 figure {
   @include alignment($direction: column);
-  @include boxSize($width: 100px, $height: 100px);
+  /* @include boxSize($width: 100px, $height: 100px); */
+  @include boxSize($width: 100%, $height: 100%);
   overflow: hidden;
   position: relative;
   box-shadow: $shadowSmall;
   cursor: pointer;
   // border: 2px inset lightgray;
-  border-radius: 10px 0 10px 0;
+  /* border-radius: 10px 0 10px 0; */
 
   &:hover {
     filter: sepia(70%);
@@ -52,10 +53,10 @@ figure {
     // transition: 0.5s;
   }
 
-  img {
+  /* img {
     @include boxSize($width: 100%, $height: 100%);
     object-fit: cover;
-  }
+  } */
 
   figcaption {
       position: absolute;
@@ -66,5 +67,12 @@ figure {
       width: 100%;
       padding: 0.2rem;
     }
+}
+
+@media(min-width: 992px) {
+  figure {
+  @include boxSize($width: 100px, $height: 100px);
+  border-radius: 10px 0 10px 0;
+  }
 }
 </style>

@@ -5,7 +5,20 @@
       @click.self="showMenu"
     ></div>
     <div class="menuWrapper flex">
-      <h2 class="logo">Tasty</h2>
+      <router-link :to="{ name: 'home' }" class="flex">
+        <h2
+          :class="[
+            displayMenu && burgerIcon
+              ? 'flex flexCenter white'
+              : 'flex flexCenter'
+          ]"
+        >
+          <img
+            src="@/assets/small_pngs/pot-flowery.png"
+            alt="flowery pot"
+          />Tasty
+        </h2>
+      </router-link>
       <button
         v-show="$route.name === 'home' || $route.name === 'render_results'"
         class="headerSearch"
@@ -105,7 +118,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'app-header',
@@ -135,7 +148,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['openSearch']),
+    //...mapState(['openSearch']),
     ...mapActions(['logoutUser']),
     ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
 
@@ -152,6 +165,7 @@ export default {
     ...mapMutations(['setOpenSearch']),
     setOpenSearch() {
       this.$store.commit('setOpenSearch')
+      window.scrollTo(0,0)
     },
 
     onResize() {
@@ -203,7 +217,17 @@ header {
     z-index: 3;
 
     h2 {
-      padding: 0.8rem;
+      padding-left: 0.8rem;
+      font-family: 'Berkshire Swash', 'Lobster', 'Poppins', cursive;
+      @include fonts($size: 2rem, $color: lighten($graphite, 10%));
+      img {
+        height: 45px;
+        margin-right: 5px;
+      }
+    }
+
+    .white {
+      color: white;
     }
 
     .headerSearch {
@@ -309,6 +333,7 @@ header {
 
 @media (min-width: 992px) {
   header {
+    height: 50px;
     @include alignment($direction: row, $justify: space-between);
 
     .menuWrapper {

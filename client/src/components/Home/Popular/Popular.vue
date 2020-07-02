@@ -1,6 +1,6 @@
 <template>
   <div class="popularWrapper flex mgt1">
-    <!-- <h1 class="slim pd1">Popular recipes</h1> -->
+    <h1 class="slim">Highest rated recipes</h1>
     <div v-if="this.ready" class="carouselContainer center">
       <button class="carouselBtn btnLeft" @click="previousRecipe">
         &nbsp;<font-awesome-icon
@@ -115,6 +115,10 @@ export default {
   @include alignment($direction: column, $textAlign: center);
   grid-area: popular;
 
+  h1 {
+    padding: 0 2rem 2rem;
+  }
+
   .carouselContainer {
     position: relative;
     @include boxSize($width: 100%);
@@ -194,7 +198,7 @@ export default {
 
 @media (min-width: 1200px) {
   .popularWrapper {
-    @include boxSize($width: 1000px);
+    @include boxSize($width: 1100px);
   }
 }
 </style>

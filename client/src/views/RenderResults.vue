@@ -10,7 +10,7 @@
 <script>
 import QueryResults from '../components/sharedComponents/QueryResults/QueryResults'
 import Forms from '../components/sharedComponents/Forms'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'render_results',
   components: {
@@ -18,16 +18,19 @@ export default {
     QueryResults
   },
 
-/*   async beforeCreate() {
-    try {
-      await this.$store.dispatch('toggleSearch', false)
-    } catch (error) {
-      console.log(error)
-    }
-  }, */
-
   computed: {
     ...mapGetters(['getOpenSearch'])
+  },
+
+  methods: {
+    ...mapMutations(['setOpenSearch']),
+    setOpenSearch() {
+      this.$store.commit('setOpenSearch')
+    }
+  },
+
+  beforeDestroy() {
+    if (this.getOpenSearch === true) this.setOpenSearch()
   }
 }
 </script>

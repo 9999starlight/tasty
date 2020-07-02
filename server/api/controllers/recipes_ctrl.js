@@ -174,7 +174,7 @@ exports.updateRecipe = async (req, res, next) => {
       !req.userData.isAdmin &&
       req.userData.userId != recipeForUpdate.author
     ) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -268,7 +268,7 @@ exports.addRating = async (req, res, next) => {
     }
     // restricton - user can't rate his own recipe
     if (req.userData.userId == recipeForRate.author) {
-      return res.status(401).json({
+      return res.status(406).json({
         message: `You can't rate your recipe`
       })
     }
@@ -277,7 +277,7 @@ exports.addRating = async (req, res, next) => {
       (rt) => rt.ratedBy == req.userData.userId
     )
     if (findUserId) {
-      return res.status(401).json({
+      return res.status(406).json({
         message: `You have already rated this recipe`
       })
     }
@@ -332,7 +332,7 @@ exports.deleteRecipe = async (req, res) => {
       })
     }
     if (!req.userData.isAdmin && req.userData.userId != recipe.author) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }

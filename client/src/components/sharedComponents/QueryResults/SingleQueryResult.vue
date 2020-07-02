@@ -10,18 +10,17 @@
         :src="getDefaultImage"
         :key="recipe._id"
         :alt="recipe.mealName"
-        class="block"
+        class="imageFit"
       />
       <img
         v-else
         :src="recipe.image"
         :key="recipe._id"
         :alt="recipe.mealName"
-        class="block"
+        class="imageFit"
       />
       <figcaption>{{ recipe.mealName }}</figcaption>
     </figure>
-    <!-- <h4 class="mealName">{{ recipe.mealName }}</h4> -->
     <p class="rating">
       <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
       </font-awesome-icon
@@ -67,7 +66,7 @@ export default {
 
 <style lang="scss" scoped>
 .recipeLink {
-  @include boxSize($width: 290px, $height: 480px);
+  @include boxSize($width: 100%x, $height: 480px);
   @include alignment($justifyGrid: center, $align: center);
   grid-template-rows: 2.3fr 1fr 1fr;
   grid-template-columns: repeat(2, 1fr);
@@ -75,18 +74,15 @@ export default {
     'figure figure'
     'intro intro'
     'author rating';
-  box-shadow: $shadowBox;
+  background-color: $light;
+  box-shadow: $shadowSmall;
   cursor: pointer;
+  margin: 1rem 0;
 
   figure {
-    @include boxSize($width: 290px, $height: 290px);
-    // margin: 0.5rem 0;
+    @include boxSize($width: 100%, $height: 290px);
     grid-area: figure;
     position: relative;
-    img {
-      @include boxSize($width: 290px, $height: 290px);
-      object-fit: cover;
-    }
     figcaption {
       position: absolute;
       bottom: 0;
@@ -119,9 +115,15 @@ export default {
   }
 }
 
-@media (min-width: 500px) {
+@media(min-width: 350px) {
   .recipeLink {
     @include boxSize($width: 320px);
+  }
+}
+
+@media (min-width: 576px) {
+  .recipeLink {
+    margin: 1rem;
     &:hover {
       filter: brightness(80%);
     }

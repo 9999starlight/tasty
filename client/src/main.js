@@ -80,6 +80,14 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 let VueScrollTo = require('vue-scrollto')
 Vue.use(VueScrollTo)
 
+// set deafult Axios headers for current user's requests
+function tokenSettings() {
+  const token = localStorage.getItem('userToken')
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+}
+
 // response interceptor check for invalid/expired token
 axios.interceptors.response.use(
   function(response) {
@@ -88,7 +96,7 @@ axios.interceptors.response.use(
   function(error) {
     if (
       localStorage.getItem('userToken') !== null &&
-      error.response.status === 403 &&
+      error.response.status === 401 &&
       error.response.data.message === 'Unauthorized access or invalid token!'
     ) {
       console.log(error.response)
@@ -106,4 +114,4 @@ new Vue({
   axios,
   render: (h) => h(App)
 }).$mount('#app')
-//tokenSettings()
+tokenSettings()

@@ -51,14 +51,14 @@ export default {
           }
         },
         {
-          tagName: 'Pasta recipes',
+          tagName: 'Pasta',
           tagSrc: require('@/assets/pasta_tag.jpg'),
           tagParams: {
             dishType: 'pasta'
           }
         },
         {
-          tagName: 'Chicken recipes',
+          tagName: 'Chicken',
           tagSrc: require('@/assets/chicken_tag.jpg'),
           tagParams: {
             'ingredients.ingredient': 'chicken'
@@ -77,15 +77,19 @@ export default {
   .tagsInner {
     @include alignment($justify: space-evenly);
     flex-wrap: wrap;
-    .tags {
-      @include boxSize($width: 100px, $height: 100px);
-    }
+  }
+  .tags {
+    @include boxSize($width: 100px, $height: 50px);
   }
 }
 @media (min-width: 992px) {
   .tagsWrapper {
     text-align: center;
     @include boxSize($minWidth: 900px, $maxWidth: 1000px);
+
+    .tags {
+      @include boxSize($width: 100px, $height: 100px);
+    }
   }
 }
 

@@ -23,15 +23,14 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Lato|Poppins&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Berkshire+Swash&display=swap');
 @import './styles/global.scss';
 #app {
   box-sizing: border-box;
   @include boxSize($width: 100%, $minHeight: 100vh);
   @include alignment($direction: column, $align: center);
-  font-family: 'Lato', Arial, sans-serif;
-  /* background: linear-gradient(to top, #efefbb, #d4d3dd); */
+  font-family: 'Montserrat', Arial, sans-serif;
   //position: relative;
 }
 </style>

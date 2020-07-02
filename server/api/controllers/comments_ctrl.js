@@ -5,7 +5,7 @@ const Recipe = require('../models/recipe')
 exports.getAllComments = async (req, res, next) => {
   try {
     if (!req.userData.isAdmin) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
@@ -136,7 +136,7 @@ exports.addComment = async (req, res, next) => {
 exports.deleteSingleComment = async (req, res, next) => {
   try {
     if (!req.userData.isAdmin && req.userData.userId != result.author) {
-      return res.status(401).json({
+      return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
