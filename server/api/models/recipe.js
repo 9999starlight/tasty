@@ -23,7 +23,7 @@ const recipeSchema = mongoose.Schema({
   },
   dishType: {
     type: String,
-    reqired: true,
+    required: true,
     minlength: 3,
     maxlength: 40,
     match: /^\b(pasta|salad|bread|soup|side dish|roast|pizza|stew|sandwich|pastry|sauce|cookie|dessert|drink|main|snack)\b$/i

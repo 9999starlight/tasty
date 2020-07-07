@@ -1,5 +1,5 @@
 <template>
-  <div class="userRecipes flex flexCenter">
+  <div class="userRecipes flex flexCenter mgt3">
     <!-- modal -->
     <transition name="fade" mode="out-in">
       <div class="modalOverlay" v-if="getEditState" @click.self="cancelEdit">
@@ -144,6 +144,8 @@ export default {
 .userRecipes {
   @include boxSize($width: 100%);
   @include alignment($direction: column);
+  background-color: rgb(250, 221, 226);
+  background: $palePinkGray;
   // border-top: 2px solid rgb(233, 231, 231);
 
   h1 {

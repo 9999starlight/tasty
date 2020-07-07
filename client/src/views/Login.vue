@@ -1,6 +1,6 @@
 <template>
   <div class="formWrapper container">
-    <form class="loginForm flex pd1" enctype="multipart/form-data">
+    <form class="flex pd1" enctype="multipart/form-data">
       <div class="formHeader flex mgb1">
         <h1 v-if="!showSignUp" class="mgb1">Login</h1>
         <h1 v-else class="mgb1">Sign Up</h1>
@@ -14,21 +14,21 @@
         </p>
       </div>
       <div class="formGroup flex flexCenter mgb1">
-        <font-awesome-icon
-          :icon="['fa', 'user']"
-          class="userIcons"
-        ></font-awesome-icon>
         <div class="labelWrapper">
+          <font-awesome-icon
+            :icon="['fa', 'user']"
+            class="userIcons"
+          ></font-awesome-icon>
           <input type="text" v-model.trim="username" id="username" required />
           <label for="username">Username</label>
         </div>
       </div>
       <div class="formGroup flex flexCenter mgb1">
-        <font-awesome-icon
-          :icon="['fa', 'lock']"
-          class="userIcons"
-        ></font-awesome-icon>
         <div class="labelWrapper">
+          <font-awesome-icon
+            :icon="['fa', 'lock']"
+            class="userIcons"
+          ></font-awesome-icon>
           <input
             type="password"
             v-model.trim="password"
@@ -66,7 +66,13 @@
         </div>
       </div>
       <!--  -->
-      <div class="messageWrapper center">
+      <div
+        :class="[
+          errorMessage !== ''
+            ? 'messageWrapper flex flexCenter messageBackground'
+            : 'messageWrapper center'
+        ]"
+      >
         <transition name="expand" mode="out-in">
           <InfoMessage
             v-if="errorMessage !== ''"
@@ -187,7 +193,7 @@ export default {
         }
         formData.append('username', this.username)
         formData.append('password', this.password)
-        const res = this.$store.dispatch('signUpUser', formData)
+        const res = await this.$store.dispatch('signUpUser', formData)
         this.toggleLoader()
         if (res) {
           this.$router.push('/')
@@ -235,30 +241,36 @@ export default {
   );
   background-attachment: fixed;
 }
-.loginForm {
+form {
   flex: 1;
   @include alignment(
     $direction: column,
     $justify: space-evenly,
     $align: center
   );
-  @include boxSize($minHeight: 400px, $width: 100%);
+  @include boxSize($height: 100%, $width: 100%);
   box-shadow: $shadowBox;
-  background-color: rgba(255, 255, 255, 0.49);
+  // background-color: rgba(255, 255, 255, 0.49);
+  background-color: rgba(255, 255, 255, 0.22);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.459),
     0 5px 10px -3px rgba(0, 0, 0, 0.322);
+  p,
+  label,
+  h1,
+  input {
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+      0px -1px 0px rgba(0, 0, 0, 0.7);
+  }
 
   .formHeader {
     @include alignment($direction: column, $align: center);
 
     h1 {
       font-family: 'Lobster', cursive;
-      color: lighten($graphite, 20%);
-      text-shadow: -1px -1px 1px rgba(255, 254, 254, 0.65),
-        1px 1px 1px rgba(0, 0, 0, 0.91);
+      color: lighten($graphite, 10%);
     }
     p {
-      color: lighten($graphite, 5%);
+      color: $graphite;
     }
 
     .signupLink {
@@ -274,11 +286,12 @@ export default {
     @include alignment($textAlign: left);
     .labelWrapper {
       position: relative;
+
       input {
-        @include boxSize($width: 250px);
+        @include boxSize($width: 220px);
         padding: 0.3rem 0;
         background-color: transparent;
-        border-bottom: 1px solid darken($color: $graphite, $amount: 20%);
+        border-bottom: 1px solid darken($color: $graphite, $amount: 10%);
         @include fonts($size: 0.9rem, $color: lighten($graphite, 5%));
 
         &:valid,
@@ -292,11 +305,11 @@ export default {
         position: absolute;
         @include fonts(
           $size: 0.9rem,
-          $color: lighten($graphite, 10%),
+          $color: lighten($graphite, 5%),
           $weight: 100
         );
         top: -25px;
-        left: 0;
+        left: 25px;
         pointer-events: none;
         transform: translateY(30px);
         transition: all 0.3s ease-in-out;
@@ -304,13 +317,14 @@ export default {
 
       input:valid + label,
       input:focus + label {
-        @include fonts($size: 0.7rem, $color: lighten($graphite, 15%));
+        @include fonts($size: 0.7rem, $color: lighten($graphite, 10%));
         transform: translateY(0);
       }
-    }
-    .userIcons {
-      @include fonts($size: 1.1rem, $color: lighten($graphite, 20%));
-      margin-right: 10px;
+
+      .userIcons {
+        @include fonts($size: 1.1rem, $color: lighten($graphite, 10%));
+        margin-right: 10px;
+      }
     }
   }
 
@@ -319,6 +333,7 @@ export default {
     @include alignment($direction: column);
     @include boxSize($width: 280px);
     background-color: rgba(255, 255, 255, 0.3);
+    padding: 0.5rem;
 
     h4 {
       color: lighten($graphite, 13%);
@@ -328,13 +343,26 @@ export default {
       @include boxSize($height: auto);
     }
 
+    button {
+      font-size: 0.8rem;
+    }
+
     .small {
       text-align: center;
+    }
+
+    .uploadBtnWrapper {
+      box-shadow: none;
     }
   }
 
   .messageWrapper {
     @include boxSize($height: 40px);
+    padding: 0.5rem;
+  }
+
+  .messageBackground {
+    background-color: rgba(255, 255, 255, 0.3);
   }
 
   .btnAction {
@@ -355,7 +383,7 @@ export default {
   .formWrapper {
     @include alignment($justify: center, $align: center);
 
-    .loginForm {
+    form {
       @include boxSize($width: 450px, $maxHeight: 600px);
     }
 
@@ -378,12 +406,16 @@ export default {
     }
     .uploadSection {
       @include boxSize($width: 350px);
+
+      /* button {
+        font-size: 1rem;
+      } */
     }
   }
 }
 
 @media (min-width: 768px) {
-  .loginForm {
+  form {
     .formHeader {
       .signupLink:hover {
         filter: brightness(60%);
@@ -393,11 +425,17 @@ export default {
 }
 
 @media (min-width: 992px) {
-  .loginForm {
+  form {
     .cancelBtn {
       width: 110px;
       padding: 0.4rem;
     }
+  }
+}
+
+@media (orientation: landscape) {
+  form {
+    min-height: 600px;
   }
 }
 </style>

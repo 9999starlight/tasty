@@ -150,6 +150,7 @@ export default {
   grid-template-areas: 'image mealName mealName' 'image details details' 'date date date' 'rating rating rating' 'editDelete editDelete editDelete';
   box-shadow: $shadowSmall;
   border: 1px solid lightgray;
+  background-color: $light;
 
   p {
     @include fonts($size: 0.9rem);

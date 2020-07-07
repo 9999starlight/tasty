@@ -6,12 +6,12 @@ const commentSchema = mongoose.Schema({
   commentedRecipeId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe',
-    reqired: true
+    required: true
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    reqired: true
+    required: true
   },
   createdAt: {
     type: Date,
@@ -19,7 +19,7 @@ const commentSchema = mongoose.Schema({
   },
   commentBody: {
     type: String,
-    reqired: true
+    required: true
   }
 })
 

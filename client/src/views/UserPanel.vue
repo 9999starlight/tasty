@@ -7,7 +7,7 @@
     ]"
     v-if="getIsLogged === true"
   >
-    <h1 class="mgb1">Welcome {{ getCurrentUser.username }}</h1>
+    <h1 class="mg2">Welcome {{ getCurrentUser.username }}</h1>
     <section class="profile">
       <h3 class="italic">Profile</h3>
       <div class="imageUsername flex">
@@ -222,6 +222,7 @@ export default {
 
 <style lang="scss" scoped>
 .userPanel {
+  padding: 0;
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
@@ -336,6 +337,12 @@ export default {
     @include alignment($direction: column);
     @include boxSize($width: 100%);
     padding: 0;
+  }
+}
+
+@media (min-width: 576px) {
+  .userPanel {
+    padding: 1rem;
   }
 }
 

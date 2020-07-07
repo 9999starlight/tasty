@@ -61,14 +61,25 @@
         <label for="timing" class="timingLabel"
           ><span class="required">*</span> Preparation Time (in minutes)</label
         >
-        <input
-          type="number"
-          min="1"
-          v-model="timing"
-          id="timing"
-          title="Preparation time in minutes"
-          @blur="validateTiming"
-        />
+        <div class="numberWrapper flex">
+          <button
+            @click.prevent="timing >= 2 ? timing-- : (timing = 1)"
+            class="plusMinus"
+          >
+            <font-awesome-icon :icon="['fa', 'minus']"></font-awesome-icon>
+          </button>
+          <input
+            type="number"
+            min="1"
+            v-model.number="timing"
+            id="timing"
+            title="Preparation time in minutes"
+            @blur="validateTiming"
+          />
+          <button @click.prevent="timing++" class="plusMinus">
+            <font-awesome-icon :icon="['fa', 'plus']"></font-awesome-icon>
+          </button>
+        </div>
         <div class="warnWrapper">
           <p class="warn" v-show="!timingWarn">
             Minutes (number) is required!
@@ -78,15 +89,26 @@
         <label for="persons"
           ><span class="required">*</span> Number of persons</label
         >
-        <input
-          v-model="persons"
-          type="number"
-          min="1"
-          id="persons"
-          required
-          title="Amount is enough for entered number of persons"
-          @blur="validatePersons"
-        />
+        <div class="numberWrapper flex">
+          <button
+            @click.prevent="persons >= 2 ? persons-- : (persons = 1)"
+            class="plusMinus"
+          >
+            <font-awesome-icon :icon="['fa', 'minus']"></font-awesome-icon>
+          </button>
+          <input
+            v-model.number="persons"
+            type="number"
+            min="1"
+            id="persons"
+            required
+            title="Amount is enough for entered number of persons"
+            @blur="validatePersons"
+          />
+          <button @click.prevent="persons++" class="plusMinus">
+            <font-awesome-icon :icon="['fa', 'plus']"></font-awesome-icon>
+          </button>
+        </div>
         <div class="warnWrapper">
           <p class="warn" v-show="!personsWarn">
             Number of persons is required!
@@ -155,9 +177,11 @@
         <label for="file" class="block">Select recipe image</label>
         <div class="uploadBtnWrapper">
           <input type="file" ref="recipeImage" @change="selectRecipeImage" />
-          <button class="chooseImage">Choose image</button>
+          <button class="chooseImage add">Choose image</button>
         </div>
-        <button @click.prevent="removeSelectedImage">Cancel</button>
+        <button @click.prevent="removeSelectedImage" class="remove">
+          Cancel
+        </button>
         <div class="small">
           <small class="block">File formats accepted: jpg/jpeg/png/gif</small>
           <small>Maximum upload file size 2Mb</small>
@@ -199,13 +223,24 @@
             />
             <button
               @click.prevent="removeIngredient(index)"
+              class="remove mgt1"
               :disabled="ingredients.length === 1"
             >
-              Remove ingr
+              Remove
+              <font-awesome-icon
+                :icon="['fa', 'minus']"
+                class="icons"
+              ></font-awesome-icon>
             </button>
           </div>
         </transition-group>
-        <button @click="addIngredient">Add ingredient</button>
+        <button @click="addIngredient" class="mgt1 add">
+          Add
+          <font-awesome-icon
+            :icon="['fa', 'plus']"
+            class="icons"
+          ></font-awesome-icon>
+        </button>
         <div class="warnWrapper">
           <p class="warn" v-show="!ingredientsWarn">
             At least one ingredient entry is required!
@@ -215,7 +250,7 @@
     </fieldset>
     <!-- steps -->
     <fieldset class="steps">
-      <legend>Preparation</legend>
+      <legend>Preparation steps</legend>
       <div class="inner center">
         <transition-group name="scale-in-tl">
           <div
@@ -237,12 +272,21 @@
             <button
               @click.prevent="removeStep(index)"
               :disabled="steps.length === 1"
+              class="remove mgt1"
             >
-              Remove step
+              Remove<font-awesome-icon
+                :icon="['fa', 'minus']"
+                class="icons"
+              ></font-awesome-icon>
             </button>
           </div>
         </transition-group>
-        <button @click="addStep" class="mgt1">Add step</button>
+        <button @click="addStep" class="mgt1 add">
+          Add<font-awesome-icon
+            :icon="['fa', 'plus']"
+            class="icons"
+          ></font-awesome-icon>
+        </button>
         <div class="warnWrapper">
           <p class="warn" v-show="!stepsWarn">
             At least one preparation step required!
@@ -320,8 +364,8 @@ export default {
       preview: null,
       mealName: '',
       intro: '',
-      timing: '',
-      persons: '',
+      timing: 1,
+      persons: 1,
       regional: '',
       vegetarian: false,
       glutenFree: false,
@@ -343,7 +387,6 @@ export default {
   mixins: [fileValidation, loaderMixin],
 
   beforeMount() {
-    // console.log(this.getEditState, this.getSingleRecipe)
     if (this.getEditState) {
       this.mealName = this.getSingleRecipe.mealName
       this.intro = this.getSingleRecipe.intro
@@ -457,7 +500,7 @@ export default {
     },
 
     validateTiming() {
-      const numberTest = /^[0-9]+$/g
+      const numberTest = /^[1-9]\d*$/g
       if (!numberTest.test(this.timing)) {
         this.timingWarn = false
         return false
@@ -468,7 +511,7 @@ export default {
     },
 
     validatePersons() {
-      const numberTest = /^[0-9]+$/g
+      const numberTest = /^[1-9]\d*$/g
       if (!numberTest.test(this.persons)) {
         this.personsWarn = false
         return false
@@ -480,7 +523,6 @@ export default {
 
     validateIngredients() {
       const findEmpty = this.ingredients.find((ingr) => ingr.ingredient === '')
-      // console.log('ingr', findEmpty)
       if (!this.ingredients.length || findEmpty) {
         this.ingredientsWarn = false
         return false
@@ -492,7 +534,6 @@ export default {
 
     validateSteps() {
       const findEmpty = this.steps.find((st) => st.step === '')
-      // console.log('steps', findEmpty)
       if (!this.steps.length || findEmpty) {
         this.stepsWarn = false
         return false
@@ -570,6 +611,7 @@ export default {
       try {
         this.toggleLoader()
         const fd = this.configureFormData()
+        console.log(fd)
         const response = await axios.post(`${recipesUrl}`, fd, {
           headers: { 'Content-Type': 'multipart/form-data' },
           timeout: 7000
@@ -581,6 +623,7 @@ export default {
           this.$router.push(`/SingleResult/${response.data.createdRecipe._id}`)
         }
       } catch (error) {
+        console.log(error.message)
         this.toggleLoader()
         this.updateMessage(error.response.data.message)
         console.log(error.response.data.message)
@@ -618,7 +661,6 @@ export default {
 
 <style lang="scss" scoped>
 form {
-  // @include boxSize($width: 100%);
   @include alignment(
     $direction: column,
     $justify: space-evenly,
@@ -626,8 +668,8 @@ form {
     $textAlign: left
   );
   @include boxSize($width: 100%);
-  // background-color: lighten($graphite, 10%);
-  background-color: $light;
+  background: #ada996;
+  background: $zinc;
   color: lighten($graphite, 10%);
   padding: 1rem 0;
 
@@ -639,13 +681,34 @@ form {
   }
 
   input[type='text'],
-  input[type='number'],
   textarea {
-    padding: 0.3rem;
+    padding: 0.5rem 0.3rem;
     @include fonts($color: $graphite);
-    @include boxSize($width: 100%, $maxWidth: 300px);
+    @include boxSize($width: 100%);
     border: 1px solid lighten($graphite, 55%);
     border-radius: 6px;
+  }
+
+  input[type='number'] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+    @include fonts($color: $graphite, $weight: 700);
+    text-align: center;
+    border-radius: 0;
+    @include boxSize($width: 4rem, $height: 2rem);
+  }
+
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .plusMinus {
+    box-shadow: none;
+    @include boxSize($width: 2rem, $height: 2rem);
+    border-radius: 0;
+    background-color: #8396c7;
+    background: $blueGradient;
   }
 
   label {
@@ -668,15 +731,19 @@ form {
     border: 1px solid lightgray;
     padding: 0.6rem;
     @include boxSize($width: 100%, $minWidth: 280px);
+    background-color: rgba(255, 255, 255, 0.3);
 
     legend {
       margin: 0 auto;
-      border: 2px inset white;
+      border: 2px inset $light;
       background-color: complement($midTone);
-      color: white;
+      color: $light;
       padding: 0.5rem;
       border-radius: 30%;
+      font-size: 1.1rem;
       font-family: 'Lobster', cursive;
+      text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+        0px -1px 0px rgba(0, 0, 0, 0.7);
     }
   }
 
@@ -685,8 +752,26 @@ form {
   }
 
   button {
-    padding: 0.3rem;
-    width: 100px;
+    padding: 0.4rem;
+    width: 110px;
+    color: $light;
+    box-shadow: $shadowSmall;
+    border-radius: 4px;
+    &.add {
+      background-color: #8396c7;
+      background: $blueGradient;
+    }
+    &.remove {
+      background: linear-gradient(180deg, #776d6de0, #322628ba);
+    }
+    .icons {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .numberWrapper {
+    width: max-content;
+    border: 1px solid lighten($midTone, 30%);
   }
 
   .warnWrapper {
@@ -705,7 +790,6 @@ form {
         @include alignment($direction: column);
         img {
           @include boxSize($maxWidth: 100%, $height: 100px);
-          //margin: 1rem auto;
         }
 
         figcaption {
@@ -720,8 +804,9 @@ form {
       box-shadow: $shadowSmall;
       margin: 0.8rem 0;
       button {
-        background: lighten($graphite, 40%);
         @include fonts($color: $light);
+        width: 110px;
+        padding: 0.4rem;
       }
 
       input[type='file'] {
@@ -737,11 +822,25 @@ form {
     }
   }
 
+  .ingredients .add,
+  .steps .add {
+    margin: 1rem auto;
+  }
+
+  .singleIngredient,
+  .singleStep {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid lightgray;
+    margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
   .submitBtn {
     background: $orangeGradient;
-    @include fonts($color: $light, $weight: 600);
-    padding: 0.4rem;
-    @include boxSize($width: 150px);
+    @include fonts($color: $light, $weight: 600, $size: 1.1rem);
+    padding: 0.6rem 0.4rem;
+    width: 200px;
     box-shadow: $shadowSmall;
   }
 }
@@ -765,10 +864,8 @@ form {
       .images {
         @include alignment($justify: space-evenly);
         figure {
-          //@include alignment($direction: column);
           img {
             @include boxSize($height: 200px);
-            //margin: 1rem auto;
           }
 
           figcaption {

@@ -1,5 +1,5 @@
 <template>
-  <div class="savedRecipes flex flexCenter">
+  <div class="savedRecipes flex flexCenter mgt3">
     <h1 class="mg1">Saved recipes</h1>
     <Loader :bigLoader="bigLoader" v-if="isLoading" />
     <NotFound v-if="!getCurrentUser.favorites.length" :message="noRecipes" />
@@ -96,6 +96,8 @@ export default {
 .savedRecipes {
   @include boxSize($width: 100%);
   @include alignment($direction: column);
+  background-color: #c3d1d373;
+  background: linear-gradient(180deg, #c3d1d373, #ffdde178);
   // border-top: 2px solid rgb(233, 231, 231);
 
   h1 {

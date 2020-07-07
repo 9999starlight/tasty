@@ -1,5 +1,5 @@
 <template>
-  <div class="createRecipe flex flexCenter">
+  <div class="createRecipe flex flexCenter mgt3">
     <h1 id="createRecipeHeading" class="mg1">
       Create Recipe
     </h1>
@@ -27,7 +27,7 @@ export default {
 
   computed: {
     ...mapGetters(['getEditState'])
-  }/* ,
+  } /* ,
 
   async beforeRouteLeave(to, from, next) {
     try {
@@ -45,6 +45,8 @@ export default {
 .createRecipe {
   @include alignment($direction: column);
   @include boxSize($width: 100%);
+  background: #ada996;
+  background: linear-gradient(to right, #eaeaea, #dbdbdb, #f2f2f2, #ada996);
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);

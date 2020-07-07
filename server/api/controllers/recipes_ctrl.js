@@ -247,7 +247,7 @@ exports.updateRecipe = async (req, res, next) => {
         comments: updated.comments
       }
     })
-    console.log(updated)
+    // console.log(updated)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({

@@ -1,5 +1,5 @@
 <template>
-    <p :class="!messageStatus ? 'error' : 'success'">{{ message }}</p>
+  <p :class="!messageStatus ? 'error' : 'success'">{{ message }}</p>
 </template>
 
 <script>
@@ -46,11 +46,10 @@ export default {
   @include fonts($color: green, $size: 0.8rem);
 }
 
-@media(min-width: 996px) {
-
+@media (min-width: 992px) {
   .error,
   .success {
-    @include fonts($size: 1rem)
+    @include fonts($size: 1rem);
   }
 }
 </style>

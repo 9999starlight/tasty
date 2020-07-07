@@ -1,7 +1,12 @@
 <template>
   <div class="popularWrapper flex mgt1">
     <h1 class="slim">Highest rated recipes</h1>
-    <div v-if="this.ready" class="carouselContainer center">
+    <div
+      v-if="this.ready"
+      class="carouselContainer center"
+      @mouseenter="stopSlider"
+      @mouseleave="slideInit"
+    >
       <button class="carouselBtn btnLeft" @click="previousRecipe">
         &nbsp;<font-awesome-icon
           :icon="['fa', 'chevron-circle-left']"
@@ -70,7 +75,7 @@ export default {
   },
 
   destroyed() {
-    clearInterval(this.timing)
+    this.stopSlider()
   },
 
   computed: {
@@ -82,6 +87,10 @@ export default {
       this.timing = setInterval(() => {
         this.nextRecipe()
       }, 5000)
+    },
+
+    stopSlider() {
+      clearInterval(this.timing)
     },
 
     nextRecipe() {
