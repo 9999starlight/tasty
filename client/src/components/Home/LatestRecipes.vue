@@ -13,6 +13,7 @@
         :recipe="recipe"
       />
     </div>
+    <button @click="loadMore">Load more</button>
   </div>
 </template>
 
@@ -29,7 +30,9 @@ export default {
 
   data() {
     return {
-      latestRecipes: []
+      allRecipes: [],
+      latestRecipes: [],
+      count: 6
     }
   },
 
@@ -41,10 +44,21 @@ export default {
         sort: '-createdAt'
       })
       if (results) {
-        this.latestRecipes = [...results.resultsArray].slice(0, 6)
+        this.allRecipes = [...results.resultsArray]
+        this.latestRecipes = [...results.resultsArray].slice(0, this.count)
       }
     } catch (error) {
       console.log(error.message)
+    }
+  },
+
+  methods: {
+    loadMore() {
+      const tempArr = this.allRecipes.slice(
+        this.latestRecipes.length,
+        this.latestRecipes.length + this.count
+      )
+      this.latestRecipes = [...this.latestRecipes, ...tempArr]
     }
   }
 }
@@ -56,31 +70,21 @@ export default {
   @include alignment($direction: column);
   background-color: $light;
   padding: 1rem 0;
-  /* mask-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    #ffffff 5%,
-    #ffffff 95%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    #ffffff 5%,
-    #ffffff 95%,
-    rgba(255, 255, 255, 0) 100%
-  ); */
 
   h1 {
     padding: 1rem 2rem 2rem;
+    color: darken($golden, 15%);
   }
   .innerWrapper {
     @include boxSize($width: 100%);
     flex-wrap: wrap;
-
-    /* .recipeLink {
-      margin: 1rem 0;
-    } */
+  }
+  button {
+    background-color: transparent;
+    padding: 1rem 2rem;
+    @include fonts($size: 1.1rem, $color: darken($golden, 15%), $weight: 700);
+    border: 1px solid darken($golden, 15%);
+    margin-top: 1rem;
   }
 }
 img {
@@ -88,11 +92,20 @@ img {
   margin: auto;
 }
 
-@media (min-width: 350px) {
+@media (min-width: 576px) {
   .latestRecipesContainer {
     padding: 1rem;
-    background-color: rgb(250, 221, 226);
-    background: $palePinkGray;
+    background-image: linear-gradient(
+      109.6deg,
+      rgba(255, 253, 208, 1) 11.2%,
+      rgba(153, 102, 51, 1) 91%
+    );
+    box-shadow: $shadowBox;
+    // background-image: $zinc;
+    button {
+      @include fonts($color: $light);
+      border-color: darken($light, 10%);
+    }
   }
 }
 

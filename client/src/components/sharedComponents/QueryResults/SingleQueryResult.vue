@@ -42,7 +42,13 @@
       />
       <span>{{ recipe.author.username }}</span>
     </div>
-    <p class="intro lightItalic pd1">{{ recipe.intro }}</p>
+    <p class="intro lightItalic pd1">
+      {{
+        recipe.intro.length > 70
+          ? recipe.intro.substr(0, 70) + '...'
+          : recipe.intro
+      }}
+    </p>
   </router-link>
 </template>
 
@@ -66,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .recipeLink {
-  @include boxSize($width: 100%x, $height: 480px);
+  @include boxSize($width: 100%x, $height: 430px);
   @include alignment($justifyGrid: center, $align: center);
   grid-template-rows: 2.3fr 1fr 1fr;
   grid-template-columns: repeat(2, 1fr);
@@ -83,6 +89,7 @@ export default {
     @include boxSize($width: 100%, $height: 290px);
     grid-area: figure;
     position: relative;
+    overflow: hidden;
     figcaption {
       position: absolute;
       bottom: 0;
@@ -95,6 +102,7 @@ export default {
 
   .author {
     grid-area: author;
+    color: darken($golden, 5%);
 
     img {
       @include boxSize($width: 20px, $height: 20px);
@@ -115,23 +123,28 @@ export default {
   }
 }
 
-@media(min-width: 350px) {
+@media (min-width: 350px) {
   .recipeLink {
-    @include boxSize($width: 320px);
+    @include boxSize($width: 310px);
   }
 }
 
 @media (min-width: 576px) {
   .recipeLink {
     margin: 1rem;
-    &:hover {
-      filter: brightness(80%);
-    }
+
     figure {
-      @include boxSize($width: 320px, $height: 320px);
-      img {
-        @include boxSize($width: 320px, $height: 320px);
-      }
+      @include boxSize($height: 300px);
+    }
+  }
+}
+
+@media (min-width: 776px) {
+  .recipeLink {
+    figure img:hover {
+      transform: scale(1.1);
+      transition: transform 0.4s;
+      filter: brightness(90%);
     }
   }
 }

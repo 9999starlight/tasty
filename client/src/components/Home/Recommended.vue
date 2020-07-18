@@ -43,7 +43,6 @@ export default {
           .sort(() => Math.random() - 0.5)
           .slice(0, 6)
       }
-      // console.log(this.recommendedRecipes)
     } catch (error) {
       console.log(error.message)
     }
@@ -61,14 +60,12 @@ export default {
   .innerWrapper {
     @include boxSize($width: 100%);
     flex-wrap: wrap;
-
-    /*     .recipeLink {
-      margin: 1rem;
-    } */
   }
-}
-h1 {
-  padding: 1rem 2rem 2rem;
+
+  h1 {
+    padding: 1rem 2rem 2rem;
+    color: darken($golden, 15%);
+  }
 }
 
 img {
@@ -76,11 +73,16 @@ img {
   margin: auto;
 }
 
-@media (min-width: 350px) {
+@media (min-width: 576px) {
   .recommendedRecipesContainer {
     padding: 1rem;
-    background-color: rgb(250, 221, 226);
-    background: $palePinkGray;
+    background-image: linear-gradient(
+      109.6deg,
+      rgba(255, 253, 208, 1) 11.2%,
+      rgba(153, 102, 51, 1) 91%
+    );
+    box-shadow: $shadowBox;
+    // background-image: $zinc;
   }
 }
 

@@ -1,6 +1,6 @@
 const state = {
   editState: false,
-  openSearch: false,
+  openSearch: false
 }
 const actions = {
   changeEditState({ commit }, payload) {

@@ -4,7 +4,11 @@
     tag="div"
     class="singleRecipeSlide"
   >
-    <figure id="slideContainer">
+    <figure
+      id="slideContainer"
+      @mouseenter="$emit('pauseSlides')"
+      @mouseleave="$emit('resumeSlides')"
+    >
       <transition name="fadePartial" mode="out-in">
         <img
           v-if="recipe.image === undefined"
@@ -53,13 +57,6 @@ export default {
   computed: {
     ...mapGetters(['getDefaultImage'])
   }
-
-  /*   methods: {
-    leave(el) {
-      el.style.opacity = 0
-      el.duration = 1500
-    }
-  } */
 }
 </script>
 
@@ -78,7 +75,6 @@ export default {
       background-color: rgba(29, 28, 28, 0.774);
       @include fonts($color: $light);
       @include boxSize($width: 100%, $height: 60px);
-      // padding: 1.3rem;
 
       span:nth-of-type(2) {
         display: inline-block;

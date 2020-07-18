@@ -10,11 +10,9 @@
         <div class="modalWrapper" v-if="editModal">
           <header class="flex flexCenter">
             <h2>Edit User</h2>
-            <button @click="closeUserEdit" class="del">
-              <font-awesome-icon
-                :icon="['fa', 'times']"
-                title="Close"
-              ></font-awesome-icon>
+            <button @click="closeUserEdit" class="del tooltipContainer">
+              <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
+              <Tooltip :tooltipText="'Close'" />
             </button>
           </header>
           <div class="editing flex flexCenter" v-if="editAdmin">
@@ -175,26 +173,35 @@
               </div>
             </div>
             <div class="buttonsUser flex">
-              <button @click="openUserEdit(user.userId)">
+              <button
+                @click="openUserEdit(user.userId)"
+                class="tooltipContainer"
+              >
                 <font-awesome-icon
                   v-if="user.isDisabled"
                   :icon="['fa', 'user-slash']"
                   class="delete"
-                  title="Enable user"
                 ></font-awesome-icon>
                 <font-awesome-icon
                   v-else
                   :icon="['fa', 'user']"
                   class="edit userEnabled"
-                  title="Disable user"
                 ></font-awesome-icon>
+                <Tooltip
+                  :tooltipText="
+                    user.isDisabled ? 'Enable user' : 'Disable user'
+                  "
+                />
               </button>
-              <button @click="adminEditing(user.userId)">
+              <button
+                @click="adminEditing(user.userId)"
+                class="tooltipContainer"
+              >
                 <font-awesome-icon
                   :icon="['fa', 'user-shield']"
                   class="edit"
-                  title="Change admin status"
                 ></font-awesome-icon>
+                <Tooltip :tooltipText="'Change admin status'" />
               </button>
             </div>
           </div>
@@ -222,6 +229,7 @@ import Loader from '../sharedComponents/Loader'
 import Select from '../sharedComponents/Select'
 import SortingButtons from '../sharedComponents/SortingButtons'
 import Pagination from '../sharedComponents/Pagination'
+import Tooltip from '../sharedComponents/Tooltip'
 import loaderMixin from '../../mixins/loaderMixin'
 import apiCalls from '../../mixins/apiCalls'
 import dateFormat from '../../mixins/dateFormat'
@@ -234,7 +242,8 @@ export default {
     Loader,
     Select,
     SortingButtons,
-    Pagination
+    Pagination,
+    Tooltip
   },
 
   mixins: [

@@ -32,11 +32,11 @@ const apiCalls = {
     },
 
     async allUserRecipes(id) {
-      //console.log(params)
       try {
         const params = {
           author: id
         }
+        console.log(params)
         await this.$store.dispatch('fetchQueriedRecipes', params)
         //console.log(res)
         this.$router.push({ name: 'render_results' })

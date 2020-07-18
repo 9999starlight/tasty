@@ -69,12 +69,15 @@
                 }"
                 ><a>View Recipe</a></router-link
               >
-              <button @click="deleteComment(comment._id)">
+              <button
+                @click="deleteComment(comment._id)"
+                class="tooltipContainer"
+              >
                 <font-awesome-icon
                   :icon="['fa', 'trash-alt']"
                   class="delete"
-                  title="Delete comment"
                 ></font-awesome-icon>
+                <Tooltip :tooltipText="'Delete comment'" />
               </button>
             </div>
           </div>
@@ -114,6 +117,7 @@ import paginationOptions from '../../mixins/paginationOptions'
 import Loader from '../sharedComponents/Loader'
 import SortingButtons from '../sharedComponents/SortingButtons'
 import Pagination from '../sharedComponents/Pagination'
+import Tooltip from '../sharedComponents/Tooltip'
 import Select from '../sharedComponents/Select'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
@@ -126,7 +130,8 @@ export default {
     Loader,
     SortingButtons,
     Pagination,
-    Select
+    Select,
+    Tooltip
   },
 
   data() {

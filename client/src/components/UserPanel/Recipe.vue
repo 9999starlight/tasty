@@ -27,12 +27,16 @@
       ><a>Details</a></router-link
     >
     <div class="editDelete flex">
-      <button v-if="usersRecipes" @click="$emit('editing', recipe._id)">
+      <button
+        v-if="usersRecipes"
+        @click="$emit('editing', recipe._id)"
+        class="tooltipContainer"
+      >
         <font-awesome-icon
           :icon="['fa', 'edit']"
           class="edit"
-          title="Edit recipe"
         ></font-awesome-icon>
+        <Tooltip :tooltipText="'Edit recipe'" />
       </button>
       <!-- user info conditonal render -->
       <p v-else class="userInfo flex flexCenter">
@@ -51,20 +55,24 @@
         <span class="authorUsername">{{ recipe.author.username }}</span>
       </p>
       <!-- end user info -->
-      <button v-if="usersRecipes" @click="deleteUserRecipe">
+      <button
+        v-if="usersRecipes"
+        @click="deleteUserRecipe"
+        class="tooltipContainer"
+      >
         <font-awesome-icon
           :icon="['fa', 'trash-alt']"
           class="delete"
-          title="Delete your recipe"
         ></font-awesome-icon>
+        <Tooltip :tooltipText="'Delete this recipe'" />
       </button>
       <!-- remove from saved recipes button conditonal render -->
-      <button v-else @click="removeFromFavorites">
+      <button v-else @click="removeFromFavorites" class="tooltipContainer">
         <font-awesome-icon
           :icon="['fa', 'trash-alt']"
           class="delete"
-          title="Remove from saved recipes"
         ></font-awesome-icon>
+        <Tooltip :tooltipText="'Remove from the list'" />
       </button>
       <!-- end remove from saved -->
     </div>
@@ -74,11 +82,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
+import Tooltip from '../sharedComponents/Tooltip'
 import axios from 'axios'
 import { recipesUrl, usersUrl } from '../../apiData'
 
 export default {
   name: 'UserRecipe',
+
+  components: {
+    Tooltip
+  },
 
   props: {
     recipe: {
@@ -95,11 +108,7 @@ export default {
   mixins: [dateFormat],
 
   computed: {
-    ...mapGetters([
-      'getDefaultImage',
-      'getDefaultUserImage',
-      'getCurrentUser'
-    ])
+    ...mapGetters(['getDefaultImage', 'getDefaultUserImage', 'getCurrentUser'])
   },
 
   // patch: remove user's recipe, update current user, refresh user's recipes
@@ -129,7 +138,6 @@ export default {
             { favoriteId: this.recipe._id }
           )
           if (response) {
-            // console.log(response.data.message)
             this.$store.dispatch('updateUser', response.data.updatedUser)
             this.$emit('deletedFromFavorites')
           }
@@ -146,21 +154,19 @@ export default {
 .userRecipe {
   padding: 0.6rem;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1.2fr 1.2fr 0.8fr 0.8fr 1fr;
-  grid-template-areas: 'image mealName mealName' 'image details details' 'date date date' 'rating rating rating' 'editDelete editDelete editDelete';
-  box-shadow: $shadowSmall;
+  grid-template-rows: 1fr 1fr 0.5fr 0.5fr 1fr;
+  grid-template-areas: 'image mealName mealName' 'image details details' 'rating rating rating' 'date date date' 'editDelete editDelete editDelete';
   border: 1px solid lightgray;
   background-color: $light;
 
   p {
     @include fonts($size: 0.9rem);
-    text-align: center;
   }
 
   figure {
     grid-area: image;
-    @include boxSize($width: 120px, $height: 100px);
-    box-shadow: $shadowBox;
+    @include boxSize($width: 100px, $height: 80px);
+    box-shadow: $shadowSmall;
 
     img {
       @include boxSize($width: 100%, $height: 100%);
@@ -168,12 +174,17 @@ export default {
     }
   }
 
+  h4,
+  .details {
+    margin-left: 1rem;
+    text-align: left;
+  }
+
   h4 {
     grid-area: mealName;
   }
   .date {
     grid-area: date;
-    margin: 0.5rem auto;
     @include fonts($size: 0.8rem);
   }
   .rating {
@@ -184,7 +195,6 @@ export default {
     grid-area: details;
     color: rgb(40, 53, 40);
     text-decoration: green underline;
-    justify-self: center;
   }
   .editDelete {
     grid-area: editDelete;
@@ -213,13 +223,31 @@ export default {
   }
 }
 
+@media (min-width: 400px) {
+  .userRecipe {
+    grid-template-rows: 1fr 1fr 0.5fr 1fr;
+    grid-template-areas: 'image mealName mealName' 'image details details' 'date date rating' 'editDelete editDelete editDelete';
+    text-align: left;
+  }
+}
+
 @media (min-width: 768px) {
   .userRecipe {
     @include boxSize($width: 100%);
-    grid-template-columns: 1fr 1.5fr 1fr 1fr;
+    grid-template-columns: auto 1.7fr 1fr 0.5fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: 'image mealName rating editDelete' 'image details date editDelete';
     @include alignment($align: center);
+
+    figure {
+      @include boxSize($width: 120px, $height: 100px);
+      justify-self: center;
+    }
+
+    h4,
+    .details {
+      margin-left: 1rem;
+    }
 
     .editDelete {
       @include alignment($direction: column);
@@ -230,7 +258,7 @@ export default {
       }
 
       .userInfo {
-        justify-content: flex-end;
+        justify-content: flex-start;
       }
     }
   }

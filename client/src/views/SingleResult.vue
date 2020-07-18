@@ -1,7 +1,7 @@
 <template>
   <div class="singleResultContainer container" v-if="ready">
     <div class="singleResultWrapper">
-      <h1 class="mgb1">{{ resultRecipe.mealName }}</h1>
+      <h1>{{ resultRecipe.mealName }}</h1>
       <section class="favorites flex">
         <div class="messageWrapper center">
           <transition name="expand" mode="out-in">
@@ -16,14 +16,13 @@
         <button
           v-if="disableRecipeSaving"
           class="addToFavorites"
-          title="Add to favorites"
           @click="addToFavorites"
         >
-          Add to favorites &nbsp;<font-awesome-icon
-            :icon="['fas', 'plus']"
-            class="plus"
-          >
-          </font-awesome-icon>
+          Add to favorites &nbsp;
+          <span>
+            <font-awesome-icon :icon="['fas', 'plus']" class="plus">
+            </font-awesome-icon>
+          </span>
         </button>
         <transition v-else name="pulsing-in" appear>
           <div
@@ -50,23 +49,23 @@
         </transition>
       </section>
       <section class="basicInfo flex mgb1">
-        <span title="Level of difficulty"
+        <span class="info tooltipContainer"
           ><font-awesome-icon :icon="['fas', 'weight']" class="mealIcons">
           </font-awesome-icon>
-          {{ resultRecipe.level }}</span
-        >
-        <span title="Number of persons"
+          {{ resultRecipe.level }}<Tooltip :tooltipText="'Level of difficulty'"
+        /></span>
+        <span class="info tooltipContainer"
           ><font-awesome-icon :icon="['fas', 'user']" class="mealIcons">
           </font-awesome-icon>
-          {{ resultRecipe.persons }}</span
-        >
-        <span title="Preparation time"
+          {{ resultRecipe.persons }}<Tooltip :tooltipText="'Number of persons'"
+        /></span>
+        <span class="info tooltipContainer"
           ><font-awesome-icon
             :icon="['far', 'clock']"
             class="mealIcons"
           ></font-awesome-icon>
-          {{ resultRecipe.timing }}</span
-        >
+          {{ resultRecipe.timing }}<Tooltip :tooltipText="'Preparation time'"
+        /></span>
       </section>
       <figure class="mgb1">
         <img
@@ -82,27 +81,29 @@
       </figure>
       <section class="underImage flex mgb1">
         <div class="userInfoRating flex mgb1">
-          <p
-            class="userInfo flex flexCenter"
+          <button
+            class="userInfo tooltipContainer"
             @click="allUserRecipes(resultRecipe.author._id)"
-            title="See all user's recipes"
           >
-            <img
-              v-if="resultRecipe.author.user_image === undefined"
-              :src="getDefaultUserImage"
-              alt="user image"
-              class="authorImage"
-            />
-            <img
-              v-else
-              :src="resultRecipe.author.user_image.url"
-              alt="user image"
-              class="authorImage"
-            />
-            <span class="authorUsername">{{
-              resultRecipe.author.username
-            }}</span>
-          </p>
+            <p class="flex flexCenter">
+              <img
+                v-if="resultRecipe.author.user_image === undefined"
+                :src="getDefaultUserImage"
+                alt="user image"
+                class="authorImage"
+              />
+              <img
+                v-else
+                :src="resultRecipe.author.user_image.url"
+                alt="user image"
+                class="authorImage"
+              />
+              <span class="authorUsername">{{
+                resultRecipe.author.username
+              }}</span>
+            </p>
+            <Tooltip :tooltipText="`See user's recipes`" />
+          </button>
           <p class="rating">
             <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
             </font-awesome-icon
@@ -200,6 +201,7 @@ import dateFormat from './../mixins/dateFormat'
 import apiCalls from './../mixins/apiCalls'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
 import Loader from '../components/sharedComponents/Loader'
+import Tooltip from '../components/sharedComponents/Tooltip'
 import Rating from '../components/SingleResult/Rating'
 import axios from 'axios'
 import { usersUrl } from '../apiData'
@@ -211,7 +213,8 @@ export default {
     Rating,
     Comments,
     InfoMessage,
-    Loader
+    Loader,
+    Tooltip
   },
 
   data() {
@@ -259,7 +262,6 @@ export default {
       const checkUserFavorites = this.getCurrentUser.favorites.filter(
         (fav) => fav === this.resultRecipe._id
       )
-      // console.log(checkUserFavorites)
       if (checkUserFavorites.length) {
         return false
       } else {
@@ -298,7 +300,6 @@ export default {
         this.resultRecipe.author._id !== this.getCurrentUser.userId &&
         this.checkRatedBy.length
       ) {
-        //console.log(this.checkRatedBy)
         return this.checkRatedBy[0].rate
       } else {
         return null
@@ -373,10 +374,8 @@ export default {
   @include alignment($display: flex, $justify: center, $align: center);
   flex-direction: column;
   @include boxSize($width: 100%);
+  background-color: $light;
 
-  section {
-    border-bottom: 1px inset rgb(209, 207, 207);
-  }
   section,
   figure,
   h1 {
@@ -384,21 +383,22 @@ export default {
   }
 
   section {
-    //@include boxSize($height: 100%);
+    border-bottom: 1px inset lightgray;
     @include alignment($direction: column, $align: flex-start);
-    padding: 0.8rem;
+    padding-bottom: 0.8rem;
+    font-size: 0.9rem;
   }
   img {
     object-fit: cover;
   }
   h1 {
-    //$color: $graphite;
-    color: transparent;
-    background: #666666;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    background-clip: text;
+    @include fonts($color: darken($golden, 5%), $weight: 800);
     text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
+    margin: 2rem auto;
+  }
+
+  h3 {
+    color: darken($golden, 5%);
   }
 
   .favorites {
@@ -411,14 +411,26 @@ export default {
     }
 
     .addToFavorites {
-      @include fonts($color: $light);
+      @include fonts($color: $light, $size: 0.9rem);
       @include alignment($display: inline-block);
-      background: linear-gradient(270deg, #38a16a, #16604d, #7cd49a);
+      background-color: #f1b3b3;
+      background-image: linear-gradient(
+        89.5deg,
+        rgba(246, 114, 128, 0.9) 0.2%,
+        rgba(248, 177, 149, 0.9) 90.6%
+      );
       background-size: 600% 600%;
       animation: movingBackground 30s ease infinite;
       margin-bottom: 0.8rem;
+      text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.82),
+        0px -1px 0px rgba(151, 146, 146, 0.67);
+
+      span {
+        margin-left: 0.3rem;
+      }
     }
 
+    // save recipe style
     .changableSave {
       &.heart {
         position: relative;
@@ -450,7 +462,7 @@ export default {
         @include fonts($size: 0.9rem, $color: lighten($graphite, 20%));
       }
     }
-
+    // end save
     .userRating {
       @include boxSize($height: 40px);
       @include fonts($size: 0.9rem, $color: lighten($graphite, 20%));
@@ -474,8 +486,9 @@ export default {
   .basicInfo {
     @include alignment($direction: row);
     @include fonts($color: $graphite);
+    padding: 0.8rem;
 
-    span {
+    .info {
       margin-right: 1rem;
     }
 
@@ -502,7 +515,9 @@ export default {
       @include alignment($justify: space-between, $align: center);
 
       .userInfo {
-        cursor: pointer;
+        display: block;
+        background-color: transparent;
+        color: #a3865b;
       }
 
       .authorImage {
@@ -526,7 +541,7 @@ export default {
   }
 
   .additionalInfo {
-    @include fonts($size: 1.1rem);
+    @include fonts($size: 0.9rem);
 
     .additionalIcons {
       margin-left: 0.5rem;
@@ -541,11 +556,14 @@ export default {
   }
 
   .ingredients {
+    h3 {
+      $color: darken($golden, 5%);
+    }
     ul {
       @include alignment($direction: column, $align: flex-start);
 
       li {
-        @include fonts($color: rgb(75, 72, 72), $size: 1.2rem);
+        @include fonts($color: rgb(75, 72, 72));
         text-align: left;
       }
     }
@@ -560,7 +578,7 @@ export default {
       );
 
       li {
-        @include fonts($color: rgb(75, 72, 72), $size: 1.2rem);
+        @include fonts($color: rgb(75, 72, 72));
 
         &::before {
           content: attr(data-number) '.';
@@ -570,6 +588,10 @@ export default {
         }
       }
     }
+  }
+
+  .comments {
+    border-bottom: none;
   }
 }
 
@@ -595,22 +617,24 @@ export default {
 }
 
 @media (min-width: 992px) {
+  .singleResultContainer {
+    background-image: $zinc;
+  }
   .singleResultWrapper {
     @include boxSize($width: 900px, $maxWidth: initial);
     @include alignment($display: grid);
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: repeat(8, auto);
-    grid-template-areas: 'title title' 'favorites favorites' 'basicInfo basicInfo' 'photo additionalInfo' 'underImage underImage' 'ingredients ingredients' 'directions directions' 'comments comments';
-
+    padding: 1rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr;
+    grid-template-rows: repeat(7, auto);
+    grid-template-areas: 'title title title title title' 'favorites favorites favorites favorites favorites' 'basicInfo basicInfo basicInfo basicInfo basicInfo' 'photo photo photo photo additionalInfo' 'underImage underImage underImage underImage underImage' 'ingredients ingredients directions directions directions' 'comments comments comments comments comments';
+    section {
+      font-size: 1rem;
+    }
     h1 {
       grid-area: title;
     }
     .favorites {
       grid-area: favorites;
-
-      .addToFavorites:hover {
-        text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
-      }
     }
     .basicInfo {
       grid-area: basicInfo;
@@ -633,18 +657,30 @@ export default {
       grid-area: additionalInfo;
       border: none;
       align-self: start;
+      font-size: 1.1rem;
+    }
+
+    .ingredients,
+    .directions {
+      border: none;
+      height: 100%;
+      margin-bottom: 0;
     }
 
     .ingredients {
       grid-area: ingredients;
+      padding: 0.8rem 0.8rem 0.8rem 0;
     }
 
     .directions {
       grid-area: directions;
+      padding: 0.8rem 0 0.8rem 1.4rem;
     }
 
     .comments {
       grid-area: comments;
+      border-top: 1px inset lightgray;
+      padding-top: 2rem;
     }
   }
 }

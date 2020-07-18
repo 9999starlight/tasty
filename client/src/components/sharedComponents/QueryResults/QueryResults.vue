@@ -1,8 +1,8 @@
 <template>
-  <div class="resultsWrapper flex flexCenter" id="searchResults">
+  <div class="resultsWrapper flex flexCenter">
+    <h2 class="slim pd1" id="searchHeading">Search Results</h2>
+    <h5>Number of results: {{ this.results.length }}</h5>
     <div class="inner flex flexCenter" v-if="getSuccess">
-      <h2 class="slim pd1" id="searchHeading">Search Results</h2>
-      <h5>Number of results: {{ this.results.length }}</h5>
       <SortingButtons
         @sortTitleAsc="sortTitleAscending(results)"
         @sortTitleDesc="sortTitleDescending(results)"
@@ -12,11 +12,12 @@
         @sortDateDesc="sortDateDescending(results)"
       />
       <div class="successful flex">
-          <SingleQueryResult
+        <SingleQueryResult
           v-for="recipe in currentRecipes"
           :key="recipe._id"
           :recipe="recipe"
-          class="mg1"/>
+          class="mg1"
+        />
       </div>
       <Pagination
         :resultsPerPage="resultsPerPage"
@@ -68,7 +69,6 @@ export default {
   mixins: [paginationOptions, sortingResults],
 
   created() {
-    //console.log(this.getQueriedRecipes)
     this.results = [...this.getQueriedRecipes]
   },
 
@@ -77,10 +77,8 @@ export default {
       if (oldValue !== newValue) {
         this.results = [...newValue]
         this.currentPage = 1
-        // console.log('watcher', this.results, this.currentPage)
       } else {
         this.currentPage = 1
-        // console.log('watcher', this.results, this.currentPage)
       }
     },
     deep: true
@@ -123,6 +121,7 @@ export default {
     @include boxSize($width: 100%);
     @include alignment($justify: center, $align: center);
     flex-wrap: wrap;
+    margin: 1.5rem auto;
   }
 }
 

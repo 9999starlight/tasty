@@ -9,28 +9,33 @@
         >
           <font-awesome-icon
             :icon="['fa', 'angle-double-left']"
-            font-size="15px"
+            class="paginationArrow"
           ></font-awesome-icon>
         </a>
       </li>
       <li>
         <a
-          v-show="!togglePrevDisabled && totalResults > resultsPerPage"
           href="#"
           @click.prevent="$emit('first')"
+          :class="{ active: currentPage === 1 }"
         >
-          First
+          1
         </a>
       </li>
-      <li v-for="num in pageNumbers" :key="num">
+      <li
+        class="morePagesIndicator"
+        v-show="!togglePrevDisabled && currentPage > 3"
+      >
+        ...
+      </li>
+      <li v-for="num in pagesForShow" :key="num">
         <a
           href="#"
           @click.prevent="$emit('paginate', num)"
           :class="{ active: currentPage === num }"
           v-show="
             currentPage === num ||
-              currentPage === num - 1 ||
-              currentPage === num + 1
+              (num >= currentPage - 1 && num < currentPage + 2)
           "
           >{{ num }}</a
         >
@@ -39,17 +44,18 @@
         class="morePagesIndicator"
         v-show="
           !toggleNextDisabled &&
-            currentPage < pageNumbers[this.pageNumbers.length - 2]
+            currentPage < pageNumbers[this.pageNumbers.length - 3]
         "
       >
         ...
       </li>
       <li>
         <a
-          v-show="!toggleNextDisabled"
           href="#"
           @click.prevent="$emit('last', pageNumbers)"
-          >Last
+          :class="{ active: currentPage === pageNumbers.length }"
+          v-show="pageNumbers.length > 1"
+          >{{ pageNumbers.length }}
         </a>
       </li>
       <li>
@@ -60,7 +66,7 @@
         >
           <font-awesome-icon
             :icon="['fa', 'angle-double-right']"
-            font-size="15px"
+            class="paginationArrow"
           ></font-awesome-icon>
         </a>
       </li>
@@ -118,6 +124,10 @@ export default {
       } else {
         return false
       }
+    },
+    // pages between first and last
+    pagesForShow() {
+      return this.pageNumbers.slice(1, this.pageNumbers.length - 1)
     }
   }
 }
@@ -132,15 +142,21 @@ export default {
 
     li {
       background-color: rgba(29, 28, 28, 0.774);
-      border-right: 1px solid darken($midTone, 10%);
+      // border-right: 1px solid darken($midTone, 10%);
+
+      /*  &:first-of-type, &:last-of-type {
+        background-color: rgba(65, 59, 59, 0.801);
+      } */
 
       &:first-of-type {
+        border-right: 1px solid darken($midTone, 10%);
         border-radius: 40% 0px 0px 40%;
       }
 
       &:last-of-type {
+        border-left: 1px solid darken($midTone, 10%);
         border-radius: 0px 40% 40% 0px;
-        border: none;
+        //border: none;
       }
     }
     a,
@@ -150,9 +166,13 @@ export default {
       padding: 0.7rem;
       @include fonts($color: saturate($lightOrange, 70%), $size: 0.9rem);
       transition: background-color 0.4s;
-
+      border-right: 1px solid darken($midTone, 10%);
       &.active {
         background-color: lighten($midTone, 5%);
+      }
+
+      &:last-of-type {
+        border: none;
       }
 
       &.prev.disabled,
@@ -162,6 +182,14 @@ export default {
         pointer-events: none;
       }
     }
+
+    a:first-of-type,
+    a:last-of-type {
+      padding: 0.7rem 1rem;
+    }
+  }
+  .paginationArrow {
+    font-size: 1.2rem;
   }
 }
 

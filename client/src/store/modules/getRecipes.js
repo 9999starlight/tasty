@@ -24,7 +24,6 @@ const actions = {
         commit('setQueriedRecipes', resultsArray)
         commit('setSuccess', true)
       }
-      // console.log(results.data.docsCount)
     } catch (error) {
       console.log(error.response.data.message)
       //console.log(error.message)

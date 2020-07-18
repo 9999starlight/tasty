@@ -10,11 +10,9 @@
         <div class="modalWrapper" v-if="getEditState">
           <header class="flex flexCenter">
             <h2>Edit Recipe</h2>
-            <button @click="cancelEdit" class="del">
-              <font-awesome-icon
-                :icon="['fa', 'times']"
-                title="Cancel and close form"
-              ></font-awesome-icon>
+            <button @click="cancelEdit" class="del tooltipContainer">
+              <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
+              <Tooltip :tooltipText="'Cancel and close form'" />
             </button>
           </header>
           <div class="editInner">
@@ -103,12 +101,15 @@
             </small>
             <small class="recipeId slim">ID: {{ recipe._id }}</small>
             <div class="recipeButtons flex">
-              <button @click="deleteRecipe(recipe._id)">
+              <button
+                @click="deleteRecipe(recipe._id)"
+                class="tooltipContainer"
+              >
                 <font-awesome-icon
                   :icon="['fa', 'trash-alt']"
                   class="delete"
-                  title="Delete recipe"
                 ></font-awesome-icon>
+                <Tooltip :tooltipText="'Delete recipe'" />
               </button>
 
               <router-link
@@ -116,12 +117,15 @@
                 class="details"
                 ><a>Details</a></router-link
               >
-              <button @click="editFormSettings(recipe._id)">
+              <button
+                @click="editFormSettings(recipe._id)"
+                class="tooltipContainer"
+              >
                 <font-awesome-icon
                   :icon="['fa', 'edit']"
                   class="edit"
-                  title="Edit recipe"
                 ></font-awesome-icon>
+                <Tooltip :tooltipText="'Edit recipe'" />
               </button>
             </div>
           </div>
@@ -159,6 +163,7 @@ import SortingButtons from '../sharedComponents/SortingButtons'
 import CreateEditForm from '../sharedComponents/CreateEditForm'
 import Pagination from '../sharedComponents/Pagination'
 import Loader from '../sharedComponents/Loader'
+import Tooltip from '../sharedComponents/Tooltip'
 import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
 import apiCalls from '../../mixins/apiCalls'
@@ -177,7 +182,8 @@ export default {
     SortingButtons,
     Pagination,
     CreateEditForm,
-    Loader
+    Loader,
+    Tooltip
   },
 
   data() {

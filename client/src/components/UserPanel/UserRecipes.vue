@@ -1,16 +1,14 @@
 <template>
-  <div class="userRecipes flex flexCenter mgt3">
+  <div class="userRecipes flex">
     <!-- modal -->
     <transition name="fade" mode="out-in">
       <div class="modalOverlay" v-if="getEditState" @click.self="cancelEdit">
         <div class="modalWrapper" v-if="getEditState">
           <header class="flex flexCenter">
             <h2>Edit Recipe</h2>
-            <button @click="cancelEdit" class="del">
-              <font-awesome-icon
-                :icon="['fa', 'times']"
-                title="Cancel and close form"
-              ></font-awesome-icon>
+            <button @click="cancelEdit" class="del tooltipContainer">
+              <font-awesome-icon :icon="['fa', 'times']"></font-awesome-icon>
+              <Tooltip :tooltipText="'Cancel and close form'" />
             </button>
           </header>
           <div class="editInner">
@@ -20,11 +18,11 @@
       </div>
     </transition>
     <!-- end modal -->
-    <h1 class="mg1">My Recipes</h1>
+    <h1 class="mg2" id="userRecipesHeading">Created Recipes</h1>
     <Loader :bigLoader="false" v-if="isLoading" />
     <NotFound
       v-if="!getCurrentUser.createdRecipes.length"
-      :message="noRecipes"
+      :message="`You haven't created any recipes yet`"
     />
     <div v-else class="listContainer flex flexCenter" id="listContainer">
       <SortingButtons
@@ -47,6 +45,16 @@
         />
       </transition-group>
     </div>
+    <a
+      v-if="getCurrentUser.createdRecipes.length > 4"
+      href="#userRecipesHeading"
+      v-scroll-to="'#userRecipesHeading'"
+      class="block hashLink mg2"
+      >Back to top &nbsp;<font-awesome-icon
+        :icon="['fa', 'hand-point-up']"
+        font-size="15px"
+      ></font-awesome-icon
+    ></a>
   </div>
 </template>
 
@@ -55,11 +63,11 @@ import { mapGetters } from 'vuex'
 import NotFound from '../sharedComponents/NotFound'
 import Loader from '../sharedComponents/Loader'
 import SortingButtons from '../sharedComponents/SortingButtons'
+import Tooltip from '../sharedComponents/Tooltip'
 import loaderMixin from '../../mixins/loaderMixin'
 import sortingResults from '../../mixins/sortingResults'
+import apiCalls from '../../mixins/apiCalls'
 import Recipe from './Recipe'
-import axios from 'axios'
-import { recipesUrl } from '../../apiData'
 import CreateEditForm from '../sharedComponents/CreateEditForm'
 
 export default {
@@ -70,28 +78,24 @@ export default {
     Loader,
     Recipe,
     SortingButtons,
-    CreateEditForm
+    CreateEditForm,
+    Tooltip
   },
 
   data() {
     return {
-      noRecipes: `You haven't created any recipes yet`,
       fetchedRecipes: [],
       usersRecipes: true
     }
   },
 
-  mixins: [loaderMixin, sortingResults],
+  mixins: [loaderMixin, sortingResults, apiCalls],
 
   computed: {
     ...mapGetters(['getCurrentUser', 'getEditState'])
   },
 
   mounted() {
-    this.$scrollTo('#routerViewContainer', 200, {
-      easing: 'linear',
-      offset: 0
-    })
     this.currentUserRecipes()
   },
 
@@ -102,10 +106,10 @@ export default {
           return
         }
         this.toggleLoader()
-        const result = await axios.get(`${recipesUrl}`, {
-          params: { author: this.getCurrentUser.userId }
+        const result = await this.fetchDbRecipes({
+          author: this.getCurrentUser.userId
         })
-        this.fetchedRecipes = [...result.data.response.recipes]
+        this.fetchedRecipes = [...result.resultsArray]
         this.toggleLoader()
       } catch (error) {
         console.log(error.response.data.message)
@@ -115,10 +119,6 @@ export default {
     async cancelEdit() {
       try {
         await this.$store.dispatch('changeEditState', false)
-        this.$scrollTo('#routerViewContainer', 200, {
-          easing: 'linear',
-          offset: 0
-        })
       } catch (error) {
         console.log(error)
       }
@@ -142,15 +142,19 @@ export default {
 
 <style lang="scss" scoped>
 .userRecipes {
-  @include boxSize($width: 100%);
-  @include alignment($direction: column);
-  background-color: rgb(250, 221, 226);
-  background: $palePinkGray;
-  // border-top: 2px solid rgb(233, 231, 231);
+  @include boxSize($width: 100%, $height: 100%);
+  @include alignment($direction: column, $align: center);
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    #f2edc163 0%,
+    #f7eb7463 90.1%
+  );
 
   h1 {
     font-family: 'Lobster', cursive;
     color: lighten($graphite, 20%);
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+      0px -1px 0px rgba(0, 0, 0, 0.7);
   }
   .listContainer {
     @include alignment($direction: column);
@@ -159,6 +163,27 @@ export default {
 
 @media (min-width: 992px) {
   .userRecipes {
+    @include background(
+      radial-gradient(
+        ellipse at center,
+        rgba(41, 35, 35, 0.4) 0%,
+        rgba(27, 26, 26, 0.5) 100%
+      ),
+      url('../../assets/backgrounds/pestle-and-mortar.jpg'),
+      $backConfig
+    );
+    background-attachment: fixed;
+
+    h1 {
+      @include fonts($size: 2.2rem, $color: $light);
+    }
+
+    .hashLink {
+      color: #7cffee;
+      padding: 0.8rem;
+      border: 1px solid #7cffee;
+    }
+
     .listContainer {
       @include alignment($direction: column);
       @include boxSize($width: 900px);

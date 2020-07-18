@@ -139,7 +139,8 @@ nav {
       li {
         @include boxSize($width: 100%);
         border-bottom: 1px solid #fff;
-        &:nth-of-type(2), &:nth-of-type(3) {
+        &:nth-of-type(2),
+        &:nth-of-type(3) {
           border-left: 0;
           border-right: 0;
         }

@@ -2,7 +2,7 @@
   <div class="searchContainer flex mgt2" id="searchContainer">
     <!-- basic Form -->
     <form class="basicForm flex flexCenter mg1">
-      <h3 class="lightItalic pd1">Find Recipes</h3>
+      <h3 class="pd1">Search Recipes</h3>
       <div class="basicSearchBox flex mg1">
         <input type="text" v-model="searchValue" placeholder="Search..." />
         <button @click.prevent="findRecipes(configBasicParams())" type="submit">
@@ -19,9 +19,9 @@
       />
     </form>
     <!-- optional form -->
-    <form class="optionalForm flex flexCenter mg1">
-      <h3 class="lightItalic pd1">Search by Categories</h3>
-      <div>
+    <form class="optionalForm mg1">
+      <h3 class="pd1">Search By Categories</h3>
+      <div class="dishTypes">
         <label for="dishType">Dish type</label>
         <Select
           :options="dishTypeOptions"
@@ -30,7 +30,7 @@
           id="dishType"
         />
       </div>
-      <div>
+      <div class="difficulty">
         <label for="">Difficulty</label>
         <Select
           :options="difficultyOptions"
@@ -171,17 +171,18 @@ export default {
       return this.queryParams
     },
 
-    // call with query params
+    // api call with query params
     async findRecipes(params) {
-      //console.log(params)
       try {
         await this.$store.dispatch('fetchQueriedRecipes', params)
-        // console.log(this.getQueriedRecipes)
         this.queryParams = {}
         if (this.renderPage) {
           this.$router.push({ name: 'render_results' })
         } else {
-          this.$scrollTo('#searchResults', 200, { easing: 'linear', offset: -10 })
+          this.$scrollTo('#searchResults', 200, {
+            easing: 'linear',
+            offset: -10
+          })
         }
       } catch (error) {
         console.log(error.message)
@@ -194,14 +195,13 @@ export default {
 <style lang="scss" scoped>
 .searchContainer {
   @include alignment($direction: column, $justify: center, $align: center);
-  grid-area: forms;
 }
 
 .searchContainer {
   @include boxSize($width: 100%);
-  flex: 1;
-  //overflow: auto;
-
+  h3 {
+    color: $golden;
+  }
   form {
     @include alignment($direction: column);
     @include boxSize($width: 100%);
@@ -229,7 +229,13 @@ export default {
   }
 
   .optionalForm {
-    @include alignment($textAlign: left);
+    @include alignment(
+      $display: flex,
+      $direction: column,
+      $justify: center,
+      $align: center,
+      $textAlign: left
+    );
 
     // checkboxes style
     label {
@@ -247,18 +253,72 @@ export default {
 
 @media (min-width: 992px) {
   .searchContainer {
-    @include boxSize($width: 100%);
-    @include alignment($direction: row, $align: flex-start);
+    @include boxSize($width: 900px);
+    @include alignment($align: flex-start);
+    margin: 2rem 0;
 
-    form {
-      @include boxSize($width: 450px);
+    .basicForm,
+    .optionalForm {
+      padding: 1rem;
+      width: 100%;
+      box-shadow: 0 4px 9px 0 rgba(41, 40, 40, 0.08),
+        0 3px 10px 0 rgba(0, 0, 0, 0.41);
+    }
+
+    .basicForm {
+      @include alignment($direction: row, $justify: space-evenly);
+      margin: 0 0 2rem 0;
+      .basicSearchBox {
+        order: 3;
+      }
+
+      .selectBox {
+        order: 2;
+        grid-area: selectBox;
+        margin: 0;
+      }
+    }
+
+    .optionalForm {
+      @include alignment(
+        $display: grid,
+        $justify: unset,
+        $justifyGrid: center,
+        $textAlign: left
+      );
+      margin: 0;
+      grid-template-columns: repeat(3, auto);
+      grid-template-rows: repeat(3, auto);
+      grid-template-areas: 'title title title' 'dishTypes difficulty checkBoxes' 'btn btn btn';
+
+      h3 {
+        grid-area: title;
+      }
+      .dishTypes {
+        grid-area: dishTypes;
+      }
+
+      .difficulty {
+        grid-area: difficulty;
+      }
+
+      .checkBoxes {
+        grid-area: checkBoxes;
+        margin: 0.6rem 0 0 0;
+      }
+
+      button {
+        grid-area: btn;
+        @include fonts($size: 1.1rem, $weight: 700);
+        letter-spacing: 0.2rem;
+      }
     }
   }
 }
 
 @media (min-width: 1200px) {
   .searchContainer {
-    @include boxSize($width: 1100px);
+    //@include boxSize($width: 1100px);
     @include alignment($justify: space-evenly, $align: flex-start);
   }
 }

@@ -8,6 +8,7 @@ import SingleResult from './views/SingleResult'
 import RenderResults from './views/RenderResults'
 // UserPanel & children
 import UserPanel from './views/UserPanel'
+import UserProfile from './components/UserPanel/UserProfile'
 import UserRecipes from './components/UserPanel/UserRecipes'
 import CreateRecipe from './components/UserPanel/CreateRecipe'
 import SavedRecipes from './components/UserPanel/SavedRecipes'
@@ -43,9 +44,14 @@ let router = new Router({
     },
     {
       path: '/userpanel',
-      name: 'userpanel',
+      //name: 'userpanel',
       component: UserPanel,
       children: [
+        {
+          path: '',
+          name: 'user_profile',
+          component: UserProfile
+        },
         {
           path: '/userpanel/user_recipes',
           name: 'user_recipes',

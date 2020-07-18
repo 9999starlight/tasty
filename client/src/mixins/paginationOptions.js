@@ -2,7 +2,6 @@ const paginationOptions = {
   data() {
     return {
       currentPage: 1
-      // resultsPerPage: 2
     }
   },
 
@@ -20,7 +19,6 @@ const paginationOptions = {
   methods: {
     changePage(num) {
       this.currentPage = num
-      // console.log(this.currentPage)
     },
 
     nextPage(pageNumbers) {

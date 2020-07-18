@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
+  <div class="container renderResults">
     <transition name="slide-down" mode="out-in">
       <Forms v-show="getOpenSearch" :renderPage="false" />
     </transition>
-    <QueryResults />
+    <QueryResults id="searchResults" />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getOpenSearch'])
+    ...mapGetters(['getOpenSearch', 'getQueriedRecipes'])
   },
 
   methods: {
@@ -35,4 +35,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.renderResults {
+  justify-content: flex-start;
+}
+</style>

@@ -1,21 +1,21 @@
 <template>
   <div class="homeContainer container" id="homeContainer">
-    <Tags />
     <transition name="slide-down" mode="out-in">
-      <Forms class="browse" v-show="getOpenSearch" />
+      <Forms v-show="getOpenSearch" />
     </transition>
     <Popular />
+    <Tags />
     <LatestRecipes />
     <Recommended />
     <a
-          href="#homeContainer"
-          v-scroll-to="'#homeContainer'"
-          class="block hashLink mg1"
-          >Back to top &nbsp;<font-awesome-icon
-            :icon="['fa', 'hand-point-up']"
-            font-size="15px"
-          ></font-awesome-icon
-        ></a>
+      href="#homeContainer"
+      v-scroll-to="'#homeContainer'"
+      class="block hashLink mg2"
+      >Back to top &nbsp;<font-awesome-icon
+        :icon="['fa', 'hand-point-up']"
+        font-size="15px"
+      ></font-awesome-icon
+    ></a>
   </div>
 </template>
 
@@ -54,8 +54,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.browse {
-  height: 350px;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -1,12 +1,7 @@
 <template>
-  <div class="popularWrapper flex mgt1">
-    <h1 class="slim">Highest rated recipes</h1>
-    <div
-      v-if="this.ready"
-      class="carouselContainer center"
-      @mouseenter="stopSlider"
-      @mouseleave="slideInit"
-    >
+  <div class="popularWrapper flex mgt2">
+    <div v-if="this.ready" class="carouselContainer center">
+      <h3 class="flex flexCenter">Highest rated recipes</h3>
       <button class="carouselBtn btnLeft" @click="previousRecipe">
         &nbsp;<font-awesome-icon
           :icon="['fa', 'chevron-circle-left']"
@@ -21,7 +16,12 @@
           class="arrows"
         ></font-awesome-icon>
       </button>
-      <PopularSlide v-bind:recipe="recipesArray[currentRecipe]" ref="slide" />
+      <PopularSlide
+        v-bind:recipe="recipesArray[currentRecipe]"
+        ref="slide"
+        @pauseSlides="stopSlider"
+        @resumeSlides="slideInit"
+      />
       <div class="carouselNav mgt1" ref="dots">
         <button
           @click="moveToSlide(index)"
@@ -122,16 +122,20 @@ export default {
 .popularWrapper {
   @include boxSize($width: 100%);
   @include alignment($direction: column, $textAlign: center);
-  grid-area: popular;
-
-  h1 {
-    padding: 0 2rem 2rem;
-  }
 
   .carouselContainer {
     position: relative;
     @include boxSize($width: 100%);
-
+    h3 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(29, 28, 28, 0.664);
+      @include fonts($color: $light, $weight: 100, $size: 1rem);
+      @include boxSize($height: 60px);
+      z-index: 1;
+      padding: 0.8rem;
+    }
     .carouselBtn {
       cursor: pointer;
       font-size: 30px;
@@ -190,7 +194,14 @@ export default {
   }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
+  .popularWrapper {
+    .carouselContainer {
+      h3 {
+        @include fonts($size: 1.3rem);
+      }
+    }
+  }
   .altImage {
     @include boxSize($height: 400px);
   }

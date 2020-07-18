@@ -25,8 +25,10 @@
           selected = option
           open = false
         "
-
-        @keydown.enter.prevent="selected = option; open = false"
+        @keydown.enter.prevent="
+          selected = option
+          open = false
+        "
         :class="{ 'active-option': currentItem === index }"
       >
         {{ option }}
@@ -98,10 +100,8 @@ export default {
 
   .selected {
     @include boxSize($height: 2rem);
-    //background-color: $midTextColor;
     background: $darkSteel;
     border-radius: 6px;
-    //border: 1px solid #423f37ef;
     padding-left: 0.5rem;
     cursor: pointer;
     user-select: none;
@@ -124,7 +124,6 @@ export default {
     max-height: 120px;
     overflow-y: auto;
     position: absolute;
-    //background-color: $midTextColor;
     background: $darkSteel;
     left: 0;
     right: 0;
@@ -136,7 +135,6 @@ export default {
       user-select: none;
     }
     .active-option {
-      // background-color: lighten($midTextColor, 10%);
       background: #7a7b7a;
     }
     .option:hover {

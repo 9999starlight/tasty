@@ -73,7 +73,6 @@
             min="1"
             v-model.number="timing"
             id="timing"
-            title="Preparation time in minutes"
             @blur="validateTiming"
           />
           <button @click.prevent="timing++" class="plusMinus">
@@ -102,7 +101,6 @@
             min="1"
             id="persons"
             required
-            title="Amount is enough for entered number of persons"
             @blur="validatePersons"
           />
           <button @click.prevent="persons++" class="plusMinus">
@@ -120,8 +118,7 @@
           v-model="regional"
           type="text"
           id="regional"
-          placeholder="Regional"
-          title="Enter country or region"
+          placeholder="Enter country or region"
         />
         <!-- checkBoxes -->
         <div class="checkBoxes flex">
@@ -172,14 +169,17 @@
           <p v-if="getEditState && getSingleRecipe.image === undefined">
             No current image
           </p>
-          <!-- </div> -->
         </div>
         <label for="file" class="block">Select recipe image</label>
         <div class="uploadBtnWrapper">
           <input type="file" ref="recipeImage" @change="selectRecipeImage" />
-          <button class="chooseImage add">Choose image</button>
+          <button class="add">Browse image</button>
         </div>
-        <button @click.prevent="removeSelectedImage" class="remove">
+        <button
+          v-if="preview"
+          @click.prevent="removeSelectedImage"
+          class="remove"
+        >
           Cancel
         </button>
         <div class="small">
@@ -206,9 +206,8 @@
             >
             <input
               type="text"
-              placeholder="At least one ingredient required"
+              placeholder="Enter ingredient"
               required
-              title="Enter ingredient"
               :id="'ingred' + index"
               v-model="ingred.ingredient"
               @blur="validateIngredients"
@@ -217,13 +216,12 @@
             <input
               type="text"
               :id="'amount' + index"
-              placeholder="Ingredient Amount"
-              title="Enter amount of this ingredient"
+              placeholder="Enter amount of this ingredient"
               v-model="ingred.amount"
             />
             <button
               @click.prevent="removeIngredient(index)"
-              class="remove mgt1"
+              class="remove mgt1 tooltipContainer"
               :disabled="ingredients.length === 1"
             >
               Remove
@@ -231,15 +229,20 @@
                 :icon="['fa', 'minus']"
                 class="icons"
               ></font-awesome-icon>
+              <Tooltip
+                v-if="ingredients.length !== 1"
+                :tooltipText="'Remove this ingredient'"
+              />
             </button>
           </div>
         </transition-group>
-        <button @click="addIngredient" class="mgt1 add">
+        <button @click="addIngredient" class="mgt1 add tooltipContainer">
           Add
           <font-awesome-icon
             :icon="['fa', 'plus']"
             class="icons"
           ></font-awesome-icon>
+          <Tooltip :tooltipText="'Add new ingredient'" />
         </button>
         <div class="warnWrapper">
           <p class="warn" v-show="!ingredientsWarn">
@@ -265,27 +268,31 @@
               :id="'step' + index"
               required
               v-model="st.step"
-              placeholder="At least one preparation step required"
-              title="Enter the step of preparation"
+              placeholder="Enter the step of preparation"
               @blur="validateSteps"
             ></textarea>
             <button
               @click.prevent="removeStep(index)"
               :disabled="steps.length === 1"
-              class="remove mgt1"
+              class="remove mgt1 tooltipContainer"
             >
               Remove<font-awesome-icon
                 :icon="['fa', 'minus']"
                 class="icons"
               ></font-awesome-icon>
+              <Tooltip
+                v-if="steps.length !== 1"
+                :tooltipText="'Remove this step'"
+              />
             </button>
           </div>
         </transition-group>
-        <button @click="addStep" class="mgt1 add">
+        <button @click="addStep" class="mgt1 add tooltipContainer">
           Add<font-awesome-icon
             :icon="['fa', 'plus']"
             class="icons"
           ></font-awesome-icon>
+          <Tooltip :tooltipText="'Add preparation step'" />
         </button>
         <div class="warnWrapper">
           <p class="warn" v-show="!stepsWarn">
@@ -320,6 +327,7 @@ import { mapGetters } from 'vuex'
 import Select from './Select'
 import InfoMessage from './InfoMessage'
 import Loader from './Loader'
+import Tooltip from './Tooltip'
 import fileValidation from '../../mixins/fileValidation'
 import loaderMixin from '../../mixins/loaderMixin'
 import axios from 'axios'
@@ -330,7 +338,8 @@ export default {
   components: {
     Select,
     InfoMessage,
-    Loader
+    Loader,
+    Tooltip
   },
 
   data() {

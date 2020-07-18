@@ -106,6 +106,7 @@ export default {
 .addComment {
   @include alignment($direction: column, $align: center);
   @include boxSize($maxWidth: 280px);
+
   margin: auto;
   form {
     @include boxSize($width: 100%);
@@ -116,6 +117,7 @@ export default {
     @include boxSize($width: 100%, $height: 120px);
     border: 1px solid lightgray;
     padding: 0.8rem;
+    font-size: 0.9rem;
     &:focus {
       outline: 1px solid rgb(158, 192, 90);
     }
@@ -133,7 +135,7 @@ export default {
   .addComment {
     @include boxSize($maxWidth: 400px);
     button {
-      @include boxSize($maxWidth: 400px);
+      @include boxSize($maxWidth: 400px, $height: 2.5rem);
     }
   }
 }

@@ -327,7 +327,7 @@ export default {
 
 @media (min-width: 768px) {
   .overview/* ,
-  .loaderContainer  */{
+  .loaderContainer  */ {
     margin-top: 0;
     @include boxSize($width: calc(100% - 4rem));
     align-self: flex-end;
@@ -345,7 +345,7 @@ export default {
     }
 
     .recipe:hover {
-      background-color: rgb(235, 235, 235);
+      background-color: rgba(243, 242, 242, 0.87);
     }
 
     .counts {

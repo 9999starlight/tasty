@@ -145,9 +145,21 @@ export default {
   .addRate {
     @include boxSize($height: 40px);
     @include fonts($color: $light);
-    background-color: lighten($graphite, 15%);
+    background-color: #485563;
+    background-image: linear-gradient(
+      220.3deg,
+      rgb(72, 85, 99) 8.8%,
+      rgb(127, 146, 166) 95.1%
+    );
     border-bottom: 1px solid lighten($graphite, 50%);
     cursor: pointer;
+    p {
+      text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.95),
+        0px -1px 0px rgba(55, 53, 53, 0.67);
+      span {
+        margin: 0 0 0.2rem 0.3rem;
+      }
+    }
   }
 
   .starRatingDropdown {
@@ -155,7 +167,12 @@ export default {
     position: absolute;
     top: 40px;
     @include boxSize($height: 40px);
-    background-color: lighten($graphite, 15%);
+    background-color: #485563;
+    background-image: linear-gradient(
+      220.3deg,
+      rgb(72, 85, 99) 8.8%,
+      rgb(127, 146, 166) 95.1%
+    );
 
     .stars {
       @include alignment($justify: space-evenly);
@@ -217,7 +234,7 @@ export default {
     .rateCounterWrapper {
       @include fonts($color: white, $size: 0.8rem);
       @include boxSize($width: 15%, $height: 100%);
-      background-color: lighten($graphite, 6%);
+      background-color: #485563;
     }
   }
 }
@@ -239,6 +256,14 @@ export default {
       .rateCounter {
         @include fonts($size: 1rem);
       }
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  .ratingWrapper {
+    .addRate:hover {
+      filter: brightness(90%);
     }
   }
 }

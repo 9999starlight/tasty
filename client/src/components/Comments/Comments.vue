@@ -1,7 +1,7 @@
 <template>
-  <section class="comments mgt2">
-    <h2 class="mgb1">Comments:</h2>
-    <h3 v-if="!comments.length" class="lightItalic mg1">Not Commented Yet</h3>
+  <section class="comments">
+    <h2 class="mgb2">Comments:</h2>
+    <h4 v-if="!comments.length" class="lightItalic mg1">Not Commented Yet</h4>
     <div
       v-for="singleComment in comments"
       :key="singleComment.index"
@@ -41,4 +41,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+h2 {
+  color: darken($golden, 5%);
+}
+</style>

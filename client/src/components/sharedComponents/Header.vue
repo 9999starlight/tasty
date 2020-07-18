@@ -4,6 +4,10 @@
       :class="displayMenu && burgerIcon ? 'filter open' : 'filter'"
       @click.self="showMenu"
     ></div>
+    <div
+      :class="showDropdown ? 'dropdownOverlay' : ''"
+      @click.self="showDropdown = false"
+    ></div>
     <div class="menuWrapper flex">
       <router-link :to="{ name: 'home' }" class="flex">
         <h2
@@ -45,21 +49,13 @@
           exact
           ><a>Home</a></router-link
         >
-        <!-- <router-link
-          :to="{ name: 'browse' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>Recipes</a></router-link
-        > -->
-        <!-- if loggedIn -->
-        <router-link
+        <!-- dropdown user menu -->
+        <li
           v-if="getIsLogged"
-          :to="{ name: 'userpanel' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a>
+          class="userPanelMenu"
+          @click="showDropdown = !showDropdown"
+        >
+          <span class="flex flexCenter">
             <img
               v-if="getCurrentUser.user_image"
               :src="getCurrentUser.user_image"
@@ -73,9 +69,69 @@
             {{ getCurrentUser.username }}
             <font-awesome-icon
               :icon="['fa', 'chevron-down']"
-              class="arrowDown"
-            ></font-awesome-icon> </a
-        ></router-link>
+              :class="showDropdown ? 'arrowDown rotate' : 'arrowDown'"
+            ></font-awesome-icon>
+          </span>
+          <transition name="slide-menu" mode="out-in">
+            <ul class="userDropdown" v-show="showDropdown">
+              <router-link
+                :to="{ name: 'user_profile' }"
+                tag="li"
+                active-class="active"
+                exact
+                class="flex"
+                ><a
+                  ><font-awesome-icon
+                    :icon="['fa', 'user']"
+                    class="userIcon"
+                  ></font-awesome-icon
+                  >&nbsp;Profile</a
+                ></router-link
+              >
+              <router-link
+                :to="{ name: 'user_recipes' }"
+                tag="li"
+                active-class="active"
+                exact
+                class="flex"
+                ><a
+                  ><font-awesome-icon
+                    :icon="['fa', 'book']"
+                    class="userIcon"
+                  ></font-awesome-icon
+                  >&nbsp;My recipes</a
+                ></router-link
+              >
+              <router-link
+                :to="{ name: 'create_recipe' }"
+                tag="li"
+                active-class="active"
+                class="flex"
+                ><a
+                  ><font-awesome-icon
+                    :icon="['fa', 'edit']"
+                    class="userIcon"
+                  ></font-awesome-icon
+                  >&nbsp;Create recipe</a
+                ></router-link
+              >
+              <router-link
+                :to="{ name: 'saved_recipes' }"
+                tag="li"
+                active-class="active"
+                class="flex"
+                ><a
+                  ><font-awesome-icon
+                    :icon="['fa', 'heart']"
+                    class="userIcon"
+                  ></font-awesome-icon
+                  >&nbsp;Saved recipes</a
+                ></router-link
+              >
+            </ul>
+          </transition>
+        </li>
+        <!-- end dropdown -->
         <router-link
           v-if="authAdmin == true"
           :to="{ name: 'overview' }"
@@ -125,7 +181,8 @@ export default {
   data() {
     return {
       displayMenu: false,
-      burgerIcon: true
+      burgerIcon: true,
+      showDropdown: false
     }
   },
 
@@ -148,7 +205,6 @@ export default {
   },
 
   computed: {
-    //...mapState(['openSearch']),
     ...mapActions(['logoutUser']),
     ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
 
@@ -165,7 +221,7 @@ export default {
     ...mapMutations(['setOpenSearch']),
     setOpenSearch() {
       this.$store.commit('setOpenSearch')
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0)
     },
 
     onResize() {
@@ -198,18 +254,18 @@ header {
   z-index: 7;
   box-shadow: $shadowSmall;
 
-  filter {
-    position: absolute;
-    background-color: rgba(15, 15, 15, 0.959);
-  }
-
-  .open {
+  .open,
+  .dropdownOverlay {
     @include boxSize($width: 100%, $minHeight: 100vh);
     top: 0;
     left: 0;
     position: absolute;
     z-index: 2;
-    background: rgba(15, 15, 15, 0.849);
+    background: rgba(15, 15, 15, 0.9);
+  }
+
+  .dropdownOverlay {
+    background-color: transparent;
   }
 
   .menuWrapper {
@@ -218,8 +274,9 @@ header {
 
     h2 {
       padding-left: 0.8rem;
-      font-family: 'Berkshire Swash', 'Lobster', 'Poppins', cursive;
+      font-family: 'Berkshire Swash', 'Lobster', cursive;
       @include fonts($size: 2rem, $color: lighten($graphite, 10%));
+
       img {
         height: 45px;
         margin-right: 5px;
@@ -302,20 +359,9 @@ header {
         @include alignment($display: flex, $align: center);
       }
 
-      img {
-        display: inline-block;
-        @include boxSize($width: 20px, $height: 20px);
-        border-radius: 50%;
-        margin-right: 10px;
-      }
-
-      .arrowDown {
-        margin-left: 0.4rem;
-        @include fonts($size: 0.8rem, $color: gray);
-      }
-
       .userIcon {
         margin-right: 0.3rem;
+        color: whitesmoke;
       }
 
       button {
@@ -327,6 +373,45 @@ header {
 
     .links {
       @include boxSize($width: 100%);
+    }
+
+    // dropdown
+    .userPanelMenu {
+      color: $light;
+      position: relative;
+      cursor: pointer;
+      span {
+        padding: 0.8rem;
+        justify-content: flex-start;
+
+        img {
+          display: inline-block;
+          @include boxSize($width: 20px, $height: 20px);
+          border-radius: 50%;
+          margin-right: 10px;
+        }
+
+        .arrowDown {
+          margin-left: 0.5rem;
+          @include fonts($size: 0.8rem, $color: gray);
+
+          &.rotate {
+            transform: rotate(180deg);
+            transition: 0.5s;
+          }
+        }
+      }
+    }
+    .userDropdown {
+      position: relative;
+      transition: all 0.2s ease;
+      left: 0;
+      z-index: 5;
+      width: 100%;
+      li {
+        z-index: 5;
+        padding: 0;
+      }
     }
   }
 }
@@ -364,22 +449,44 @@ header {
           padding: 0 0.5rem;
           width: initial;
 
+          .userIcon {
+            color: lighten($graphite, 20%);
+          }
+
           &.active {
             background-color: transparent;
-            border-bottom: 2px solid rgba(250, 128, 114, 0.705);
+            border-bottom: 2px solid $lightOrange;
           }
 
           &:hover {
-            background-color: transparent;
-          }
-          a:hover {
-            color: rgba(250, 128, 114, 0.452);
+            background-color: $light;
+            color: $golden;
           }
           a,
           button {
-            color: black;
+            color: lighten($graphite, 5%);
             margin: 0;
           }
+          a:hover,
+          button:hover {
+            color: $golden;
+          }
+        }
+      }
+
+      .userPanelMenu {
+        color: $graphite;
+        display: flex;
+      }
+      .userDropdown {
+        position: absolute;
+        box-shadow: $shadowSmall;
+        top: 48px;
+        min-width: 170px;
+        li a {
+          background-color: $light;
+          color: $graphite;
+          border-bottom: 1px solid lightgray;
         }
       }
     }
