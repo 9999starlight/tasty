@@ -2,38 +2,35 @@
   <div
     class="selectBox"
     tabindex="0"
-    @blur="open = false"
-    @keydown.esc.exact.prevent="open = false"
-    @keydown.enter.exact.prevent="open = true"
+    @blur="closeMenu"
+    @keydown.esc.exact.prevent="closeMenu"
     @keydown.up.prevent="previousItem"
     @keydown.down.prevent="nextItem"
-    @focusout="$emit('checkValue')"
+    v-on="open ? { keydown: selectOnEnter } : { keydown: openMenu }"
   >
-    <div class="selected" :class="{ open: open }" @click="toggleOpen">
+    <div
+      class="selected"
+      :class="{ open: open }"
+      v-on="{ click: open ? closeMenu : openMenu }"
+    >
       {{ selected }}
       <font-awesome-icon
         :icon="['fa', 'chevron-down']"
         class="arrows"
       ></font-awesome-icon>
     </div>
-    <div class="options" v-show="open" ref="options">
-      <div
+    <ul class="options" v-show="open" ref="options">
+      <li
+        ref="singleOption"
         class="option"
         v-for="(option, index) of options"
         :key="index"
-        @click="
-          selected = option
-          open = false
-        "
-        @keydown.enter.prevent="
-          selected = option
-          open = false
-        "
-        :class="{ 'active-option': currentItem === index }"
+        @click="selectItem(option)"
+        :class="[currentItem === index ? 'active-option' : '']"
       >
         {{ option }}
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -59,30 +56,58 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getEditState'])
+    ...mapGetters(['getEditState']),
+
+    // calculate item height to scroll current item into view
+    scrollItemHeight() {
+      return this.$refs.singleOption[this.currentItem].clientHeight
+    }
   },
 
   methods: {
-    toggleOpen() {
-      this.open = !this.open
+    // open menu on click or pressing enter or space key
+    openMenu(event) {
+      if (
+        event.type === 'click' ||
+        event.keyCode === 13 ||
+        event.keyCode === 32
+      ) {
+        event.preventDefault()
+        this.open = true
+      }
+    },
+
+    closeMenu() {
+      this.open = false
+      this.currentItem = 0
+    },
+
+    selectItem(option) {
+      this.selected = option
+      this.closeMenu()
+    },
+    // press on enter key for select the option
+    selectOnEnter(event) {
+      if (event.keyCode === 13) {
+        this.selected = this.$refs.options.children[this.currentItem].innerText
+        // this.selected = this.options[this.currentItem]
+        this.closeMenu()
+      }
     },
 
     nextItem() {
       if (this.currentItem < this.$refs.options.children.length - 1) {
-        // event.preventDefault();
+        this.$refs.options.scrollTop = this.scrollItemHeight * this.currentItem
         this.currentItem++
       }
-      /* if (event.keyCode === 38 && this.currentItem > 0) {
-        event.preventDefault();
-        this.currentItem--
-      } else if (event.keyCode === 40 && this.currentItem < this.$refs.options.children.length - 1) {
-        event.preventDefault();
-        this.currentItem++
-      } */
     },
+
     previousItem() {
-      if (this.currentItem > 0) {
-        // event.preventDefault();
+      if (this.currentItem === 0) {
+        this.$refs.options.scrollTop = this.currentItem
+      } else {
+        this.$refs.options.scrollTop =
+          this.scrollItemHeight * (this.currentItem - 1)
         this.currentItem--
       }
     }
@@ -135,10 +160,10 @@ export default {
       user-select: none;
     }
     .active-option {
-      background: #7a7b7a;
+      background-color: lighten($graphite, 40%);
     }
     .option:hover {
-      background-color: lighten(#7a7b7a, 8%);
+      color: lighten($golden, 20%);
     }
   }
 }
