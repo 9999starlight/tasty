@@ -109,10 +109,8 @@ a {
 .btnAction {
   @include boxSize($width: 260px, $height: 2rem);
   display: inline-block;
-  // background-image: linear-gradient(to top, #44a8c9 0%, #76a9b8 100%);
   background-color: #fbab7e;
   background: $orangeGradient;
-  /* background: linear-gradient(to bottom, #d66d75, #cf6161); */
   ;
   @include fonts($color: $light, $size: 1rem);
   border-radius: 6px;
@@ -136,14 +134,6 @@ a {
   object-fit: cover;
 }
 
-/* .error {
-  @include fonts($color: crimson, $size: 0.7rem);
-}
-
-.success {
-  @include fonts($color: green, $size: 0.7rem);
-}
- */
 .messageWrapper {
   @include boxSize($height: 40px);
   margin-top: 1rem;
@@ -153,27 +143,7 @@ a {
   color: crimson;
 }
 
-/* // scroll
-.scrolling {
-  scrollbar-width: thin;
-  scrollbar-color: lighten($graphite, 20%) lighten($graphite, 60%);
-
-  &::-webkit-scrollbar {
-    width: 11px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: lighten($graphite, 60%);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: lighten($graphite, 20%);
-    border-radius: 6px;
-    border: 3px solid lighten($graphite, 60%);
-  }
-} */
-
-// checkboxes, home page form, create/edit recipe form
+// checkboxes (home page form, create/edit recipe form)
 .checkBoxes {
   @include alignment($justify: space-around);
   @include boxSize($width: 260px);
@@ -282,7 +252,6 @@ small {
     @include boxSize($width: 100px, $height: 80px);
 
     img {
-      // @include boxSize($maxHeight: 100%, $width: 80px);
       box-shadow: $shadowSmall;
     }
 
@@ -355,7 +324,7 @@ small {
   transition: all 1s;
 }
 
-// animations transitions
+// animations & transitions
 
 // fade - views transition
 .fade-enter-active,
@@ -388,8 +357,7 @@ small {
   animation: slide-down 1s reverse;
 }
 
-// open/close user menu
-// open/close forms
+// open/close user menu, open/close forms
 .slide-menu-enter-active {
   animation: slide-down 0.3s;
 }
@@ -448,7 +416,6 @@ small {
 @media(min-width: 768px) {
 
   .modalWrapper {
-    // overflow: auto;
     @include boxSize($height: 600px, $width: 650px);
     flex-direction: column;
     justify-content: flex-start;

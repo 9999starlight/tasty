@@ -82,7 +82,6 @@ img {
       rgba(153, 102, 51, 1) 91%
     );
     box-shadow: $shadowBox;
-    // background-image: $zinc;
   }
 }
 

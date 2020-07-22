@@ -6,6 +6,7 @@ import Home from './views/Home'
 import Login from './views/Login'
 import SingleResult from './views/SingleResult'
 import RenderResults from './views/RenderResults'
+import ErrorPage from './views/ErrorPage'
 // UserPanel & children
 import UserPanel from './views/UserPanel'
 import UserProfile from './components/UserPanel/UserProfile'
@@ -18,7 +19,6 @@ import Overview from './components/AdminPanel/Overview'
 import AdminUsers from './components/AdminPanel/AdminUsers'
 import AdminRecipes from './components/AdminPanel/AdminRecipes'
 import AdminComments from './components/AdminPanel/AdminComments'
-import ErrorPage from './views/ErrorPage'
 
 Vue.use(Router)
 
@@ -44,7 +44,6 @@ let router = new Router({
     },
     {
       path: '/userpanel',
-      //name: 'userpanel',
       component: UserPanel,
       children: [
         {
@@ -107,7 +106,7 @@ let router = new Router({
       name: 'login',
       component: Login,
       beforeEnter(to, from, next) {
-        // check status, if logged in can't go to login page before logout
+        // check status, if logged in can't go to login page
         if (store.getters['getIsLogged'] == false) {
           next()
         } else {
@@ -153,7 +152,6 @@ router.beforeEach((to, from, next) => {
       })
     } else {
       let user = JSON.parse(localStorage.getItem('vuex'))
-      // console.log(user.currentUser.currentUser.isAdmin)
       if (to.matched.some((record) => record.meta.requiresAdmin)) {
         if (user.currentUser.currentUser.isAdmin == true) {
           next()

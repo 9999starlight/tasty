@@ -14,7 +14,6 @@ const actions = {
       const results = await axios.get(`${recipesUrl}`, {
         params: payload
       })
-      // console.log(results)
       let resultsArray = []
       if (!results.data.response.recipes.length) {
         commit('setQueriedRecipes', [])
@@ -26,13 +25,11 @@ const actions = {
       }
     } catch (error) {
       console.log(error.response.data.message)
-      //console.log(error.message)
     }
   },
 
   fetchSingleRecipe: async ({ commit }, id) => {
     try {
-      // console.log('client sends this id: ', id)
       const response = await axios.get(`${recipesUrl}/${id}`, {
         cancelToken: source.token,
         timeout: 5000
@@ -44,24 +41,20 @@ const actions = {
       }
       return response.data
     } catch (error) {
-       (thrown, error) => {
+       /* (thrown, error) => {
         if (axios.isCancel(thrown)) {
           console.log('Request canceled', thrown.message)
-        } else {
+        } else { */
           console.log(error.message)
           console.log(error.response.data.message)
-        }
-      }
+      /*   }
+      } */
     }
   },
 
   clearSingleRecipe({ commit }, payload) {
     commit('setSingleRecipe', payload)
   }
-
-  /* clearQuery({ commit }, payload) {
-    commit('setQueriedRecipes', payload)
-  } */
 }
 
 const mutations = {

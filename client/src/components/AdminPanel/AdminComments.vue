@@ -94,6 +94,7 @@
           />
         </div>
         <a
+          v-if="filteredComments.length > 5"
           href="#commentsHeading"
           v-scroll-to="'#commentsHeading'"
           class="block hashLink mg2"
@@ -204,7 +205,6 @@ export default {
         if (comments) {
           this.allComments = [...comments.commentsArray]
           this.commentsCount = comments.count
-          // console.log(this.commentsCount, this.allComments)
           this.toggleLoader()
         }
       } catch (error) {

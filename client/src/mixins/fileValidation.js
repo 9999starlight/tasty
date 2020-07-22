@@ -8,7 +8,6 @@ const fileValidation = {
   methods: {
     imageValidation(img) {
       const ext = img.type.split('/')
-      // console.log(ext[1])
       if (!ext[1].match(/jpg|jpeg|png|gif$/i)) {
         this.valMessage = 'Unsupported file type!'
         return false

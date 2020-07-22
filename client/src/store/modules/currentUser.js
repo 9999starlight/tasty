@@ -116,8 +116,6 @@ const getters = {
   }
 }
 
-// private helpers
-
 function userSettings(commit, token, user) {
   commit('setCurrentUser', user)
   commit('setUserToken', token)

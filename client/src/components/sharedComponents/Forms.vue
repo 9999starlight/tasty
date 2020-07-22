@@ -147,11 +147,11 @@ export default {
       if (this.basicSelected !== '') {
         if (this.basicSelected === 'title')
           this.queryParams['mealName'] = this.searchValue
-        if (this.basicSelected === 'ingredient')
+        if (this.basicSelected === 'ingredient') {
           this.queryParams['ingredients.ingredient'] = this.searchValue
-        if (this.basicSelected === 'regional')
-          this.queryParams['regional'] = this.searchValue
+        }
       }
+      console.log(this.queryParams)
       return this.queryParams
     },
 
@@ -318,7 +318,6 @@ export default {
 
 @media (min-width: 1200px) {
   .searchContainer {
-    //@include boxSize($width: 1100px);
     @include alignment($justify: space-evenly, $align: flex-start);
   }
 }

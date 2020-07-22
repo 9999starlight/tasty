@@ -85,10 +85,10 @@ export default {
               commentBody: this.commentText
             })
             if (response.data) {
-              // console.log(response.data)
               this.messageStatus = true
               this.updateMessage('Comment posted successfully!')
               this.$emit('commentAdded')
+              this.commentText = ''
             }
           }
         }

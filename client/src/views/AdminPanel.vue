@@ -45,11 +45,5 @@ export default {
   .adminContainer {
     padding: 2rem 1rem 1rem 0;
   }
-/* 
-  .loaderContainer {
-    margin-top: auto 0;
-    @include boxSize($width: calc(100% - 4rem));
-    align-self: flex-end;
-} */
 }
 </style>

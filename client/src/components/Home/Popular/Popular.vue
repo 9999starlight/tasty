@@ -162,7 +162,6 @@ export default {
     }
   }
   .carouselNav {
-    /* background: pink; */
     display: flex;
     justify-content: center;
     padding: 1rem 0;

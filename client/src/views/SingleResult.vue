@@ -162,7 +162,7 @@
             :key="ingred.index"
             class="mgb1"
           >
-            {{ ingred.ingredient }} <span>{{ ingred.amount }}</span>
+            {{ ingred.ingredient }} <span>- {{ ingred.amount }}</span>
           </li>
         </ul>
       </section>
@@ -326,7 +326,6 @@ export default {
         )
         if (result) {
           this.resultRecipe = Object.assign({}, this.getSingleRecipe)
-          console.log(result)
           this.updateMessageStatus(true)
           this.updateMessage('Recipe has been rated')
         }
@@ -675,6 +674,14 @@ export default {
     .directions {
       grid-area: directions;
       padding: 0.8rem 0 0.8rem 1.4rem;
+
+      ol li {
+        line-height: 1.5;
+
+        p {
+          line-height: 1.8;
+        }
+      }
     }
 
     .comments {

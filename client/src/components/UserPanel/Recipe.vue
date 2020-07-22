@@ -119,7 +119,6 @@ export default {
         if (confirm('Are you sure you want to delete this recipe?')) {
           const response = await axios.delete(`${recipesUrl}/${recipeId}`)
           if (response) {
-            console.log(response.data)
             this.$store.dispatch('updateUser', response.data.userUpdate)
             this.$emit('del')
           }

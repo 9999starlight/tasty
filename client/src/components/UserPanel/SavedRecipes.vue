@@ -27,7 +27,7 @@
       </transition-group>
     </div>
     <a
-      v-if="getCurrentUser.favorites.length > 4"
+      v-if="getCurrentUser.favorites.length > 5"
       href="#savedRecipesHeading"
       v-scroll-to="'#savedRecipesHeading'"
       class="block hashLink mg2"

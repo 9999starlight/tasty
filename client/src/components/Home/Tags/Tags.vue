@@ -15,7 +15,6 @@
         class="arrows"
       ></font-awesome-icon>
     </button>
-    <!-- <h3 class="lightItalic">Popular Categories</h3> -->
     <div
       :class="[
         moveLeft
@@ -134,7 +133,6 @@ export default {
   @include boxSize($width: 100vw, $height: 9rem);
 
   h2 {
-    //font-family: "Berkshire Swash", "Lobster", "Poppins", cursive;
     color: #a3865b;
   }
 

@@ -142,6 +142,7 @@
           />
         </div>
         <a
+          v-if="filteredRecipes.length >= 5"
           href="#recipesHeading"
           v-scroll-to="'#recipesHeading'"
           class="block hashLink mg1"
@@ -188,7 +189,6 @@ export default {
 
   data() {
     return {
-      //ready: false,
       allRecipes: [],
       recipesCount: 0,
       adminRecipesOptions: ['Meal Name', 'User', 'Recipe ID'],
@@ -312,11 +312,9 @@ export default {
 
     async deleteRecipe(recipeId) {
       try {
-        // console.log(recipeId)
         if (confirm('Are you sure you want to delete this recipe?')) {
           const response = await axios.delete(`${recipesUrl}/${recipeId}`)
           if (response) {
-            console.log(response.data)
             this.recipeFetch()
           }
         }
@@ -378,14 +376,12 @@ export default {
   }
 
   .allRecipesContainer {
-    // overflow: auto;
     @include boxSize($height: calc(100% - 100px));
     padding: 0.5rem;
   }
   .recipeSingle {
     @include boxSize($width: 100%);
     @include alignment($align: center, $textAlign: left);
-    // border-bottom: 1px solid lighten($graphite, 40%);
     box-shadow: $shadowBox;
     color: $graphite;
     grid-template-rows: repeat(5, auto);

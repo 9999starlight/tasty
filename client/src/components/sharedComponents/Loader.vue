@@ -33,7 +33,6 @@ export default {
 
   &.small {
     font-size: 6px;
-    //margin: 1rem;
   }
   &.large {
     font-size: 15px;

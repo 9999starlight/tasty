@@ -13,7 +13,7 @@ exports.getAllComments = async (req, res, next) => {
       ...req.query
     }
     // copy query object and then exclude fields
-    const excludedFields = ['page', 'sort', 'limit', 'fields']
+    const excludedFields = ['sort']
     excludedFields.forEach((el) => delete queryObj[el])
     let query = Comment.find(queryObj)
 
@@ -169,4 +169,3 @@ exports.deleteSingleComment = async (req, res, next) => {
     })
   }
 }
-

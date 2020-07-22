@@ -30,7 +30,7 @@
         @last="lastPage"
       />
       <a
-        v-if="getSuccess === true"
+        v-if="getSuccess === true && currentRecipes.length > 5"
         href="#searchHeading"
         v-scroll-to="'#searchHeading'"
         class="block hashLink mg2"

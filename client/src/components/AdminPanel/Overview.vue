@@ -135,14 +135,12 @@ export default {
         const sortedByComments = [...fetchedRecipes.resultsArray]
           .sort((a, b) => b.comments.length - a.comments.length)
           .slice(0, 5)
-        //console.log(sortedByComments)
         sortedByComments.map((single) => {
           this.mostCommented.push({
             name: single.mealName,
             value: single.comments.length
           })
         })
-        //console.log(this.mostCommented)
       } catch (error) {
         console.log(error.message)
       }
@@ -152,11 +150,9 @@ export default {
       try {
         const fetchedUsers = await this.fetchUsers()
         this.usersCount = fetchedUsers.count
-        //console.log(fetchedUsers)
         const sortedByRecipes = [...fetchedUsers.usersArray]
           .sort((a, b) => b.createdRecipes.length - a.createdRecipes.length)
           .slice(0, 5)
-        //console.log(sortedByRecipes)
         sortedByRecipes.map((single) => {
           this.mostActiveUsers.push({
             name: single.username,
@@ -173,7 +169,6 @@ export default {
         const fetchedComments = await this.fetchComments({ sort: '-createdAt' })
         this.commentsCount = fetchedComments.count
         this.latestComments = [...fetchedComments.commentsArray].slice(0, 10)
-        // console.log(this.latestComments)
         this.toggleLoader()
       } catch (error) {
         console.log(error.message)
@@ -238,22 +233,6 @@ export default {
     @include boxSize($width: 280px, $height: 240px);
     border: 1px solid lightgray;
     position: relative;
-    //overflow: auto;
-    // scrollbar styling
-    /* scrollbar-width: thin;
-    scrollbar-color: lighten($graphite, 20%) lighten($graphite, 60%); */
-    /*  &::-webkit-scrollbar {
-      width: 11px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: lighten($graphite, 60%);
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: lighten($graphite, 20%);
-      border-radius: 6px;
-      border: 3px solid lighten($graphite, 60%);
-    } */
 
     header {
       background-color: lighten($graphite, 20%);
@@ -326,15 +305,10 @@ export default {
 }
 
 @media (min-width: 768px) {
-  .overview/* ,
-  .loaderContainer  */ {
+  .overview {
     margin-top: 0;
     @include boxSize($width: calc(100% - 4rem));
     align-self: flex-end;
-
-    /* .loaderContainer {
-      margin: auto 0;
-    } */
 
     section {
       grid-template-columns: repeat(2, 1fr);

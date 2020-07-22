@@ -60,19 +60,6 @@ export default {
 
   computed: {
     ...mapGetters(['getCurrentUser', 'getIsLogged'])
-
-    /* disableRating() {
-      const checkRatedBy = this.resultRecipe.rates.filter(
-          (rate) => rate.ratedBy === this.getCurrentUser.userId)
-      if (
-        this.getIsLogged &&
-        (this.resultRecipe.author._id === this.getCurrentUser.userId || checkRatedBy.length)
-      ) {
-        return false
-      } else {
-        return true
-      }
-    } */
   },
 
   methods: {
@@ -81,7 +68,6 @@ export default {
     },
 
     fillTheStars(event) {
-      // console.log(event.target)
       this.rateValue = Number(event.target.id)
       const stars = this.$refs.stars.children
       stars.forEach((child) => {
@@ -100,17 +86,6 @@ export default {
           this.rateValue = 1
           return
         }
-        /* // check if user already rated this recipe
-        const checkRatedBy = this.resultRecipe.rates.filter(
-          (rate) => rate.ratedBy === this.getCurrentUser.userId
-        )
-        if (checkRatedBy.length) {
-          this.$emit('updateMsgStatus', false)
-          this.$emit('updateMsg', 'You have already rated this recipe!')
-          this.ratingDropdown = false
-          this.rateValue = 1
-          return
-        } */
         this.ratingDropdown = false
         // update recipe rating
         const response = await axios.patch(
@@ -119,7 +94,6 @@ export default {
         )
         if (response) {
           this.rateValue = 1
-          console.log(response)
           this.$emit('updateRating')
         }
       } catch (error) {

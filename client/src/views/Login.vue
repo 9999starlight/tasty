@@ -38,7 +38,7 @@
           <label for="password">Password</label>
         </div>
       </div>
-      <!--  -->
+      <!-- signup options -->
       <div v-if="showSignUp" class="formGroup flex flexCenter uploadSection">
         <h4 class="block mgb1">Upload profile image</h4>
         <div class="upload flex">
@@ -65,7 +65,7 @@
           <small>Maximum upload file size 2Mb</small>
         </div>
       </div>
-      <!--  -->
+      <!-- end signup options -->
       <div
         :class="[
           errorMessage !== ''
@@ -150,7 +150,7 @@ export default {
       this.errorMessage = message
     },
 
-    // toggle login/sign up forms
+    // toggle login/signup forms
     toggleSignUp() {
       this.showSignUp = !this.showSignUp
     },
@@ -250,7 +250,6 @@ form {
   );
   @include boxSize($height: 100%, $width: 100%);
   box-shadow: $shadowBox;
-  // background-color: rgba(255, 255, 255, 0.49);
   background-color: rgba(255, 255, 255, 0.22);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.459),
     0 5px 10px -3px rgba(0, 0, 0, 0.322);
@@ -277,7 +276,6 @@ form {
       @include fonts($color: rgb(14, 92, 122), $weight: 700);
       cursor: pointer;
       text-decoration: underline;
-      //margin: 0 auto;
     }
   }
 
@@ -406,10 +404,6 @@ form {
     }
     .uploadSection {
       @include boxSize($width: 350px);
-
-      /* button {
-        font-size: 1rem;
-      } */
     }
   }
 }

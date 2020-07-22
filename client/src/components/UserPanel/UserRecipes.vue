@@ -46,7 +46,7 @@
       </transition-group>
     </div>
     <a
-      v-if="getCurrentUser.createdRecipes.length > 4"
+      v-if="getCurrentUser.createdRecipes.length > 5"
       href="#userRecipesHeading"
       v-scroll-to="'#userRecipesHeading'"
       class="block hashLink mg2"

@@ -106,7 +106,6 @@ export default {
       ) {
         arr.push(i)
       }
-      // console.log(arr)
       return arr
     },
 
@@ -135,18 +134,12 @@ export default {
 
 <style lang="scss" scoped>
 .paginationWrapper {
-  //@include boxSize($width: 100%);
   ul {
     @include boxSize($maxWidth: 100%, $height: 3rem);
     box-shadow: 0px 20px 9px -17px rgba(16, 16, 16, 0.79);
 
     li {
       background-color: rgba(29, 28, 28, 0.774);
-      // border-right: 1px solid darken($midTone, 10%);
-
-      /*  &:first-of-type, &:last-of-type {
-        background-color: rgba(65, 59, 59, 0.801);
-      } */
 
       &:first-of-type {
         border-right: 1px solid darken($midTone, 10%);
@@ -156,7 +149,6 @@ export default {
       &:last-of-type {
         border-left: 1px solid darken($midTone, 10%);
         border-radius: 0px 40% 40% 0px;
-        //border: none;
       }
     }
     a,

@@ -5,18 +5,20 @@ const User = require('../models/user')
 const cloudinary = require('cloudinary')
 require('../middlewares/cloudinary')
 const { returnUserImage } = require('../helpers/imageFunction')
+const { options } = require('mongoose')
 
 exports.getRecipes = async (req, res, next) => {
   try {
     const queryObj = {
       ...req.query
     }
-    // copy query object and then exclude fields
-    const excludedFields = ['page', 'sort', 'limit', 'fields']
-    excludedFields.forEach((el) => delete queryObj[el])
+
+    // copy query object and then exclude sort
+    const excludedField = ['sort']
+    excludedField.forEach((el) => delete queryObj[el])
     let query = Recipe.find(queryObj)
 
-    // Sorting
+    // Set sorting
     if (req.query.sort) {
       query = query.sort(req.query.sort)
     }
@@ -247,7 +249,6 @@ exports.updateRecipe = async (req, res, next) => {
         comments: updated.comments
       }
     })
-    // console.log(updated)
   } catch (error) {
     console.log(error.message)
     res.status(500).json({

@@ -16,15 +16,13 @@ $blueGray: linear-gradient(to top, #2c3e50, #bdc3c7);
 //$palePinkGray: linear-gradient(180deg, #f9e3e36e, #ffdde178);
 $zinc: linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
 
-// configs
+// other
 $shadowSmall: 3px 3px 6px rgba(35, 35, 36, 0.47);
 $shadowBox: 0 8px 16px 0 rgba(0, 0, 0, 0.2),
 0 6px 20px 0 rgba(0, 0, 0, 0.801);
-$lightFilter: radial-gradient(
-  ellipse at center,
+$lightFilter: radial-gradient(ellipse at center,
   rgba(41, 35, 35, 0.349) 0%,
-  rgba(27, 26, 26, 0.425) 100%
-);
+  rgba(27, 26, 26, 0.425) 100%);
 $backConfig: no-repeat center center/cover;
 
 // mixins

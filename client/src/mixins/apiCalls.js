@@ -38,7 +38,6 @@ const apiCalls = {
         }
         console.log(params)
         await this.$store.dispatch('fetchQueriedRecipes', params)
-        //console.log(res)
         this.$router.push({ name: 'render_results' })
       } catch (error) {
         console.log(error.response.data.message)
@@ -48,7 +47,6 @@ const apiCalls = {
     async fetchSingleUser(id) {
       try {
         const singleUser = await axios.get(`${usersUrl}/${id}`)
-        // console.log(singleUser)
         return singleUser
       } catch (error) {
         console.log(error.response.data.message)

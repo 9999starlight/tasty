@@ -1,11 +1,8 @@
 <template>
   <div id="app" class="flex">
     <app-header></app-header>
-    <transition
-      name="fade"
-      mode="out-in"
-    >
-    <router-view></router-view>
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
     </transition>
   </div>
 </template>
@@ -17,7 +14,7 @@ export default {
   name: 'app',
 
   components: {
-    'app-header': Header,
+    'app-header': Header
   }
 }
 </script>
@@ -31,6 +28,5 @@ export default {
   @include boxSize($width: 100%, $minHeight: 100vh);
   @include alignment($direction: column, $align: center);
   font-family: 'Montserrat', Arial, sans-serif;
-  //position: relative;
 }
 </style>

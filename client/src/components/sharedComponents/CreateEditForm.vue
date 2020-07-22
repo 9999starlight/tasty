@@ -620,13 +620,11 @@ export default {
       try {
         this.toggleLoader()
         const fd = this.configureFormData()
-        console.log(fd)
         const response = await axios.post(`${recipesUrl}`, fd, {
           headers: { 'Content-Type': 'multipart/form-data' },
           timeout: 7000
         })
         if (response) {
-          console.log(response)
           this.$store.dispatch('updateUser', response.data.updatedUser)
           this.toggleLoader()
           this.$router.push(`/SingleResult/${response.data.createdRecipe._id}`)
@@ -653,7 +651,6 @@ export default {
           }
         )
         if (response) {
-          console.log(response.data)
           this.toggleLoader()
           await this.$store.dispatch('changeEditState', false)
           this.$router.push(`/SingleResult/${this.getSingleRecipe._id}`)

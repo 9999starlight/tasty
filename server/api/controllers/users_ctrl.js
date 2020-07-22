@@ -149,7 +149,7 @@ exports.getAllUsers = async (req, res, next) => {
     const queryObj = {
       ...req.query
     } // copy query object and then exclude fields
-    const excludedFields = ['page', 'sort', 'limit', 'fields']
+    const excludedFields = ['sort']
     excludedFields.forEach((el) => delete queryObj[el])
     let query = User.find(queryObj)
 
@@ -298,7 +298,6 @@ exports.addToFavorites = async (req, res, next) => {
         message: `Unauthorized - access denied!`
       })
     }
-    //const user = await User.findById(id)
     const addFavorite = await Recipe.findById(req.body.favoriteId)
     if (!addFavorite) {
       return res.status(404).json({

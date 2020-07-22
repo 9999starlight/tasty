@@ -69,10 +69,8 @@ export default {
     .sortBtn {
       @include boxSize($width: 90px, $height: 30px);
       box-shadow: $shadowSmall;
-      //margin: 0.3rem 0;
 
       &:focus {
-        //background-color: $graphite, 10%;
         outline: 1px inset saturate($lightOrange, 80%);
         box-shadow: 0 5px gray;
         color: $lightOrange;
