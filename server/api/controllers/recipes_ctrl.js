@@ -24,16 +24,17 @@ exports.getRecipes = async (req, res, next) => {
     }
 
     const docs = await query.populate({
-      // Get comment's author info
+      // Get recipes's author info
       path: 'author',
-      select: 'username user_image createdRecipes _id'
+      select: '_id username user_image'
     })
     const response = {
       recipes: docs.map((doc) => {
         return {
           author: {
             username: doc.author.username,
-            image: returnUserImage(doc.author)
+            image: returnUserImage(doc.author),
+            _id: doc.author._id
           },
           mealName: doc.mealName,
           intro: doc.intro,

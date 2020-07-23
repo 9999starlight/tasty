@@ -19,7 +19,7 @@
         :alt="recipe.mealName"
         class="imageFit"
       />
-      <figcaption>{{ recipe.mealName }}</figcaption>
+      <figcaption>{{ recipe.mealName | titleCase }}</figcaption>
     </figure>
     <p class="rating">
       <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
@@ -42,18 +42,20 @@
       />
       <span>{{ recipe.author.username }}</span>
     </div>
-    <p class="intro lightItalic pd1">
-      {{
-        recipe.intro.length > 70
-          ? recipe.intro.substr(0, 70) + '...'
-          : recipe.intro
-      }}
+    <p v-if="recipe.intro.length > 70" class="intro lightItalic pd1">
+      {{ recipe.intro | shortenTheString | sentenceCase }}
+    </p>
+    <p v-else class="intro lightItalic pd1">
+      {{ recipe.intro | sentenceCase }}
     </p>
   </router-link>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import titleCase from '../../../filters/titleCase'
+import sentenceCase from '../../../filters/sentenceCase'
+
 export default {
   name: 'SingleQueryResult',
   props: {
@@ -66,6 +68,14 @@ export default {
   computed: {
     ...mapGetters(['getDefaultImage']),
     ...mapState(['defaultUserImage'])
+  },
+
+  filters: {
+    titleCase,
+    sentenceCase,
+    shortenTheString: function(str) {
+      return str.substr(0, 70) + '...'
+    }
   }
 }
 </script>

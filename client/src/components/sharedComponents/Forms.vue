@@ -28,7 +28,7 @@
           ref="dishSelect"
           class="categories mgb1"
           id="dishType"
-        />
+        /> 
       </div>
       <div class="difficulty">
         <label for="">Difficulty</label>
@@ -146,9 +146,11 @@ export default {
     configBasicParams() {
       if (this.basicSelected !== '') {
         if (this.basicSelected === 'title')
-          this.queryParams['mealName'] = this.searchValue
+          this.queryParams['mealName'] = this.searchValue.toLowerCase()
         if (this.basicSelected === 'ingredient') {
-          this.queryParams['ingredients.ingredient'] = this.searchValue
+          this.queryParams[
+            'ingredients.ingredient'
+          ] = this.searchValue.toLowerCase()
         }
       }
       console.log(this.queryParams)

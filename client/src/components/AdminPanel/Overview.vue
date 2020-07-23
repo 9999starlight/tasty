@@ -45,7 +45,7 @@
                 class="imageFit"
               />
             </figure>
-            <h5 class="center">{{ recipe.mealName }}</h5>
+            <h5 class="center">{{ recipe.mealName | titleCase }}</h5>
             <p class="lightItalic created">
               {{ convertDate(recipe.createdAt) }}
             </p>
@@ -91,6 +91,7 @@ import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
 import apiCalls from '../../mixins/apiCalls'
 import loaderMixin from '../../mixins/loaderMixin'
+import titleCase from '../../filters/titleCase'
 
 export default {
   name: 'overview',
@@ -113,6 +114,10 @@ export default {
   },
 
   mixins: [dateFormat, apiCalls, loaderMixin],
+
+  filters: {
+    titleCase
+  },
 
   computed: {
     ...mapGetters(['getDefaultImage'])

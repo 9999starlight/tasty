@@ -84,7 +84,7 @@
                 class="imageFit"
               />
             </figure>
-            <h5>{{ recipe.mealName }}</h5>
+            <h5>{{ recipe.mealName | titleCase }}</h5>
             <p class="lightItalic created">
               {{ convertDate(recipe.createdAt) }}
             </p>
@@ -171,6 +171,7 @@ import apiCalls from '../../mixins/apiCalls'
 import sortingResults from '../../mixins/sortingResults'
 import loaderMixin from '../../mixins/loaderMixin'
 import paginationOptions from '../../mixins/paginationOptions'
+import titleCase from '../../filters/titleCase'
 import { recipesUrl } from '../../apiData'
 import axios from 'axios'
 
@@ -210,6 +211,10 @@ export default {
     loaderMixin,
     paginationOptions
   ],
+
+  filters: {
+    titleCase
+  },
 
   computed: {
     ...mapGetters(['getDefaultImage', 'getEditState']),

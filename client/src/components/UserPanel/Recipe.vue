@@ -9,7 +9,7 @@
       />
       <img v-else :src="recipe.image" :alt="recipe.mealName" class="block" />
     </figure>
-    <h4>{{ recipe.mealName }}</h4>
+    <h4>{{ recipe.mealName | titleCase }}</h4>
     <p class="lightItalic date">
       Published: {{ convertDate(recipe.createdAt) }}
     </p>
@@ -39,7 +39,11 @@
         <Tooltip :tooltipText="'Edit recipe'" />
       </button>
       <!-- user info conditonal render -->
-      <p v-else class="userInfo flex flexCenter">
+      <p
+        v-else
+        class="userInfo flex flexCenter tooltipContainer"
+        @click="allUserRecipes(recipe.author._id)"
+      >
         <img
           v-if="recipe.author.image"
           :src="recipe.author.image"
@@ -53,6 +57,7 @@
           class="authorImage"
         />
         <span class="authorUsername">{{ recipe.author.username }}</span>
+        <Tooltip :tooltipText="`See user's recipes`" />
       </p>
       <!-- end user info -->
       <button
@@ -82,6 +87,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
+import apiCalls from '../../mixins/apiCalls'
+import titleCase from '../../filters/titleCase'
 import Tooltip from '../sharedComponents/Tooltip'
 import axios from 'axios'
 import { recipesUrl, usersUrl } from '../../apiData'
@@ -105,7 +112,11 @@ export default {
     }
   },
 
-  mixins: [dateFormat],
+  mixins: [dateFormat, apiCalls],
+
+  filters: {
+    titleCase
+  },
 
   computed: {
     ...mapGetters(['getDefaultImage', 'getDefaultUserImage', 'getCurrentUser'])
@@ -258,6 +269,7 @@ export default {
 
       .userInfo {
         justify-content: flex-start;
+        cursor: pointer;
       }
     }
   }

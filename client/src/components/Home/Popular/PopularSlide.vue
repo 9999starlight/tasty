@@ -27,7 +27,7 @@
       </transition>
       <figcaption class="flex flexCenter">
         <span
-          ><strong>{{ recipe.mealName }}</strong></span
+          ><strong>{{ recipe.mealName | titleCase }}</strong></span
         >
         <span>
           <font-awesome-icon :icon="['fa', 'star']" class="starIcon">
@@ -44,6 +44,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import titleCase from '../../../filters/titleCase'
+
 export default {
   name: 'PopularSlide',
 
@@ -56,6 +58,10 @@ export default {
 
   computed: {
     ...mapGetters(['getDefaultImage'])
+  },
+
+  filters: {
+    titleCase
   }
 }
 </script>

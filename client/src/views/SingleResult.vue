@@ -1,7 +1,7 @@
 <template>
   <div class="singleResultContainer container" v-if="ready">
     <div class="singleResultWrapper">
-      <h1>{{ resultRecipe.mealName }}</h1>
+      <h1>{{ resultRecipe.mealName | titleCase }}</h1>
       <section class="favorites flex">
         <div class="messageWrapper center">
           <transition name="expand" mode="out-in">
@@ -148,10 +148,10 @@
           ></font-awesome-icon>
         </p>
         <p v-if="resultRecipe.regional" class="mgb1">
-          <span class="slim">Regional: </span>{{ resultRecipe.regional }}
+          <span class="slim">Regional: </span>{{ resultRecipe.regional | titleCase }}
         </p>
         <p class="mgb1">
-          <span class="slim">Dish Type: </span>{{ resultRecipe.dishType }}
+          <span class="slim">Dish Type: </span>{{ resultRecipe.dishType | titleCase }}
         </p>
       </section>
       <section class="ingredients flex mgb1">
@@ -162,7 +162,8 @@
             :key="ingred.index"
             class="mgb1"
           >
-            {{ ingred.ingredient }} <span>- {{ ingred.amount }}</span>
+            {{ ingred.ingredient | sentenceCase }}
+            <span>- {{ ingred.amount }}</span>
           </li>
         </ul>
       </section>
@@ -175,7 +176,7 @@
             :data-number="index + 1"
             class="mgb1"
           >
-            <p>{{ st.step }}</p>
+            <p>{{ st.step | sentenceCase }}</p>
           </li>
         </ol>
       </section>
@@ -199,6 +200,8 @@ import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
 import dateFormat from './../mixins/dateFormat'
 import apiCalls from './../mixins/apiCalls'
+import titleCase from '../filters/titleCase'
+import sentenceCase from '../filters/sentenceCase'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
 import Loader from '../components/sharedComponents/Loader'
 import Tooltip from '../components/sharedComponents/Tooltip'
@@ -308,6 +311,11 @@ export default {
   },
 
   mixins: [dateFormat, apiCalls],
+
+  filters: {
+    titleCase,
+    sentenceCase
+  },
 
   methods: {
     updateMessage(message) {

@@ -36,7 +36,6 @@ const apiCalls = {
         const params = {
           author: id
         }
-        console.log(params)
         await this.$store.dispatch('fetchQueriedRecipes', params)
         this.$router.push({ name: 'render_results' })
       } catch (error) {

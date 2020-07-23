@@ -4,6 +4,7 @@ const recipeSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   mealName: {
     type: String,
+    lowercase: true,
     required: true,
     minlength: 4,
     maxlength: 50,
@@ -44,6 +45,7 @@ const recipeSchema = mongoose.Schema({
   },
   regional: {
     type: String,
+    lowercase: true,
     required: false,
     default: ''
   },
@@ -67,6 +69,7 @@ const recipeSchema = mongoose.Schema({
       _id: false,
       ingredient: {
         type: String,
+        lowercase: true,
         required: true
       },
       amount: {
