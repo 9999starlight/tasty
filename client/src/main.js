@@ -101,7 +101,7 @@ axios.interceptors.response.use(
       error.response.status === 401 &&
       error.response.data.message === 'Unauthorized access or invalid token!'
     ) {
-      console.log(error.response)
+      // console.log(error.response)
       store.dispatch('logoutUser')
     }
     return Promise.reject(error)

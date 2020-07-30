@@ -1,5 +1,8 @@
 <template>
-  <nav class="paginationWrapper flex flexCenter mgt2">
+  <nav
+    class="paginationWrapper flex flexCenter mgt2"
+    v-if="this.pageNumbers.length > 1"
+  >
     <ul class="flex">
       <li>
         <a

@@ -70,12 +70,6 @@ export default {
       @include boxSize($width: 90px, $height: 30px);
       box-shadow: $shadowSmall;
 
-      &:focus {
-        outline: 1px inset saturate($lightOrange, 80%);
-        box-shadow: 0 5px gray;
-        color: $lightOrange;
-      }
-
       &.btnAsc {
         background-color: lighten($graphite, 20%);
         @include fonts($color: $light);
@@ -87,6 +81,11 @@ export default {
         background-color: $light;
         @include fonts($color: lighten($graphite, 20%));
         border: 2px inset lighten($graphite, 20%);
+      }
+
+      &:focus {
+        outline: 2px solid saturate($golden, 40%);
+        color: saturate($golden, 40%);
       }
 
       .arrow {

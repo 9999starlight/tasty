@@ -150,12 +150,10 @@ export default {
 }
 
 @media (min-width: 776px) {
-  .recipeLink {
-    figure img:hover {
-      transform: scale(1.1);
-      transition: transform 0.4s;
-      filter: brightness(90%);
-    }
+  .recipeLink:hover figure img {
+    transform: scale(1.1);
+    transition: transform 0.4s ease-in-out;
+    filter: brightness(90%);
   }
 }
 </style>

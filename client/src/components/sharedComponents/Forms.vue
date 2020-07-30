@@ -5,7 +5,11 @@
       <h3 class="pd1">Search Recipes</h3>
       <div class="basicSearchBox flex mg1">
         <input type="text" v-model="searchValue" placeholder="Search..." />
-        <button @click.prevent="findRecipes(configBasicParams())" type="submit">
+        <button
+          @click.prevent="findRecipes(configBasicParams())"
+          type="submit"
+          class="hovEffect"
+        >
           <font-awesome-icon
             :icon="['fa', 'search']"
             class="search"
@@ -28,7 +32,7 @@
           ref="dishSelect"
           class="categories mgb1"
           id="dishType"
-        /> 
+        />
       </div>
       <div class="difficulty">
         <label for="">Difficulty</label>
@@ -66,7 +70,7 @@
       <button
         @click.prevent="findRecipes(configDetailedParams())"
         type="submit"
-        class="btnAction mg1"
+        class="btnAction mg1 hovEffect"
       >
         Search
       </button>
@@ -153,7 +157,6 @@ export default {
           ] = this.searchValue.toLowerCase()
         }
       }
-      console.log(this.queryParams)
       return this.queryParams
     },
 
@@ -209,6 +212,7 @@ export default {
     @include boxSize($width: 100%);
     @include fonts($color: $graphite);
     border: 2px solid lightgray;
+    background-image: $zinc;
   }
 
   .basicForm {

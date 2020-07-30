@@ -4,10 +4,10 @@
       :class="displayMenu && burgerIcon ? 'filter open' : 'filter'"
       @click.self="showMenu"
     ></div>
-    <div
+    <!-- <div
       :class="showDropdown ? 'dropdownOverlay' : ''"
       @click.self="showDropdown = false"
-    ></div>
+    ></div> -->
     <div class="menuWrapper flex">
       <router-link :to="{ name: 'home' }" class="flex">
         <h2
@@ -24,7 +24,11 @@
         </h2>
       </router-link>
       <button
-        v-show="$route.name === 'home' || $route.name === 'render_results'"
+        v-show="
+          $route.name === 'home' ||
+            $route.name === 'render_results' ||
+            $route.name === 'SingleResult'
+        "
         class="headerSearch"
         @click="setOpenSearch"
       >
@@ -53,7 +57,8 @@
         <li
           v-if="getIsLogged"
           class="userPanelMenu"
-          @click="showDropdown = !showDropdown"
+          @mouseover="showDropdown = true"
+          @mouseleave="showDropdown = false"
         >
           <span class="flex flexCenter">
             <img
@@ -424,6 +429,10 @@ header {
     .menuWrapper {
       flex-grow: 2;
 
+      h2:hover {
+        color: $golden;
+      }
+
       .headerSearch {
         position: static;
         margin-right: 1rem;
@@ -447,7 +456,7 @@ header {
         li {
           border: none;
           padding: 0 0.5rem;
-          width: initial;
+          @include boxSize($width: initial, $height: 100%);
 
           .userIcon {
             color: lighten($graphite, 20%);
@@ -481,7 +490,7 @@ header {
       .userDropdown {
         position: absolute;
         box-shadow: $shadowSmall;
-        top: 48px;
+        top: 50px;
         min-width: 170px;
         li a {
           background-color: $light;

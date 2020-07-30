@@ -21,22 +21,23 @@
           <span>{{ getCurrentUser.createdRecipes.length }}</span>
         </p>
       </div>
-      <form enctype="multipart/form-data" class="changePhoto pd1">
-        <label for="file" class="block center">Change profile image</label>
+      <form enctype="multipart/form-data" class="flex flexCenter pd1">
+        <h3 class="center">Change profile image</h3>
         <div class="upload flex">
           <div class="buttons flex">
-            <div class="uploadBtnWrapper">
+            <label for="userImageUpload" class="uploadBtnWrapper hovEffect">
               <input
                 type="file"
+                id="userImageUpload"
                 ref="userImageUpload"
                 @change="selectImageFile"
               />
-              <button class="chooseImage">Browse image</button>
-            </div>
+              Browse image
+            </label>
             <button
               @click.prevent="removeSelectedImage"
               v-if="preview"
-              class="cancelBtn"
+              class="cancelBtn hovEffect"
             >
               Cancel image
             </button>
@@ -63,7 +64,7 @@
         </div>
         <button
           type="submit"
-          class="imageSubmit block mg1"
+          class="btnAction mg1 hovEffect"
           @click.prevent="submitImage"
         >
           Upload image
@@ -174,18 +175,7 @@ export default {
 
 <style lang="scss" scoped>
 .profileContainer {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    #f2edc163 0%,
-    #f7eb7463 90.1%
-  );
-}
-.profile {
-  border: 2px solid lightgray;
-
-  .italic {
-    @include fonts($color: rgb(214, 212, 212), $style: italic, $weight: 400);
-  }
+  background-color: rgb(238, 236, 236);
 }
 
 section div,
@@ -193,26 +183,31 @@ form {
   @include alignment($textAlign: left);
 
   p,
-  span,
-  label {
+  span {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
   }
 
-  label {
-    color: lighten($graphite, 20%);
+  h3 {
+    color: $golden;
+    text-align: center;
   }
 }
 .profile {
   @include alignment($display: flex, $direction: column, $align: center);
-  @include boxSize($width: 250px);
+  @include boxSize($width: 100%, $maxWidth: 400px);
   box-shadow: $shadowSmall;
   background-color: lighten($graphite, 20%);
   color: $light;
+  border-radius: 10px;
+  border: 2px solid lightgray;
+
+  .italic {
+    @include fonts($color: rgb(214, 212, 212), $style: italic, $weight: 400);
+  }
 
   h1,
   h3,
-  .imageUsername,
   .additionalInfo,
   form {
     padding: 0.5rem 0.8rem;
@@ -221,6 +216,7 @@ form {
 
   .imageUsername {
     @include alignment($align: center);
+    padding: 0.5rem 0.8rem;
 
     img {
       display: inline-block;
@@ -237,17 +233,19 @@ form {
     }
   }
   form {
+    flex-direction: column;
     grid-area: form;
     background-color: white;
     color: $graphite;
-
-    .imageSubmit {
-      background: $orangeGradient;
+    border-radius: 0 0 10px 10px;
+    .btnAction.hovEffect {
       @include fonts($color: $light, $weight: 600);
-      margin: 0 auto;
-      padding: 0.4rem;
-      @include boxSize($width: 150px);
-      box-shadow: $shadowSmall;
+      @include boxSize($width: 180px);
+      border-radius: 0;
+    }
+
+    .small {
+      text-align: center;
     }
 
     .messageWrapper {
@@ -257,18 +255,16 @@ form {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   .profile {
     @include alignment($display: grid);
-    @include boxSize($height: 380px, $width: 600px);
+    @include boxSize($height: 380px, $width: 560px, $maxWidth: initial);
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(3, auto);
     grid-template-areas: 'heading3 form' 'imageUsername form' 'additionalInfo form';
 
-    h3,
-    span,
-    p {
-      font-size: 105%;
+    .profile div {
+      text-align: center;
     }
 
     h3 {
@@ -277,7 +273,7 @@ form {
 
     .imageUsername {
       grid-area: imageUsername;
-      @include alignment($direction: column);
+      @include alignment($direction: column, $justify: center, $align: center);
 
       img {
         width: 140px;
@@ -298,17 +294,18 @@ form {
         $direction: column,
         $justify: space-evenly
       );
+      border-radius: 0 10px 10px 0;
 
-      label {
-        @include fonts($size: 1.2rem);
-        margin-bottom: 1rem;
-      }
-
-      .imageSubmit {
-        padding: 0.6rem;
-        @include fonts($size: 1rem);
+      .small {
+        text-align: left;
       }
     }
+  }
+}
+
+@media (min-width: 768px) {
+  .profile {
+    width: 650px;
   }
 }
 

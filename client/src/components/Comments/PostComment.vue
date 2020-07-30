@@ -22,7 +22,7 @@
       </div>
       <button
         type="submit"
-        class="btnAction block"
+        class="btnAction block hovEffect"
         @click.prevent="postUserComment"
       >
         <font-awesome-icon :icon="['fas', 'plus']"> </font-awesome-icon

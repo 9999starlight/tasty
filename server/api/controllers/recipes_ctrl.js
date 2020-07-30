@@ -16,15 +16,20 @@ exports.getRecipes = async (req, res, next) => {
     // copy query object and then exclude sort
     const excludedField = ['sort']
     excludedField.forEach((el) => delete queryObj[el])
+
+    // set regex search for string values
+    for (let q in queryObj) {
+      if (q === 'mealName' || q === 'ingredients.ingredient')
+        queryObj[q] = { $regex: queryObj[q], $options: 'i' }
+    }
     let query = Recipe.find(queryObj)
 
     // Set sorting
     if (req.query.sort) {
       query = query.sort(req.query.sort)
     }
-
+    // Get recipes's author info
     const docs = await query.populate({
-      // Get recipes's author info
       path: 'author',
       select: '_id username user_image'
     })
@@ -67,8 +72,9 @@ exports.getRecipes = async (req, res, next) => {
 }
 
 exports.getSingleRecipe = async (req, res, next) => {
-  const id = req.params.recipeId
+  let id = req.params.recipeId
   try {
+    //console.log(new mongoose.Types.ObjectId(id))
     const doc = await Recipe.findById(id)
       .populate({
         // Get comment's author info

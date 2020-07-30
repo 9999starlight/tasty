@@ -76,11 +76,7 @@ img {
 @media (min-width: 576px) {
   .recommendedRecipesContainer {
     padding: 1rem;
-    background-image: linear-gradient(
-      109.6deg,
-      rgba(255, 253, 208, 1) 11.2%,
-      rgba(153, 102, 51, 1) 91%
-    );
+    background-image: $zinc;
     box-shadow: $shadowBox;
   }
 }

@@ -26,7 +26,7 @@ mongoose
 mongoose.set('useCreateIndex', true)
 
 // middlewares
-app.use(morgan('tiny')) //  console - base url, time, etc
+app.use(morgan('tiny'))
 app.use(cors())
 app.use(
   bodyParser.urlencoded({

@@ -13,7 +13,7 @@
       />
       <span class="slim">{{ singleComment.author.username }}</span>
     </p>
-    <p class="commentBody mgt1">{{ singleComment.commentBody }}</p>
+    <p class="commentBody slim mgt1">{{ singleComment.commentBody }}</p>
     <p class="date lightItalic mgt1">
       {{ convertDate(singleComment.createdAt) }}
     </p>

@@ -13,7 +13,7 @@
         :recipe="recipe"
       />
     </div>
-    <button @click="loadMore">Load more</button>
+    <button @click="loadMore" class="hovEffect">Load more</button>
   </div>
 </template>
 
@@ -82,9 +82,10 @@ export default {
   button {
     background-color: transparent;
     padding: 1rem 2rem;
-    @include fonts($size: 1.1rem, $color: darken($golden, 15%), $weight: 700);
-    border: 1px solid darken($golden, 15%);
+    @include fonts($size: 1.1rem, $color: darken($golden, 5%), $weight: 700);
+    border: 1px solid darken($golden, 5%);
     margin-top: 1rem;
+    transition: 350ms ease-in-out;
   }
 }
 img {
@@ -95,18 +96,19 @@ img {
 @media (min-width: 576px) {
   .latestRecipesContainer {
     padding: 1rem;
-    background-image: linear-gradient(
-      109.6deg,
-      rgba(255, 253, 208, 1) 11.2%,
-      rgba(153, 102, 51, 1) 91%
-    );
+    background-image: $zinc;
     box-shadow: $shadowBox;
-    button {
-      @include fonts($color: $light);
-      border-color: darken($light, 10%);
-    }
   }
 }
+
+/* @media (min-width: 768px) {
+  .latestRecipesContainer {
+    button:hover {
+      box-shadow: inset 0 0 0 2rem darken($golden, 5%);
+      color: $light;
+    }
+  }
+} */
 
 @media (min-width: 992px) {
   img {

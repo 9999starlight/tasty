@@ -1,6 +1,9 @@
 <template>
-  <div class="singleResultContainer container" v-if="ready">
-    <div class="singleResultWrapper">
+  <div class="singleResultContainer container">
+    <transition name="slide-down" mode="out-in">
+      <Forms v-show="getOpenSearch" />
+    </transition>
+    <div class="singleResultWrapper" v-if="ready">
       <h1>{{ resultRecipe.mealName | titleCase }}</h1>
       <section class="favorites flex">
         <div class="messageWrapper center">
@@ -15,7 +18,7 @@
         </div>
         <button
           v-if="disableRecipeSaving"
-          class="addToFavorites"
+          class="addToFavorites hovEffect"
           @click="addToFavorites"
         >
           Add to favorites &nbsp;
@@ -118,7 +121,7 @@
         <span class="recipeDate">{{
           convertDate(resultRecipe.createdAt)
         }}</span>
-        <p class="intro lightItalic">{{ resultRecipe.intro }}</p>
+        <p class="intro lightItalic">{{ resultRecipe.intro | sentenceCase }}</p>
       </section>
       <section class="additionalInfo flex mgb1">
         <p class="mgb1">
@@ -148,10 +151,12 @@
           ></font-awesome-icon>
         </p>
         <p v-if="resultRecipe.regional" class="mgb1">
-          <span class="slim">Regional: </span>{{ resultRecipe.regional | titleCase }}
+          <span class="slim">Regional: </span
+          >{{ resultRecipe.regional | titleCase }}
         </p>
         <p class="mgb1">
-          <span class="slim">Dish Type: </span>{{ resultRecipe.dishType | titleCase }}
+          <span class="slim">Dish Type: </span
+          >{{ resultRecipe.dishType | titleCase }}
         </p>
       </section>
       <section class="ingredients flex mgb1">
@@ -162,8 +167,9 @@
             :key="ingred.index"
             class="mgb1"
           >
-            {{ ingred.ingredient | sentenceCase }}
-            <span>- {{ ingred.amount }}</span>
+            <span>{{ ingred.ingredient | sentenceCase }}</span
+            ><span v-if="ingred.amount"> - </span>
+            <span> {{ ingred.amount }}</span>
           </li>
         </ul>
       </section>
@@ -186,16 +192,16 @@
         @updating="updateRecipe"
       />
     </div>
+    <NotFound
+      v-else-if="displayNotFound"
+      :message="'No result for reqested recipe'"
+    />
+    <Loader v-else :bigLoader="true" />
   </div>
-  <NotFound
-    v-else-if="displayNotFound"
-    :message="'No result for reqested recipe'"
-  />
-  <Loader v-else :bigLoader="true" />
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
 import dateFormat from './../mixins/dateFormat'
@@ -203,6 +209,7 @@ import apiCalls from './../mixins/apiCalls'
 import titleCase from '../filters/titleCase'
 import sentenceCase from '../filters/sentenceCase'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
+import Forms from '../components/sharedComponents/Forms'
 import Loader from '../components/sharedComponents/Loader'
 import Tooltip from '../components/sharedComponents/Tooltip'
 import Rating from '../components/SingleResult/Rating'
@@ -213,6 +220,7 @@ export default {
   name: 'SingleResult',
   components: {
     NotFound,
+    Forms,
     Rating,
     Comments,
     InfoMessage,
@@ -255,7 +263,8 @@ export default {
       'getDefaultImage',
       'getDefaultUserImage',
       'getCurrentUser',
-      'getIsLogged'
+      'getIsLogged',
+      'getOpenSearch'
     ]),
 
     disableRecipeSaving() {
@@ -326,6 +335,11 @@ export default {
       this.messageStatus = msgStatus
     },
 
+    ...mapMutations(['setOpenSearch']),
+    setOpenSearch() {
+      this.$store.commit('setOpenSearch')
+    },
+
     async updateRecipe() {
       try {
         const result = await this.$store.dispatch(
@@ -372,6 +386,10 @@ export default {
         }
       }
     }
+  },
+
+  beforeDestroy() {
+    if (this.getOpenSearch === true) this.setOpenSearch()
   }
 }
 </script>
@@ -572,6 +590,13 @@ export default {
       li {
         @include fonts($color: rgb(75, 72, 72));
         text-align: left;
+
+        &::before {
+          content: '\2726';
+          margin-right: 0.5rem;
+          //color: rgb(219, 86, 108);
+          color: $golden;
+        }
       }
     }
   }
@@ -586,6 +611,7 @@ export default {
 
       li {
         @include fonts($color: rgb(75, 72, 72));
+        line-height: 1.5;
 
         &::before {
           content: attr(data-number) '.';
@@ -684,8 +710,6 @@ export default {
       padding: 0.8rem 0 0.8rem 1.4rem;
 
       ol li {
-        line-height: 1.5;
-
         p {
           line-height: 1.8;
         }
@@ -694,7 +718,7 @@ export default {
 
     .comments {
       grid-area: comments;
-      border-top: 1px inset lightgray;
+      border-top: 1px solid lightgray;
       padding-top: 2rem;
     }
   }

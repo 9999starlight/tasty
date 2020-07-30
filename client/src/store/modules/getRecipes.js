@@ -1,4 +1,4 @@
-import { recipesUrl, source } from '../../apiData'
+import { recipesUrl } from '../../apiData'
 import axios from 'axios'
 
 const state = {
@@ -31,7 +31,6 @@ const actions = {
   fetchSingleRecipe: async ({ commit }, id) => {
     try {
       const response = await axios.get(`${recipesUrl}/${id}`, {
-        cancelToken: source.token,
         timeout: 5000
       })
       if (!response.data) {
@@ -41,14 +40,8 @@ const actions = {
       }
       return response.data
     } catch (error) {
-       /* (thrown, error) => {
-        if (axios.isCancel(thrown)) {
-          console.log('Request canceled', thrown.message)
-        } else { */
-          console.log(error.message)
-          console.log(error.response.data.message)
-      /*   }
-      } */
+      console.log(error.message)
+      console.log(error.response.data.message)
     }
   },
 

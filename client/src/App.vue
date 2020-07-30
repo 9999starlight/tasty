@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Montserrat|Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Berkshire+Swash&display=swap');
 @import './styles/global.scss';
 #app {

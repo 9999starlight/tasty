@@ -167,7 +167,9 @@ export default {
   grid-template-rows: 1fr 1fr 0.5fr 0.5fr 1fr;
   grid-template-areas: 'image mealName mealName' 'image details details' 'rating rating rating' 'date date date' 'editDelete editDelete editDelete';
   border: 1px solid lightgray;
+  border-radius: 10px;
   background-color: $light;
+  box-shadow: $shadowSmall;
 
   p {
     @include fonts($size: 0.9rem);
@@ -192,6 +194,7 @@ export default {
 
   h4 {
     grid-area: mealName;
+    color: $golden;
   }
   .date {
     grid-area: date;
@@ -214,14 +217,16 @@ export default {
       background-color: transparent;
       padding: 0.8rem;
       @include fonts($size: 1.5rem);
+      .tooltipBox {
+        bottom: 80%;
+      }
       .edit {
         @include fonts($color: rgb(136, 187, 54));
         filter: drop-shadow(2px 1px #393b39);
       }
 
       .delete {
-        @include fonts($color: crimson);
-        filter: drop-shadow(2px 1px #661313);
+        @include fonts($color: rgba(220, 20, 60, 0.808));
       }
     }
 

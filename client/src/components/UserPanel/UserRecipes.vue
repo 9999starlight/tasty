@@ -143,12 +143,9 @@ export default {
 <style lang="scss" scoped>
 .userRecipes {
   @include boxSize($width: 100%, $height: 100%);
+  flex: 1 1 auto;
   @include alignment($direction: column, $align: center);
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    #f2edc163 0%,
-    #f7eb7463 90.1%
-  );
+  background-color: rgb(238, 236, 236);
 
   h1 {
     font-family: 'Lobster', cursive;

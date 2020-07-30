@@ -7,7 +7,7 @@
         <label for="mealName"><span class="required">*</span> Meal Name</label>
         <input
           type="text"
-          v-model="mealName"
+          v-model.trim="mealName"
           id="mealName"
           required
           placeholder="Meal Name, 4-50 characters"
@@ -23,7 +23,7 @@
         <!-- description -->
         <label for="intro"><span class="required">*</span> Description</label>
         <textarea
-          v-model="intro"
+          v-model.trim="intro"
           id="intro"
           required
           placeholder="Description, 4-150 characters"
@@ -115,7 +115,7 @@
         <!-- regional -->
         <label for="regional">Regional</label>
         <input
-          v-model="regional"
+          v-model.trim="regional"
           type="text"
           id="regional"
           placeholder="Enter country or region"
@@ -170,15 +170,20 @@
             No current image
           </p>
         </div>
-        <label for="file" class="block">Select recipe image</label>
-        <div class="uploadBtnWrapper">
-          <input type="file" ref="recipeImage" @change="selectRecipeImage" />
-          <button class="add">Browse image</button>
-        </div>
+        <h4 class="block mgt1">Select recipe image</h4>
+        <label for="recipeImage" class="uploadBtnWrapper hovEffect">
+          <input
+            type="file"
+            ref="recipeImage"
+            id="recipeImage"
+            @change="selectRecipeImage"
+          />
+          Browse image
+        </label>
         <button
           v-if="preview"
           @click.prevent="removeSelectedImage"
-          class="remove"
+          class="remove hovEffect"
         >
           Cancel
         </button>
@@ -195,8 +200,8 @@
     <fieldset class="ingredients mgb1">
       <legend>Ingredients</legend>
       <div class="inner center">
-        <transition-group name="scale-in-tl">
-          <div
+        <transition-group name="scale-in-tl" tag="ul">
+          <li
             class="singleIngredient"
             v-for="(ingred, index) in ingredients"
             :key="'ing' + index"
@@ -209,7 +214,7 @@
               placeholder="Enter ingredient"
               required
               :id="'ingred' + index"
-              v-model="ingred.ingredient"
+              v-model.trim="ingred.ingredient"
               @blur="validateIngredients"
             />
             <label :for="'amount' + index">Amount</label>
@@ -217,7 +222,7 @@
               type="text"
               :id="'amount' + index"
               placeholder="Enter amount of this ingredient"
-              v-model="ingred.amount"
+              v-model.trim="ingred.amount"
             />
             <button
               @click.prevent="removeIngredient(index)"
@@ -234,7 +239,7 @@
                 :tooltipText="'Remove this ingredient'"
               />
             </button>
-          </div>
+          </li>
         </transition-group>
         <button @click="addIngredient" class="mgt1 add tooltipContainer">
           Add
@@ -255,8 +260,8 @@
     <fieldset class="steps">
       <legend>Preparation steps</legend>
       <div class="inner center">
-        <transition-group name="scale-in-tl">
-          <div
+        <transition-group name="scale-in-tl" tag="ul">
+          <li
             class="singleStep"
             v-for="(st, index) in steps"
             :key="'st' + index"
@@ -267,7 +272,7 @@
             <textarea
               :id="'step' + index"
               required
-              v-model="st.step"
+              v-model.trim="st.step"
               placeholder="Enter the step of preparation"
               @blur="validateSteps"
             ></textarea>
@@ -285,7 +290,7 @@
                 :tooltipText="'Remove this step'"
               />
             </button>
-          </div>
+          </li>
         </transition-group>
         <button @click="addStep" class="mgt1 add tooltipContainer">
           Add<font-awesome-icon
@@ -313,10 +318,14 @@
       </transition>
     </div>
     <Loader :bigLoader="bigLoader" v-show="isLoading" />
-    <button v-if="!getEditState" @click.prevent="validation" class="submitBtn">
+    <button
+      v-if="!getEditState"
+      @click.prevent="validation"
+      class="submitBtn hovEffect"
+    >
       Submit Recipe
     </button>
-    <button v-else @click.prevent="validation" class="submitBtn">
+    <button v-else @click.prevent="validation" class="submitBtn hovEffect">
       Submit Changes
     </button>
   </form>
@@ -330,6 +339,8 @@ import Loader from './Loader'
 import Tooltip from './Tooltip'
 import fileValidation from '../../mixins/fileValidation'
 import loaderMixin from '../../mixins/loaderMixin'
+import titleCase from '../../filters/titleCase'
+import sentenceCase from '../../filters/sentenceCase'
 import axios from 'axios'
 import { recipesUrl } from '../../apiData'
 export default {
@@ -395,13 +406,24 @@ export default {
 
   mixins: [fileValidation, loaderMixin],
 
+  filters: {
+    sentenceCase,
+    titleCase
+  },
+
   beforeMount() {
     if (this.getEditState) {
-      this.mealName = this.getSingleRecipe.mealName
-      this.intro = this.getSingleRecipe.intro
+      this.mealName = this.$options.filters.titleCase(
+        this.getSingleRecipe.mealName
+      )
+      this.intro = this.$options.filters.sentenceCase(
+        this.getSingleRecipe.intro
+      )
       this.timing = this.getSingleRecipe.timing
       this.persons = this.getSingleRecipe.persons
-      this.regional = this.getSingleRecipe.regional
+      this.regional = this.$options.filters.titleCase(
+        this.getSingleRecipe.regional
+      )
       this.vegetarian = this.getSingleRecipe.vegetarian
       this.glutenFree = this.getSingleRecipe.glutenFree
       this.ingredients = JSON.parse(
@@ -694,9 +716,12 @@ form {
     border: 1px solid lighten($graphite, 55%);
     border-radius: 6px;
   }
-
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
   input[type='number'] {
-    -webkit-appearance: textfield;
+    //-webkit-appearance: textfield;
     -moz-appearance: textfield;
     appearance: textfield;
     @include fonts($color: $graphite, $weight: 700);
@@ -757,11 +782,16 @@ form {
     @include boxSize($width: 100%);
   }
 
+  .uploadBtnWrapper {
+    border-radius: 4px;
+  }
+
   button {
     padding: 0.4rem;
-    width: 110px;
+    width: 120px;
     color: $light;
     box-shadow: $shadowSmall;
+    border-width: 0;
     border-radius: 4px;
     &.add {
       background-color: #8396c7;
@@ -803,26 +833,7 @@ form {
         }
       }
     }
-    .uploadBtnWrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      box-shadow: $shadowSmall;
-      margin: 0.8rem 0;
-      button {
-        @include fonts($color: $light);
-        width: 110px;
-        padding: 0.4rem;
-      }
 
-      input[type='file'] {
-        font-size: 2rem;
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-      }
-    }
     .small {
       @include boxSize($height: 70px);
     }

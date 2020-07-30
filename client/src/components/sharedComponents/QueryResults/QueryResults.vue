@@ -1,7 +1,7 @@
 <template>
   <div class="resultsWrapper flex flexCenter">
-    <h2 class="slim pd1" id="searchHeading">Search Results</h2>
-    <h5>Number of results: {{ this.results.length }}</h5>
+    <h1 class="pd1" id="searchHeading">Search Results</h1>
+    <h4>Recipes found: {{ this.results.length }}</h4>
     <div class="inner flex flexCenter" v-if="getSuccess">
       <SortingButtons
         @sortTitleAsc="sortTitleAscending(results)"
@@ -30,7 +30,7 @@
         @last="lastPage"
       />
       <a
-        v-if="getSuccess === true && currentRecipes.length > 5"
+        v-if="getSuccess === true && currentRecipes.length >= 5"
         href="#searchHeading"
         v-scroll-to="'#searchHeading'"
         class="block hashLink mg2"
@@ -89,11 +89,10 @@ export default {
 
     // page settings
     resultsPerPage() {
-      // check if results are less than initial value of 2 (to be changed to 10)
-      if (this.results.length < 2) {
+      if (this.results.length < 6) {
         return this.results.length
       } else {
-        return 2
+        return 6
       }
     },
 
@@ -116,6 +115,11 @@ export default {
 }
 .resultsWrapper {
   grid-area: results;
+
+  h1,
+  h4 {
+    color: $golden;
+  }
 
   .successful {
     @include boxSize($width: 100%);

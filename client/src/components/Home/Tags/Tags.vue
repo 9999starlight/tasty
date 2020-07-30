@@ -1,5 +1,5 @@
 <template>
-  <div class="tagsWrapper">
+  <div class="tagsWrapper mg1">
     <h2>Popular Tags</h2>
     <button v-if="showButtons" class="leftSilde" @click="slideLeft">
       <font-awesome-icon

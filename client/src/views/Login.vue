@@ -43,14 +43,14 @@
         <h4 class="block mgb1">Upload profile image</h4>
         <div class="upload flex">
           <div class="buttons flex">
-            <div class="uploadBtnWrapper">
-              <input type="file" ref="image" @change="selectFile" />
-              <button class="chooseImage">Browse image</button>
-            </div>
+            <label for="image" class="uploadBtnWrapper hovEffect">
+              <input type="file" ref="image" id="image" @change="selectFile" />
+              Browse image
+            </label>
             <button
               @click.prevent="removeSelectedImage"
               v-if="preview"
-              class="cancelBtn"
+              class="cancelBtn hovEffect"
             >
               Cancel image
             </button>
@@ -341,16 +341,12 @@ form {
       @include boxSize($height: auto);
     }
 
-    button {
-      font-size: 0.8rem;
-    }
-
     .small {
       text-align: center;
     }
 
     .uploadBtnWrapper {
-      box-shadow: none;
+      text-shadow: none;
     }
   }
 
@@ -414,15 +410,6 @@ form {
       .signupLink:hover {
         filter: brightness(60%);
       }
-    }
-  }
-}
-
-@media (min-width: 992px) {
-  form {
-    .cancelBtn {
-      width: 110px;
-      padding: 0.4rem;
     }
   }
 }

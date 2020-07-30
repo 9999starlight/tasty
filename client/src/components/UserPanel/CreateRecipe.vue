@@ -3,7 +3,7 @@
     <h1 id="createRecipeHeading" class="mg2">
       Create Recipe
     </h1>
-    <div class="formWrapper">
+    <div class="formWrapper mgb1">
       <CreateEditForm />
     </div>
   </div>

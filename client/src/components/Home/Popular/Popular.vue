@@ -170,8 +170,7 @@ export default {
   .carouselIndicator {
     border: 0;
     border-radius: 50%;
-    width: 1.2rem;
-    height: 1.2rem;
+    @include boxSize($width: 1rem, $height: 1rem);
     background-color: gray;
     margin: 0 0.8rem;
     cursor: pointer;
@@ -199,6 +198,9 @@ export default {
       h3 {
         @include fonts($size: 1.3rem);
       }
+    }
+    .carouselIndicator {
+      @include boxSize($width: 1.2rem, $height: 1.2rem);
     }
   }
   .altImage {
