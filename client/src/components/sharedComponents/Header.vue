@@ -464,21 +464,32 @@ header {
 
           &.active {
             background-color: transparent;
-            border-bottom: 2px solid $lightOrange;
+          }
+
+          &.active a {
+            border-bottom: 2px solid $golden;
           }
 
           &:hover {
-            background-color: $light;
+            box-shadow: $shadowSmall;
+          }
+
+          &:hover a,
+          &:hover span,
+          &:hover button,
+          &:hover .userIcon,
+          &:hover .arrowDown {
             color: $golden;
           }
+
           a,
           button {
             color: lighten($graphite, 5%);
             margin: 0;
           }
-          a:hover,
+
           button:hover {
-            color: $golden;
+            filter: brightness(100%);
           }
         }
       }
@@ -486,16 +497,30 @@ header {
       .userPanelMenu {
         color: $graphite;
         display: flex;
-      }
-      .userDropdown {
-        position: absolute;
-        box-shadow: $shadowSmall;
-        top: 50px;
-        min-width: 170px;
-        li a {
-          background-color: $light;
-          color: $graphite;
-          border-bottom: 1px solid lightgray;
+
+        .userDropdown {
+          position: absolute;
+          box-shadow: $shadowSmall;
+          top: 50px;
+          min-width: 170px;
+          li a {
+            background-color: $light;
+            color: darken($golden, 10%);
+            border-bottom: 1px solid lightgray;
+          }
+
+          li a svg {
+            color: darken($golden, 10%);
+          }
+
+          li:hover a {
+            background-color: lighten($golden, 10%);
+            color: $light;
+          }
+
+          li:hover a svg {
+            color: $light;
+          }
         }
       }
     }

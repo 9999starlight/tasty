@@ -379,12 +379,6 @@ small {
 }
 
 // favorites button
-.movingBackground-enter-active,
-.movingBackground-leave-active {
-  animation: movingBackground 30s ease;
-  animation-iteration-count: infinite;
-}
-
 .pulsing-in-enter-active,
 .pulsing-in-leave-active {
   animation: pulsing-in 2s ease;

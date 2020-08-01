@@ -445,7 +445,7 @@ export default {
         rgba(248, 177, 149, 0.9) 90.6%
       );
       background-size: 600% 600%;
-      animation: movingBackground 30s ease infinite;
+      animation: movingBackground 10s ease infinite;
       margin-bottom: 0.8rem;
       text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.82),
         0px -1px 0px rgba(151, 146, 146, 0.67);

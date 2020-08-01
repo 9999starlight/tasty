@@ -135,15 +135,15 @@ exports.addComment = async (req, res, next) => {
 
 exports.deleteSingleComment = async (req, res, next) => {
   try {
+    const id = req.params.commentId
+    const result = await Comment.findById({
+      _id: id
+    })
     if (!req.userData.isAdmin && req.userData.userId != result.author) {
       return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
     }
-    const id = req.params.commentId
-    const result = await Comment.findById({
-      _id: id
-    })
     // pull comment id from recipe comments ref array
     await Recipe.updateOne(
       {

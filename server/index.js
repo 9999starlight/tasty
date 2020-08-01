@@ -10,13 +10,10 @@ const mongoPass = process.env.MONGO_PASS
 mongoose.set('useFindAndModify', false)
 
 mongoose
-  .connect(
-    `mongodb+srv://irenamongo:${mongoPass}@tasty-eyv2p.mongodb.net/test?retryWrites=true&w=majority`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }
-  )
+  .connect(mongoPass, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('MongoDB connected!'))
   .catch((err) => {
     console.log(`MongoDB connection Error: ${err.message}`)
