@@ -5,12 +5,12 @@ const morgan = require('morgan')
 const app = express()
 const mongoose = require('mongoose')
 require('dotenv').config()
-const mongoPass = process.env.MONGO_PASS
+const mongoUrl = process.env.MONGO_URL
 // enable findByIdAndUpdate without deprication warning:
 mongoose.set('useFindAndModify', false)
 
 mongoose
-  .connect(mongoPass, {
+  .connect(mongoUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
