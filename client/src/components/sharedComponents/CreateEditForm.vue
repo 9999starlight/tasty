@@ -784,6 +784,7 @@ form {
 
   .uploadBtnWrapper {
     border-radius: 4px;
+    width: 120px;
   }
 
   button {

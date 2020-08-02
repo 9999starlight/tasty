@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      editModal ? 'adminUsers mgt3 disableScrolling' : 'adminUsers mgt3'
+      editModal ? 'adminUsers mgt4 disableScrolling' : 'adminUsers mgt4'
     ]"
     v-if="!isLoading"
   >

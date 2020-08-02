@@ -185,7 +185,7 @@ export default {
 
 <style lang="scss" scoped>
 .overview {
-  margin-top: 3rem;
+  margin-top: 4rem;
   @include boxSize($width: 100%);
   align-self: center;
 

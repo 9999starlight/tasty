@@ -107,6 +107,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ratingContainer {
+  margin-top: 1rem;
+}
 .ratingWrapper {
   position: relative;
   z-index: 4;
@@ -234,7 +237,10 @@ export default {
   }
 }
 
-@media (min-width: 576px) {
+@media (min-width: 768px) {
+  .ratingContainer {
+    margin-top: 0;
+  }
   .ratingWrapper {
     .addRate:hover {
       filter: brightness(90%);

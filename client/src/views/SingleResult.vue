@@ -446,7 +446,7 @@ export default {
       );
       background-size: 600% 600%;
       animation: movingBackground 10s ease infinite;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
       text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.82),
         0px -1px 0px rgba(151, 146, 146, 0.67);
 
@@ -459,8 +459,7 @@ export default {
     .changableSave {
       &.heart {
         position: relative;
-        width: 100px;
-        height: 40px;
+        @include boxSize($width: 100px, $height: 40px);
       }
       &.heart:before,
       &.heart:after {
@@ -468,8 +467,7 @@ export default {
         content: '';
         left: 20px;
         top: 0;
-        width: 20px;
-        height: 35px;
+        @include boxSize($width: 20px, $height: 35px);
         background: #ec476b;
         border-radius: 50px 50px 0 0;
         transform: rotate(-45deg);

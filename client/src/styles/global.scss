@@ -33,7 +33,7 @@ input:focus,
 textarea:focus,
 input:checked~span:focus,
 .selectBox:focus {
-  outline: 1px dashed lighten($golden, 10%);
+  outline: 1px dotted lighten($golden, 10%);
 }
 
 a,
@@ -196,7 +196,7 @@ a {
   display: inline-block;
   box-shadow: $shadowSmall;
   padding: 0.4rem;
-  width: 100px;
+  width: 110px;
   background-color: $light;
   @include fonts($color: darken($golden, 20%), $size: 0.8rem);
   border: 1px solid darken($golden, 20%);
@@ -218,7 +218,7 @@ a {
 
 .cancelBtn {
   padding: 0.4rem;
-  width: 100px;
+  width: 110px;
   background-color: lighten($graphite, 30%);
   @include fonts($color: $light, $size: 0.8rem);
   box-shadow: $shadowSmall;

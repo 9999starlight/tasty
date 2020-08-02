@@ -1,5 +1,5 @@
 <template>
-  <div class="adminComments mgt3" v-if="!isLoading">
+  <div class="adminComments mgt4" v-if="!isLoading">
     <h1 class="slim" id="commentsHeading">Comments</h1>
     <p class="slim mgb2">Number of comments: {{ commentsCount }}</p>
     <section>

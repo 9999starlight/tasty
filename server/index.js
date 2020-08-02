@@ -42,20 +42,31 @@ app.use('/comments', commentsRoutes)
 app.use('/users', usersRoutes)
 
 // handle & forward reqest errors
-app.use((res, req, next) => {
-  const error = new Error('Not found')
-  error.status = 404
-  next(error)
-})
-// get error
-app.use((error, req, res, next) => {
-  res.status(error.status || 500)
-  res.json({
-    error: {
-      message: error.message
-    }
+if (process.env.NODE_ENV === 'development') {
+  app.use((res, req, next) => {
+    const error = new Error('Not found')
+    error.status = 404
+    next(error)
   })
-})
+  // get error
+  app.use((error, req, res, next) => {
+    res.status(error.status || 500)
+    res.json({
+      error: {
+        message: error.message
+      }
+    })
+  })
+}
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((error, req, res, next) => {
+    res.status(err.statusCode || 500).json({
+      status: error.status,
+      message: error.message
+    })
+  })
+}
 
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`server is running on port ${port}`))

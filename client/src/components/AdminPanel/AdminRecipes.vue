@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      getEditState ? 'adminRecipes mgt3 disableScrolling' : 'adminRecipes mgt3'
+      getEditState ? 'adminRecipes mgt4 disableScrolling' : 'adminRecipes mgt4'
     ]"
     v-if="!isLoading"
   >

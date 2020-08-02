@@ -106,7 +106,8 @@ $backConfig: no-repeat center center/cover;
 // padding & margin classes
 $sizes: 1,
 2,
-3;
+3,
+4;
 
 @each $size in $sizes {
   .pd#{$size} {

@@ -131,6 +131,7 @@ export default {
 .tagsWrapper {
   position: relative;
   @include boxSize($width: 100vw, $height: 9rem);
+  overflow: hidden;
 
   h2 {
     color: #a3865b;

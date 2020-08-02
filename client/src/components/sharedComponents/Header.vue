@@ -502,6 +502,7 @@ header {
           position: absolute;
           box-shadow: $shadowSmall;
           top: 50px;
+          left: 0;
           min-width: 170px;
           li a {
             background-color: $light;

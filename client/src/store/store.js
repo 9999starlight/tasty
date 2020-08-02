@@ -7,8 +7,7 @@ import display from './modules/display'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  strict: true,
-  // strict: process.env.NODE_ENV !== 'production',
+  strict: process.env.NODE_ENV !== 'production',
   modules: {
     getRecipes,
     currentUser,
