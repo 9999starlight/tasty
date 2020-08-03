@@ -220,7 +220,7 @@ exports.getSingleUser = async (req, res, next) => {
 exports.updateUserImage = async (req, res, next) => {
   try {
     const id = req.params.userId
-    if (!req.userData.isAdmin && req.userData.userId !== id) {
+    if (req.userData.userId !== id) {
       return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
@@ -279,7 +279,7 @@ exports.updateUserImage = async (req, res, next) => {
         createdAt: result.createdAt,
         createdRecipes: result.createdRecipes,
         favorites: result.favorites,
-        userImage: result.user_image.url
+        user_image: result.user_image.url
       }
     })
   } catch (error) {

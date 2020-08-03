@@ -154,6 +154,7 @@ export default {
           }
         )
         if (response) {
+          console.log(response)
           this.$store.dispatch('updateUser', response.data.updatedUser)
           this.toggleLoader()
           this.messageStatus = true
@@ -258,7 +259,7 @@ form {
 @media (min-width: 576px) {
   .profile {
     @include alignment($display: grid);
-    @include boxSize($height: 380px, $width: 560px, $maxWidth: initial);
+    @include boxSize($height: 450px, $width: 560px, $maxWidth: initial);
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(3, auto);
     grid-template-areas: 'heading3 form' 'imageUsername form' 'additionalInfo form';
