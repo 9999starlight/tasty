@@ -43,7 +43,7 @@ exports.registerUser = async (req, res, next) => {
     })
     const savedUser = await user.save()
     const payload = {
-      _id: savedUser._id,
+      userId: savedUser._id,
       username: savedUser.username,
       isAdmin: savedUser.isAdmin,
       isDisabled: savedUser.isDisabled,
@@ -293,7 +293,7 @@ exports.updateUserImage = async (req, res, next) => {
 exports.addToFavorites = async (req, res, next) => {
   try {
     const id = req.params.userId
-    if (!req.userData.isAdmin && req.userData.userId !== id) {
+    if (req.userData.userId !== id) {
       return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
@@ -351,7 +351,7 @@ exports.addToFavorites = async (req, res, next) => {
 exports.removeFromFavorites = async (req, res, next) => {
   try {
     const id = req.params.userId
-    if (!req.userData.isAdmin && req.userData.userId !== id) {
+    if (req.userData.userId !== id) {
       return res.status(403).json({
         message: `Unauthorized - access denied!`
       })
