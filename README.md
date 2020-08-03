@@ -1,6 +1,6 @@
 # Tasty
 ## Full stack MEVN app
-#### Built and deployed to Heroku
+#### Built and deployed to Heroku (posible quite slow initial loading due to Heroku puts apps to sleep after 30 minutes of inactivity)
 ---
 ## Tools/libraries: 
 * CLIENT
@@ -53,9 +53,9 @@ Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc
 ---
 
 ### Login/Sign up
-<img align="center" width="600" src="screenshots/login.png">&nbsp;  
+<img align="center" width="400" src="screenshots/login.png">&nbsp;  
 ---
-<img align="center" width="600" src="screenshots/signup.png">&nbsp;  
+<img align="center" width="400" src="screenshots/signup.png">&nbsp;  
 ---
 ---
 
