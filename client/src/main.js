@@ -89,6 +89,7 @@ function tokenSettings() {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   }
 }
+tokenSettings()
 
 // response interceptor check for invalid/expired token
 axios.interceptors.response.use(
@@ -116,4 +117,4 @@ new Vue({
   axios,
   render: (h) => h(App)
 }).$mount('#app')
-tokenSettings()
+

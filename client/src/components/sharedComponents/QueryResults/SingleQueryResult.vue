@@ -94,12 +94,14 @@ export default {
   box-shadow: $shadowSmall;
   cursor: pointer;
   margin: 1rem 0;
+  border-radius: 8px;
 
   figure {
     @include boxSize($width: 100%, $height: 290px);
     grid-area: figure;
     position: relative;
     overflow: hidden;
+    border-radius: 8px 8px 0 0;
     figcaption {
       position: absolute;
       bottom: 0;

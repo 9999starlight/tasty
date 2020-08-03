@@ -127,7 +127,6 @@ export default {
   }
   button {
     @include boxSize($width: 100%);
-    border-radius: 0;
   }
 }
 

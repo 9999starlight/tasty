@@ -1,8 +1,19 @@
 <template>
   <div class="ratingContainer">
     <div v-show="ratingDropdown" class="overlay" @click="toggleRating"></div>
-    <div class="ratingWrapper">
-      <div @click="toggleRating" class="addRate flex flexCenter">
+    <div
+      :class="[
+        ratingDropdown ? 'ratingWrapper openRatingWidth' : 'ratingWrapper'
+      ]"
+    >
+      <div
+        @click="toggleRating"
+        :class="[
+          ratingDropdown
+            ? 'addRate flex flexCenter openBorderRadius'
+            : 'addRate flex flexCenter'
+        ]"
+      >
         <p class="flex flexCenter">
           Rate recipe &nbsp;<span class="starEntity">&#x2605;</span>
         </p>
@@ -110,13 +121,19 @@ export default {
 .ratingContainer {
   margin-top: 1rem;
 }
+
 .ratingWrapper {
   position: relative;
   z-index: 4;
+  width: 140px;
+  transition: 0.5s ease-in-out;
 
+  &.openRatingWidth {
+    width: 270px;
+  }
   .addRate,
   .starRatingDropdown {
-    @include boxSize($width: 280px);
+    @include boxSize($width: 100%);
   }
 
   .addRate {
@@ -129,7 +146,13 @@ export default {
       rgb(127, 146, 166) 95.1%
     );
     border-bottom: 1px solid lighten($graphite, 50%);
+    border-radius: 6px;
     cursor: pointer;
+
+    &.openBorderRadius {
+      border-radius: 6px 6px 0 0;
+    }
+
     p {
       text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.95),
         0px -1px 0px rgba(55, 53, 53, 0.67);
@@ -150,6 +173,7 @@ export default {
       rgb(72, 85, 99) 8.8%,
       rgb(127, 146, 166) 95.1%
     );
+    border-radius: 0 0 6px 6px;
 
     .stars {
       @include alignment($justify: space-evenly);
@@ -212,15 +236,15 @@ export default {
       @include fonts($color: white, $size: 0.8rem);
       @include boxSize($width: 15%, $height: 100%);
       background-color: #485563;
+      border-radius: 0 0 6px 0;
     }
   }
 }
 
 @media (min-width: 576px) {
   .ratingWrapper {
-    .addRate,
-    .starRatingDropdown {
-      @include boxSize($width: 350px);
+    &.openRatingWidth {
+      width: 350px;
     }
 
     .starRatingDropdown {

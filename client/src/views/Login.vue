@@ -287,7 +287,7 @@ form {
 
       input {
         @include boxSize($width: 220px);
-        padding: 0.3rem 0;
+        padding: 0.3rem;
         background-color: transparent;
         border-bottom: 1px solid darken($color: $graphite, $amount: 10%);
         @include fonts($size: 0.9rem, $color: lighten($graphite, 5%));
@@ -361,7 +361,7 @@ form {
 
   .btnAction {
     @include fonts($size: 1.2rem);
-    border-radius: initial;
+    height: 2.5rem;
   }
 
   .loginBtn {
@@ -379,6 +379,11 @@ form {
 
     form {
       @include boxSize($width: 450px, $maxHeight: 600px);
+      border-radius: 6px;
+
+      .btnAction {
+        width: 325px;
+      }
     }
 
     .formGroup {

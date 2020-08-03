@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 
 module.exports = (req, res, next) => {
   // check if there is token
-  // console.log(req.headers.authorization)
   if (
     req.headers.authorization == null ||
     req.headers.authorization == undefined

@@ -59,14 +59,20 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
+// Production
 if (process.env.NODE_ENV === 'production') {
+  // Static folder
+  app.use(express.static(__dirname + '/public/'))
+
+  // handle & forward reqest errors
   app.use((error, req, res, next) => {
     res.status(err.statusCode || 500).json({
       status: error.status,
       message: error.message
     })
   })
+  // Handle SPA
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
 }
-
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`server is running on port ${port}`))

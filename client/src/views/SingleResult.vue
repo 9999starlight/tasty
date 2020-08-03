@@ -360,7 +360,7 @@ export default {
       try {
         if (!this.getIsLogged) {
           this.updateMessageStatus(false)
-          this.updateMessage('Login to add this recipe')
+          this.updateMessage('Login to save this recipe')
           return
         }
         const response = await axios.patch(
@@ -449,6 +449,7 @@ export default {
       margin-bottom: 1rem;
       text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.82),
         0px -1px 0px rgba(151, 146, 146, 0.67);
+      border-radius: 6px;
 
       span {
         margin-left: 0.3rem;
