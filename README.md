@@ -61,11 +61,11 @@ Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc
 
 ### User Panel
 
-* User Profile
+##### User Profile
 <img align="center" width="600" src="screenshots/user-profile-lg.png">&nbsp;  
 ---
 
-* My recipes
+##### My recipes
 <img align="center" width="600" src="screenshots/created-recipes-lg.png">&nbsp;  
 ---
 <img align="center" width="600" src="screenshots/edit-recipe.png">&nbsp;  
@@ -73,11 +73,11 @@ Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc
 <img align="center" width="600" src="screenshots/edit-recipe-alert.png">&nbsp;  
 ---
 
-* Saved recipes
+##### Saved recipes
 <img align="center" width="600" src="screenshots/saved-recipes.png">&nbsp;  
 ---
 
-* Create recipe
+##### Create recipe
 <img align="center" width="500" src="screenshots/create-recipe-basic.png">&nbsp;  
 ---
 <img align="center" width="500" src="screenshots/upload-ingredients.png">&nbsp;  
@@ -87,11 +87,11 @@ Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc
 ---
 
 ### Admin Panel
-* Overview
+##### Overview
 <img align="center" width="600" src="screenshots/admin-overview.png">&nbsp;  
 ---
 
-* Admin Users
+##### Admin Users
 <img align="center" width="600" src="screenshots/admin-users-lg.png">&nbsp;  
 --- 
 <img align="center" width="600" src="screenshots/disable-user.png">&nbsp;  
@@ -99,30 +99,30 @@ Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc
 <img align="center" width="600" src="screenshots/enable-admin-lg.png">&nbsp;  
 ---
 
-* Admin Recipes
+##### Admin Recipes
 <img align="center" width="600" src="screenshots/admin-recipes-lg.png">&nbsp;  
 ---
 
-* Admin Comments
+##### Admin Comments
 <img align="center" width="600" src="screenshots/admin-coments-lg.png">&nbsp;  
 ---
 ---
 ## Random screenshots - small devices
-<img align="center" width="400" src="screenshots/mobile-menu.png">&nbsp;  
+<img align="center" height="500" src="screenshots/mobile-menu.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/home-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/home-mobile.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/single-result-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/single-result-mobile.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/single-recipe2-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/single-recipe2-mobile.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/forms-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/forms-mobile.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/comments-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/comments-mobile.png">&nbsp;  
 ---  
-<img align="center" width="400" src="screenshots/admin-users-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/admin-users-mobile.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/admin-recipes-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/admin-recipes-mobile.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/admin-comments-mobile.png">&nbsp;  
+<img align="center" height="500" src="screenshots/admin-comments-mobile.png">&nbsp;  
 ---
