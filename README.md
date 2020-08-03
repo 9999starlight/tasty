@@ -20,7 +20,7 @@
   * Multer 
   * Cloudinary (image upload)
 ---
-Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc, no extra libraries included
+#### Custom components like Slider, Pagination, Select dropdown, Rating, Tooltip, etc, no extra libraries included
 ---
 ---
 ## Views
@@ -33,7 +33,7 @@ Custom Popular recipes slider, Pagination, Select dropdown, Rating, Tooltip, etc
 ---
 <img align="center" width="600" src="screenshots/search-forms-lg.png">&nbsp;  
 ---
-<img align="center" width="600" src="screenshots/usermenu-lg.png">&nbsp;  
+<img align="center" width="400" src="screenshots/usermenu-lg.png">&nbsp;  
 ---
 ---
 
