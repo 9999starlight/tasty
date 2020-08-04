@@ -22,6 +22,7 @@
 ---
 #### Optimized for Firefox, Chrome, Edge, Opera
 #### Custom components like Slider, Pagination, Select dropdown, Rating, Tooltip, etc, no extra libraries included
+#### Unregistred user is alowed to browse recipes but only registered user can rate, save and create recipes
 ---
 ---
 ## Views

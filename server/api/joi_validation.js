@@ -4,8 +4,8 @@ exports.registerValidation = (req, res, next) => {
   const registerUserSchema = Joi.object({
     username: Joi.string()
       .min(4)
-      .max(20)
-      .regex(/^[a-z0-9_-]{4,20}$/i)
+      .max(30)
+      .regex(/^[a-z0-9_\-@.]{4,30}$/i)
       .required(),
     password: Joi.string().min(6).max(1024).required(),
     user_image: Joi.object()
@@ -24,8 +24,8 @@ exports.loginValidation = (req, res, next) => {
   const loginUserSchema = Joi.object({
     username: Joi.string()
       .min(4)
-      .max(20)
-      .regex(/^[a-z0-9_-]{4,20}$/i)
+      .max(30)
+      .regex(/^[a-z0-9_-]{4,30}$/i)
       .required(),
     password: Joi.string().min(6).max(1024).required()
   })

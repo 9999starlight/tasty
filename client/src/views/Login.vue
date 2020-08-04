@@ -13,17 +13,31 @@
           <span @click="toggleSignUp" class="signupLink">Sign in</span>
         </p>
       </div>
-      <div class="formGroup flex flexCenter mgb1">
+      <div class="formGroup flex flexCenter mgb1 tooltipContainer">
         <div class="labelWrapper">
           <font-awesome-icon
             :icon="['fa', 'user']"
             class="userIcons"
           ></font-awesome-icon>
-          <input type="text" v-model.trim="username" id="username" required />
+          <input
+            type="text"
+            v-model.trim="username"
+            id="username"
+            @blur="usernameCheck"
+            required
+          />
           <label for="username">Username</label>
         </div>
+        <p v-show="usernameInvalid" class="error inputInfo">
+          Required 4-30 characters - letters, numbers, - _ . @
+        </p>
+        <Tooltip
+          :tooltipText="
+            'Username, 4-30 characters, allowed letters, numbers, - _ . @'
+          "
+        />
       </div>
-      <div class="formGroup flex flexCenter mgb1">
+      <div class="formGroup flex flexCenter mgb1 tooltipContainer">
         <div class="labelWrapper">
           <font-awesome-icon
             :icon="['fa', 'lock']"
@@ -34,9 +48,14 @@
             v-model.trim="password"
             id="password"
             required
+            @blur="passwordCheck"
           />
           <label for="password">Password</label>
         </div>
+        <p v-show="passwordInvalid" class="error inputInfo">
+          Required minimum 6 characters
+        </p>
+        <Tooltip :tooltipText="'Password, minimum 6 characters required'" />
       </div>
       <!-- signup options -->
       <div v-if="showSignUp" class="formGroup flex flexCenter uploadSection">
@@ -107,6 +126,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import InfoMessage from '../components/sharedComponents/InfoMessage'
 import Loader from '../components/sharedComponents/Loader'
+import Tooltip from '../components/sharedComponents/Tooltip'
 import fileValidation from '../mixins/fileValidation'
 import loaderMixin from '../mixins/loaderMixin'
 export default {
@@ -114,7 +134,8 @@ export default {
 
   components: {
     InfoMessage,
-    Loader
+    Loader,
+    Tooltip
   },
 
   data() {
@@ -126,7 +147,9 @@ export default {
       filename: '',
       preview: null,
       errorMessage: '',
-      messageStatus: false
+      messageStatus: false,
+      passwordInvalid: false,
+      usernameInvalid: false
     }
   },
 
@@ -155,13 +178,36 @@ export default {
       this.showSignUp = !this.showSignUp
     },
 
+    // onblur input info
+    passwordCheck() {
+      if (this.password.length < 6) {
+        this.passwordInvalid = true
+        return false
+      } else {
+        this.passwordInvalid = false
+        return true
+      }
+    },
+
+    usernameCheck() {
+      const regexUsername = /^[a-z0-9_\-@.]{4,30}$/i
+      if (!regexUsername.test(this.username)) {
+        this.usernameInvalid = true
+        return false
+      } else {
+        this.usernameInvalid = false
+        return true
+      }
+    },
+
     validation() {
-      const regexUsername = /^[a-z0-9_-]{4,20}$/i
-      if (!regexUsername.test(this.username) || this.password.length < 6) {
+      console.log(this.usernameCheck(), this.passwordCheck())
+      if (this.usernameCheck() === true && this.passwordCheck() === true) {
+        return true
+      } else {
         this.updateMessage('Invalid username or password, please try again!')
         return false
       }
-      return true
     },
 
     selectFile() {
@@ -281,7 +327,7 @@ form {
 
   // floating labels & input style
   .formGroup {
-    @include alignment($textAlign: left);
+    @include alignment($textAlign: left, $direction: column);
     .labelWrapper {
       position: relative;
 
@@ -322,6 +368,23 @@ form {
       .userIcons {
         @include fonts($size: 1.1rem, $color: lighten($graphite, 10%));
         margin-right: 10px;
+      }
+    }
+
+    .inputInfo {
+      padding: 0.5rem;
+      font-size: 0.8rem;
+      width: 260px;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.103);
+    }
+
+    .tooltipBox {
+      transform: translateX(0);
+      bottom: 120%;
+
+      &::after {
+        border-top-color: transparent;
       }
     }
   }
@@ -401,6 +464,9 @@ form {
         input:focus + label {
           font-size: 0.9rem;
         }
+      }
+      .inputInfo {
+        width: 325px;
       }
     }
     .uploadSection {

@@ -317,6 +317,14 @@ small {
   }
 }
 
+.error {
+  @include fonts($color: crimson, $size: 0.8rem);
+}
+
+.success {
+  @include fonts($color: green, $size: 0.8rem);
+}
+
 // sorting
 .sortingItem {
   transition: all 1s;
@@ -457,5 +465,10 @@ small {
   a:hover,
   .link:hover {
     color: $golden;
+  }
+
+  .error,
+  .success {
+    @include fonts($size: 1rem);
   }
 }

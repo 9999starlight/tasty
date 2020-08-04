@@ -7,8 +7,8 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
     minlength: 4,
-    maxlength: 20,
-    match: /^[a-z0-9_-]{4,20}$/i // alpfanumeric, alowed _ -
+    maxlength: 30,
+    match: /^[a-z0-9_\-@.]{4,30}$/i
   },
   password: {
     type: String,
