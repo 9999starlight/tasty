@@ -20,6 +20,7 @@
   * Multer 
   * Cloudinary (image upload)
 ---
+#### Optimized for Firefox, Chrome, Edge, Opera
 #### Custom components like Slider, Pagination, Select dropdown, Rating, Tooltip, etc, no extra libraries included
 ---
 ---
@@ -53,9 +54,9 @@
 ---
 
 ### Login/Sign up
-<img align="center" width="400" src="screenshots/login.png">&nbsp;  
+<img align="center" width="600" src="screenshots/login.png">&nbsp;  
 ---
-<img align="center" width="400" src="screenshots/signup.png">&nbsp;  
+<img align="center" width="600" src="screenshots/signup.png">&nbsp;  
 ---
 ---
 
@@ -108,21 +109,8 @@
 ---
 ---
 ## Random screenshots - small devices
-<img align="center" height="500" src="screenshots/mobile-menu.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/home-mobile.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/single-result-mobile.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/single-recipe2-mobile.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/forms-mobile.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/comments-mobile.png">&nbsp;  
----  
-<img align="center" height="500" src="screenshots/admin-users-mobile.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/admin-recipes-mobile.png">&nbsp;  
----
-<img align="center" height="500" src="screenshots/admin-comments-mobile.png">&nbsp;  
----
+
+|  <img align="center" width="300" src="screenshots/mobile-menu.png">&nbsp;   	|   <img align="center" width="300" src="screenshots/home-mobile.png">&nbsp;  	|   <img align="center" width="300" src="screenshots/single-result-mobile.png">&nbsp;	|
+|---	|---	|---	|
+|   <img align="center" width="300" src="screenshots/single-recipe2-mobile.png">&nbsp;  	|   <img align="center" width="300" src="screenshots/forms-mobile.png">&nbsp;  	|   <img align="center" width="300" src="screenshots/comments-mobile.png">&nbsp;  	|
+|   <img align="center" width="300" src="screenshots/admin-users-mobile.png">&nbsp;  	|  <img align="center" width="300" src="screenshots/admin-recipes-mobile.png">&nbsp;   	|   <img align="center" width="300" src="screenshots/admin-comments-mobile.png">&nbsp;  	|
