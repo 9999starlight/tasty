@@ -29,13 +29,9 @@
           <label for="username">Username</label>
         </div>
         <p v-show="usernameInvalid" class="error inputInfo">
-          Required 4-30 characters - letters, numbers, - _ . @
+          Enter 4-30 characters: A-Z a-z 0-9 _ - . @
         </p>
-        <Tooltip
-          :tooltipText="
-            'Username, 4-30 characters, allowed letters, numbers, - _ . @'
-          "
-        />
+        <Tooltip :tooltipText="'4-30 characters: A-Z a-z 0-9 _ - . @'" />
       </div>
       <div class="formGroup flex flexCenter mgb1 tooltipContainer">
         <div class="labelWrapper">
@@ -53,9 +49,9 @@
           <label for="password">Password</label>
         </div>
         <p v-show="passwordInvalid" class="error inputInfo">
-          Required minimum 6 characters
+          Enter minimum 6 characters
         </p>
-        <Tooltip :tooltipText="'Password, minimum 6 characters required'" />
+        <Tooltip :tooltipText="'Minimum 6 characters required'" />
       </div>
       <!-- signup options -->
       <div v-if="showSignUp" class="formGroup flex flexCenter uploadSection">
@@ -201,7 +197,6 @@ export default {
     },
 
     validation() {
-      console.log(this.usernameCheck(), this.passwordCheck())
       if (this.usernameCheck() === true && this.passwordCheck() === true) {
         return true
       } else {
@@ -376,12 +371,20 @@ form {
       font-size: 0.8rem;
       width: 260px;
       text-align: center;
+      color: #bc2c49;
       background-color: rgba(255, 255, 255, 0.103);
     }
 
     .tooltipBox {
       transform: translateX(0);
       bottom: 120%;
+      max-width: 300px;
+      min-width: 260px;
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 0.5rem;
+      background-color: #ffffffb5;
+      color: black;
 
       &::after {
         border-top-color: transparent;
