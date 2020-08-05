@@ -35,7 +35,8 @@ import {
   faLock,
   faBook,
   faHeart,
-  faHeartBroken
+  faHeartBroken,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faClock,
@@ -74,7 +75,8 @@ library.add(
   faChartBar,
   faHeart,
   faUserSlash,
-  faHeartBroken
+  faHeartBroken,
+  faInfoCircle
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

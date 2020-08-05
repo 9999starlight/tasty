@@ -13,7 +13,7 @@
           <span @click="toggleSignUp" class="signupLink">Sign in</span>
         </p>
       </div>
-      <div class="formGroup flex flexCenter mgb1 tooltipContainer">
+      <div class="formGroup flex flexCenter mgb1">
         <div class="labelWrapper">
           <font-awesome-icon
             :icon="['fa', 'user']"
@@ -27,13 +27,29 @@
             required
           />
           <label for="username">Username</label>
+          <span class="tooltipContainer"
+            ><font-awesome-icon
+              :icon="['fa', 'info-circle']"
+              class="userIcons infoIcon"
+            ></font-awesome-icon
+            ><Tooltip
+              :tooltipText="
+                'Enter 4-30 characters, allowed: A-Z a-z 0-9 _ - . @'
+              "
+          /></span>
         </div>
-        <p v-show="usernameInvalid" class="error inputInfo">
-          Enter 4-30 characters: A-Z a-z 0-9 _ - . @
+        <p v-show="usernameInvalid" class="error inputError">
+          Please enter valid username, check
+          <span class="tooltipContainer"
+            ><font-awesome-icon
+              :icon="['fa', 'info-circle']"
+              class="userIcons infoIcon"
+            ></font-awesome-icon
+          ></span>
+          for details
         </p>
-        <Tooltip :tooltipText="'4-30 characters: A-Z a-z 0-9 _ - . @'" />
       </div>
-      <div class="formGroup flex flexCenter mgb1 tooltipContainer">
+      <div class="formGroup flex flexCenter mgb1">
         <div class="labelWrapper">
           <font-awesome-icon
             :icon="['fa', 'lock']"
@@ -47,11 +63,17 @@
             @blur="passwordCheck"
           />
           <label for="password">Password</label>
+          <span class="tooltipContainer"
+            ><font-awesome-icon
+              :icon="['fa', 'info-circle']"
+              class="userIcons infoIcon"
+            ></font-awesome-icon
+            ><Tooltip :tooltipText="'Minimum 6 characters required'"
+          /></span>
         </div>
-        <p v-show="passwordInvalid" class="error inputInfo">
-          Enter minimum 6 characters
+        <p v-show="passwordInvalid" class="error inputError">
+          Please enter minimum 6 characters
         </p>
-        <Tooltip :tooltipText="'Minimum 6 characters required'" />
       </div>
       <!-- signup options -->
       <div v-if="showSignUp" class="formGroup flex flexCenter uploadSection">
@@ -295,7 +317,6 @@ form {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.459),
     0 5px 10px -3px rgba(0, 0, 0, 0.322);
   p,
-  label,
   h1,
   input {
     text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
@@ -344,14 +365,17 @@ form {
         position: absolute;
         @include fonts(
           $size: 0.9rem,
-          $color: lighten($graphite, 5%),
+          $color: darken($graphite, 5%),
           $weight: 100
         );
+        letter-spacing: 0.5px;
         top: -25px;
         left: 25px;
         pointer-events: none;
         transform: translateY(30px);
         transition: all 0.3s ease-in-out;
+        text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+          -1px 0px 0px rgba(0, 0, 0, 0.7);
       }
 
       input:valid + label,
@@ -364,26 +388,30 @@ form {
         @include fonts($size: 1.1rem, $color: lighten($graphite, 10%));
         margin-right: 10px;
       }
+      .tooltipContainer .infoIcon {
+        @include fonts($color: #0e5c7ad6, $weight: 700, $size: 1.2rem);
+      }
     }
 
-    .inputInfo {
+    .inputError {
       padding: 0.5rem;
-      font-size: 0.8rem;
+      @include fonts($size: 0.8rem, $weight: 600, $color: #bc2c49);
       width: 260px;
       text-align: center;
-      color: #bc2c49;
       background-color: rgba(255, 255, 255, 0.103);
+
+      & .infoIcon {
+        @include fonts($color: rgb(59, 95, 107), $weight: 700, $size: 0.9rem);
+      }
     }
 
     .tooltipBox {
-      transform: translateX(0);
+      transform: translateX(-100%);
       bottom: 120%;
-      max-width: 300px;
-      min-width: 260px;
       text-align: center;
       font-size: 0.8rem;
       padding: 0.5rem;
-      background-color: #ffffffb5;
+      background-color: #ffffffcf;
       color: black;
 
       &::after {
@@ -468,7 +496,7 @@ form {
           font-size: 0.9rem;
         }
       }
-      .inputInfo {
+      .inputError {
         width: 325px;
       }
     }

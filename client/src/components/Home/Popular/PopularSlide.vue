@@ -79,7 +79,7 @@ export default {
       position: absolute;
       bottom: 0;
       background-color: rgba(29, 28, 28, 0.774);
-      @include fonts($color: $light);
+      @include fonts($color: $light, $size: 0.8rem);
       @include boxSize($width: 100%, $height: 60px);
 
       span:nth-of-type(2) {
@@ -98,6 +98,10 @@ export default {
   .singleRecipeSlide {
     figure {
       @include boxSize($height: 300px);
+
+      figcaption {
+        font-size: 1rem;
+      }
     }
   }
 }
@@ -106,7 +110,7 @@ export default {
   .singleRecipeSlide {
     figure {
       @include boxSize($height: 400px);
-      figcaption span {
+      figcaption {
         @include fonts($size: 1.2rem);
       }
     }
