@@ -106,7 +106,7 @@ export default {
   }
 }
 
-@media (min-width: 776px) {
+@media (min-width: 768px) {
   .singleRecipeSlide {
     figure {
       @include boxSize($height: 400px);

@@ -154,7 +154,6 @@ export default {
           }
         )
         if (response) {
-          console.log(response)
           this.$store.dispatch('updateUser', response.data.updatedUser)
           this.toggleLoader()
           this.messageStatus = true

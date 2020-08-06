@@ -83,7 +83,7 @@ import Select from './Select'
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'BrowseRecipes',
+  name: 'Forms',
 
   data() {
     return {
