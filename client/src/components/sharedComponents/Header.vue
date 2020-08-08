@@ -4,10 +4,6 @@
       :class="displayMenu && burgerIcon ? 'filter open' : 'filter'"
       @click.self="showMenu"
     ></div>
-    <!-- <div
-      :class="showDropdown ? 'dropdownOverlay' : ''"
-      @click.self="showDropdown = false"
-    ></div> -->
     <div class="menuWrapper flex">
       <router-link :to="{ name: 'home' }" class="flex">
         <h2

@@ -122,7 +122,7 @@ nav {
 @media (min-width: 768px) {
   nav {
     @include boxSize($height: 100%);
-    top: 50px;
+    top: 66px;
     left: 0;
     background-color: rgba(15, 15, 15, 0.859);
     &.iconsWidth {
@@ -158,6 +158,13 @@ nav {
         }
       }
     }
+  }
+}
+
+@media (min-width: 992px) {
+  nav {
+    @include boxSize($height: 100%);
+    top: 50px;
   }
 }
 </style>
