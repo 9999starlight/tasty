@@ -82,7 +82,7 @@ export default {
 
 <style lang="scss" scoped>
 .recipeLink {
-  @include boxSize($width: 100%x, $height: 430px);
+  @include boxSize($width: 100%, $height: 430px);
   @include alignment($justifyGrid: center, $align: center);
   grid-template-rows: 2.3fr 1fr 1fr;
   grid-template-columns: repeat(2, 1fr);
