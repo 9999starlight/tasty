@@ -75,11 +75,13 @@
           v-if="resultRecipe.image === undefined"
           :src="getDefaultImage"
           :alt="resultRecipe.mealName"
+          loading="lazy"
         />
         <img
           v-else
           :src="resultRecipe.image.url"
           :alt="resultRecipe.mealName"
+          loading="lazy"
         />
       </figure>
       <section class="underImage flex mgb1">
@@ -94,12 +96,14 @@
                 :src="getDefaultUserImage"
                 alt="user image"
                 class="authorImage"
+                loading="lazy"
               />
               <img
                 v-else
                 :src="resultRecipe.author.user_image.url"
                 alt="user image"
                 class="authorImage"
+                loading="lazy"
               />
               <span class="authorUsername">{{
                 resultRecipe.author.username
@@ -202,29 +206,39 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import NotFound from '../components/sharedComponents/NotFound'
 import Comments from '../components/Comments/Comments'
+import Tooltip from '../components/sharedComponents/Tooltip'
 import dateFormat from './../mixins/dateFormat'
 import apiCalls from './../mixins/apiCalls'
 import titleCase from '../filters/titleCase'
 import sentenceCase from '../filters/sentenceCase'
-import InfoMessage from '../components/sharedComponents/InfoMessage'
-import Forms from '../components/sharedComponents/Forms'
-import Loader from '../components/sharedComponents/Loader'
-import Tooltip from '../components/sharedComponents/Tooltip'
-import Rating from '../components/SingleResult/Rating'
 import axios from 'axios'
 import { usersUrl } from '../apiData'
 
 export default {
   name: 'SingleResult',
   components: {
-    NotFound,
-    Forms,
-    Rating,
+    NotFound: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/NotFound.vue'
+      ),
+    Forms: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/Forms.vue'
+      ),
+    Loader: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/Loader.vue'
+      ),
+    Rating: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/SingleResult/Rating.vue'
+      ),
+    InfoMessage: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/InfoMessage.vue'
+      ),
     Comments,
-    InfoMessage,
-    Loader,
     Tooltip
   },
 

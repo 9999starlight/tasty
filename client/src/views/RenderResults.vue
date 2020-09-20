@@ -9,12 +9,14 @@
 
 <script>
 import QueryResults from '../components/sharedComponents/QueryResults/QueryResults'
-import Forms from '../components/sharedComponents/Forms'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'render_results',
   components: {
-    Forms,
+    Forms: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/Forms'
+      ),
     QueryResults
   },
 

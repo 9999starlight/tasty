@@ -60,25 +60,28 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import NotFound from '../sharedComponents/NotFound'
-import Loader from '../sharedComponents/Loader'
-import SortingButtons from '../sharedComponents/SortingButtons'
 import Tooltip from '../sharedComponents/Tooltip'
 import loaderMixin from '../../mixins/loaderMixin'
 import sortingResults from '../../mixins/sortingResults'
 import apiCalls from '../../mixins/apiCalls'
-import Recipe from './Recipe'
-import CreateEditForm from '../sharedComponents/CreateEditForm'
 
 export default {
   name: 'user_recipes',
 
   components: {
-    NotFound,
-    Loader,
-    Recipe,
-    SortingButtons,
-    CreateEditForm,
+    NotFound: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/NotFound.vue'),
+    Loader: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
+    Recipe: () => import(/* webpackPrefetch: true */ './Recipe.vue'),
+    SortingButtons: () =>
+      import(
+        /* webpackPrefetch: true */ '../sharedComponents/SortingButtons.vue'
+      ),
+    CreateEditForm: () =>
+      import(
+        /* webpackPrefetch: true */ '../sharedComponents/CreateEditForm.vue'
+      ),
     Tooltip
   },
 

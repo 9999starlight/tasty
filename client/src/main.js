@@ -4,7 +4,9 @@ import router from './router'
 import { store } from './store/store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import animationScroll from './directives/animationScroll'
 Vue.use(VueAxios, axios)
+Vue.directive('animationscroll', animationScroll)
 
 // Font Awesome:
 import { library } from '@fortawesome/fontawesome-svg-core'

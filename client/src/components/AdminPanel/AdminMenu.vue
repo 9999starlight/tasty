@@ -71,9 +71,7 @@ export default {
     return {
       showFullMenu: false
     }
-  },
-
-  methods: {}
+  }
 }
 </script>
 

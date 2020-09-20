@@ -3,6 +3,7 @@
     :to="{ name: 'SingleResult', params: { id: recipe._id } }"
     tag="div"
     class="recipeLink grid"
+    v-animationscroll
   >
     <figure>
       <img
@@ -11,6 +12,7 @@
         :key="recipe._id"
         :alt="recipe.mealName"
         class="imageFit"
+        loading="lazy"
       />
       <img
         v-else
@@ -18,6 +20,7 @@
         :key="recipe._id"
         :alt="recipe.mealName"
         class="imageFit"
+        loading="lazy"
       />
       <figcaption>{{ recipe.mealName | titleCase }}</figcaption>
     </figure>
@@ -33,12 +36,14 @@
         :src="recipe.author.image"
         :alt="recipe.author.username"
         class="block"
+        loading="lazy"
       />
       <img
         v-else
         :src="defaultUserImage"
         :alt="recipe.author.username"
         class="block"
+        loading="lazy"
       />
       <span>{{ recipe.author.username }}</span>
     </div>

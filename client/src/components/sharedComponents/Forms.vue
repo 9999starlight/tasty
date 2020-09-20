@@ -9,6 +9,7 @@
           @click.prevent="findRecipes(configBasicParams())"
           type="submit"
           class="hovEffect"
+          aria-label="search recipes"
         >
           <font-awesome-icon
             :icon="['fa', 'search']"

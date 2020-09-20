@@ -2,14 +2,22 @@
   <div class="popularWrapper flex mgt2">
     <div v-if="this.ready" class="carouselContainer center">
       <h3 class="flex flexCenter">Highest rated recipes</h3>
-      <button class="carouselBtn btnLeft" @click="previousRecipe">
+      <button
+        class="carouselBtn btnLeft"
+        @click="previousRecipe"
+        aria-label="previous recipe"
+      >
         &nbsp;<font-awesome-icon
           :icon="['fa', 'chevron-circle-left']"
           font-size="15px"
           class="arrows"
         ></font-awesome-icon>
       </button>
-      <button class="carouselBtn btnRight" @click="nextRecipe">
+      <button
+        class="carouselBtn btnRight"
+        @click="nextRecipe"
+        aria-label="next recipe"
+      >
         &nbsp;<font-awesome-icon
           :icon="['fa', 'chevron-circle-right']"
           font-size="15px"
@@ -19,8 +27,8 @@
       <PopularSlide
         v-bind:recipe="recipesArray[currentRecipe]"
         ref="slide"
-        @pauseSlides="stopSlider"
-        @resumeSlides="slideInit"
+        @pause-slides="stopSlider"
+        @resume-slides="slideInit"
       />
       <div class="carouselNav mgt1" ref="dots">
         <button
@@ -32,11 +40,17 @@
               ? 'carouselIndicator currentSlide'
               : 'carouselIndicator'
           ]"
+          :aria-label="'move to slide ' + (index + 1)"
         ></button>
       </div>
     </div>
     <figure v-else class="altImage">
-      <img :src="getDefaultImage" alt="our menu" class="imageFit" />
+      <img
+        :src="getDefaultImage"
+        alt="our menu"
+        class="imageFit"
+        loading="lazy"
+      />
     </figure>
   </div>
 </template>

@@ -4,6 +4,7 @@
       src="@/assets/small_pngs/recipe-book.png"
       class="block"
       alt="recipe-book"
+      loading="lazy"
     />
     <h1 class="slim">Latest Recipes</h1>
     <div class="innerWrapper flex flexCenter">

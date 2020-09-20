@@ -1,14 +1,24 @@
 <template>
   <div class="tagsWrapper mg1">
     <h2>Popular Tags</h2>
-    <button v-if="showButtons" class="leftSilde" @click="slideLeft">
+    <button
+      v-if="showButtons"
+      class="leftSilde"
+      @click="slideLeft"
+      aria-label="slide left"
+    >
       <font-awesome-icon
         :icon="['fa', 'angle-double-left']"
         font-size="15px"
         class="arrows"
       ></font-awesome-icon>
     </button>
-    <button v-if="showButtons" class="rightSlide" @click="slideRight">
+    <button
+      v-if="showButtons"
+      class="rightSlide"
+      @click="slideRight"
+      aria-label="slide right"
+    >
       <font-awesome-icon
         :icon="['fa', 'angle-double-right']"
         font-size="15px"

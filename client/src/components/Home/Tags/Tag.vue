@@ -1,6 +1,11 @@
 <template>
   <figure class="tag flex flexCenter" @click="fetchTaggedRecipes">
-    <img :src="tag.tagSrc" :alt="tag.tagName" class="block imageFit" />
+    <img
+      :src="tag.tagSrc"
+      :alt="tag.tagName"
+      class="block imageFit"
+      loading="lazy"
+    />
     <figcaption>{{ tag.tagName }}</figcaption>
   </figure>
 </template>

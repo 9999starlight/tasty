@@ -33,14 +33,14 @@
 </template>
 
 <script>
-import InfoMessage from '../sharedComponents/InfoMessage'
 import { commentsUrl } from '../../apiData'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
 export default {
   name: 'PostComment',
   components: {
-    InfoMessage
+    InfoMessage: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/InfoMessage.vue')
   },
   data() {
     return {

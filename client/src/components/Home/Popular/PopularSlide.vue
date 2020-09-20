@@ -6,8 +6,8 @@
   >
     <figure
       id="slideContainer"
-      @mouseenter="$emit('pauseSlides')"
-      @mouseleave="$emit('resumeSlides')"
+      @mouseenter="$emit('pause-slides')"
+      @mouseleave="$emit('resume-slides')"
     >
       <transition name="fadePartial" mode="out-in">
         <img
@@ -16,6 +16,7 @@
           :key="recipe._id"
           :alt="recipe.mealName"
           class="imageFit"
+          loading="lazy"
         />
         <img
           v-else
@@ -23,6 +24,7 @@
           :key="recipe._id"
           :alt="recipe.mealName"
           class="imageFit"
+          loading="lazy"
         />
       </transition>
       <figcaption class="flex flexCenter">

@@ -1,13 +1,20 @@
 <template>
-  <div class="userRecipe grid mgb1">
+  <div class="userRecipe grid mgb1" v-animationscroll>
     <figure>
       <img
         v-if="recipe.image === undefined"
         :src="getDefaultImage"
         :alt="recipe.mealName"
         class="block"
+        loading="lazy"
       />
-      <img v-else :src="recipe.image" :alt="recipe.mealName" class="block" />
+      <img
+        v-else
+        :src="recipe.image"
+        :alt="recipe.mealName"
+        class="block"
+        loading="lazy"
+      />
     </figure>
     <h4>{{ recipe.mealName | titleCase }}</h4>
     <p class="lightItalic date">
@@ -31,6 +38,7 @@
         v-if="usersRecipes"
         @click="$emit('editing', recipe._id)"
         class="tooltipContainer"
+        aria-label="edit recipe"
       >
         <font-awesome-icon
           :icon="['fa', 'edit']"
@@ -49,12 +57,14 @@
           :src="recipe.author.image"
           alt="user image"
           class="authorImage"
+          loading="lazy"
         />
         <img
           v-else
           :src="getDefaultUserImage"
           alt="user image"
           class="authorImage"
+          loading="lazy"
         />
         <span class="authorUsername">{{ recipe.author.username }}</span>
         <Tooltip :tooltipText="`See user's recipes`" />
@@ -64,6 +74,7 @@
         v-if="usersRecipes"
         @click="deleteUserRecipe"
         class="tooltipContainer"
+        aria-label="delete recipe"
       >
         <font-awesome-icon
           :icon="['fa', 'trash-alt']"
@@ -72,7 +83,12 @@
         <Tooltip :tooltipText="'Delete this recipe'" />
       </button>
       <!-- remove from saved recipes button conditonal render -->
-      <button v-else @click="removeFromFavorites" class="tooltipContainer">
+      <button
+        v-else
+        @click="removeFromFavorites"
+        class="tooltipContainer"
+        aria-label="remove from saved recipes"
+      >
         <font-awesome-icon
           :icon="['fa', 'trash-alt']"
           class="delete"

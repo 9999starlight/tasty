@@ -7,8 +7,14 @@
           v-if="getCurrentUser.user_image"
           :src="getCurrentUser.user_image"
           :alt="getCurrentUser.username"
+          loading="lazy"
         />
-        <img v-else :src="getDefaultUserImage" :alt="getCurrentUser.username" />
+        <img
+          v-else
+          :src="getDefaultUserImage"
+          :alt="getCurrentUser.username"
+          loading="lazy"
+        />
         <span>{{ getCurrentUser.username }}</span>
       </div>
       <div class="additionalInfo">
@@ -43,7 +49,7 @@
             </button>
           </div>
           <figure v-if="preview" class="flex">
-            <img :src="preview" alt="preview" class="imageFit" />
+            <img :src="preview" alt="preview" class="imageFit" loading="lazy" />
           </figure>
         </div>
         <div class="small">
@@ -79,8 +85,6 @@ import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
 import fileValidation from '../../mixins/fileValidation'
 import loaderMixin from '../../mixins/loaderMixin'
-import InfoMessage from '../../components/sharedComponents/InfoMessage'
-import Loader from '../../components/sharedComponents/Loader'
 import axios from 'axios'
 import { usersUrl } from '../../apiData'
 
@@ -88,8 +92,14 @@ export default {
   name: 'user_profile',
 
   components: {
-    InfoMessage,
-    Loader
+    InfoMessage: () =>
+      import(
+        /* webpackPrefetch: true */ '../../components/sharedComponents/InfoMessage.vue'
+      ),
+    Loader: () =>
+      import(
+        /* webpackPrefetch: true */ '../../components/sharedComponents/Loader.vue'
+      )
   },
 
   data() {

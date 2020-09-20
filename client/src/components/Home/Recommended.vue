@@ -4,6 +4,7 @@
       src="@/assets/small_pngs/chubby-pot.png"
       class="block"
       alt="pot-flowers"
+      loading="lazy"
     />
     <h1 class="slim">What to cook today?</h1>
     <div class="innerWrapper flex flexCenter">

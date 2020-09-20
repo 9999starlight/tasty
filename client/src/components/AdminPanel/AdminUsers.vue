@@ -122,12 +122,14 @@
                 :src="user.user_image"
                 :alt="user.username"
                 class="imageFit"
+                loading="lazy"
               />
               <img
                 v-else
                 :src="getDefaultUserImage"
                 :alt="user.username"
                 class="imageFit"
+                loading="lazy"
               />
             </figure>
             <div class="userInfo">
@@ -225,10 +227,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Loader from '../sharedComponents/Loader'
 import Select from '../sharedComponents/Select'
 import SortingButtons from '../sharedComponents/SortingButtons'
-import Pagination from '../sharedComponents/Pagination'
 import Tooltip from '../sharedComponents/Tooltip'
 import loaderMixin from '../../mixins/loaderMixin'
 import apiCalls from '../../mixins/apiCalls'
@@ -239,11 +239,13 @@ export default {
   name: 'admin_users',
 
   components: {
-    Loader,
     Select,
     SortingButtons,
-    Pagination,
-    Tooltip
+    Tooltip,
+    Loader: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
+    Pagination: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Pagination.vue')
   },
 
   mixins: [

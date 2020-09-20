@@ -44,9 +44,6 @@
 </template>
 
 <script>
-import SingleQueryResult from './SingleQueryResult'
-import Pagination from '../Pagination'
-import SortingButtons from '../SortingButtons'
 import { mapGetters } from 'vuex'
 import paginationOptions from '../../../mixins/paginationOptions'
 import sortingResults from '../../../mixins/sortingResults'
@@ -61,9 +58,11 @@ export default {
   },
 
   components: {
-    SingleQueryResult,
-    Pagination,
-    SortingButtons
+    SingleQueryResult: () =>
+      import(/* webpackPrefetch: true */ './SingleQueryResult.vue'),
+    Pagination: () => import(/* webpackPrefetch: true */ '../Pagination.vue'),
+    SortingButtons: () =>
+      import(/* webpackPrefetch: true */ '../SortingButtons.vue')
   },
 
   mixins: [paginationOptions, sortingResults],

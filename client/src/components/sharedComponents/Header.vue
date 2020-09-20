@@ -16,6 +16,7 @@
           <img
             src="@/assets/small_pngs/pot-flowery.png"
             alt="flowery pot"
+            loading="lazy"
           />Tasty
         </h2>
       </router-link>
@@ -27,6 +28,7 @@
         "
         class="headerSearch"
         @click="setOpenSearch"
+        aria-label="search for recipes"
       >
         <font-awesome-icon
           :icon="['fa', 'search']"
@@ -41,14 +43,15 @@
     </div>
     <nav class="flex">
       <ul v-if="displayMenu" class="links flex">
-        <router-link
-          :to="{ name: 'home' }"
-          tag="li"
-          class="flex"
-          active-class="active"
-          exact
-          ><a>Home</a></router-link
-        >
+        <li>
+          <router-link
+            :to="{ name: 'home' }"
+            class="flex"
+            active-class="active"
+            exact
+            >Home</router-link
+          >
+        </li>
         <!-- dropdown user menu -->
         <li
           v-if="getIsLogged"
@@ -61,11 +64,13 @@
               v-if="getCurrentUser.user_image"
               :src="getCurrentUser.user_image"
               :alt="getCurrentUser.username"
+              loading="lazy"
             />
             <img
               v-else
               :src="getDefaultUserImage"
               :alt="getCurrentUser.username"
+              loading="lazy"
             />
             {{ getCurrentUser.username }}
             <font-awesome-icon
@@ -75,77 +80,71 @@
           </span>
           <transition name="slide-menu" mode="out-in">
             <ul class="userDropdown" v-show="showDropdown">
-              <router-link
-                :to="{ name: 'user_profile' }"
-                tag="li"
-                active-class="active"
-                exact
-                class="flex"
-                ><a
+              <li>
+                <router-link
+                  :to="{ name: 'user_profile' }"
+                  active-class="active"
+                  exact
+                  class="flex"
                   ><font-awesome-icon
                     :icon="['fa', 'user']"
                     class="userIcon"
                   ></font-awesome-icon
-                  >&nbsp;Profile</a
-                ></router-link
-              >
-              <router-link
-                :to="{ name: 'user_recipes' }"
-                tag="li"
-                active-class="active"
-                exact
-                class="flex"
-                ><a
+                  >&nbsp;Profile</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="{ name: 'user_recipes' }"
+                  active-class="active"
+                  exact
+                  class="flex"
                   ><font-awesome-icon
                     :icon="['fa', 'book']"
                     class="userIcon"
                   ></font-awesome-icon
-                  >&nbsp;My recipes</a
-                ></router-link
-              >
-              <router-link
-                :to="{ name: 'create_recipe' }"
-                tag="li"
-                active-class="active"
-                class="flex"
-                ><a
+                  >&nbsp;My recipes</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="{ name: 'create_recipe' }"
+                  active-class="active"
+                  class="flex"
                   ><font-awesome-icon
                     :icon="['fa', 'edit']"
                     class="userIcon"
                   ></font-awesome-icon
-                  >&nbsp;Create recipe</a
-                ></router-link
-              >
-              <router-link
-                :to="{ name: 'saved_recipes' }"
-                tag="li"
-                active-class="active"
-                class="flex"
-                ><a
+                  >&nbsp;Create recipe</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="{ name: 'saved_recipes' }"
+                  active-class="active"
+                  class="flex"
                   ><font-awesome-icon
                     :icon="['fa', 'heart']"
                     class="userIcon"
                   ></font-awesome-icon
-                  >&nbsp;Saved recipes</a
-                ></router-link
-              >
+                  >&nbsp;Saved recipes</router-link
+                >
+              </li>
             </ul>
           </transition>
         </li>
         <!-- end dropdown -->
-        <router-link
-          v-if="authAdmin == true"
-          :to="{ name: 'overview' }"
-          tag="li"
-          active-class="active"
-          class="flex"
-          ><a
+        <li v-if="authAdmin == true">
+          <router-link
+            :to="{ name: 'overview' }"
+            active-class="active"
+            class="flex"
             >&nbsp;
             <font-awesome-icon :icon="['fa', 'user-shield']" class="userIcon">
             </font-awesome-icon
             >Admin Panel
-          </a></router-link
-        >
+          </router-link>
+        </li>
         <li class="flex" v-if="getIsLogged">
           <button @click="logout">
             <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="userIcon">
@@ -155,19 +154,16 @@
         </li>
         <!-- end logged in -->
         <!-- if !loggedIn -->
-        <router-link
-          v-if="!getIsLogged"
-          :to="{ name: 'login' }"
-          tag="li"
-          class="flex"
-          active-class="active"
-        >
-          <a>
-            <font-awesome-icon :icon="['fas', 'sign-in-alt']" class="userIcon">
+        <li v-if="!getIsLogged">
+          <router-link
+            :to="{ name: 'login' }"
+            class="flex"
+            active-class="active"
+            ><font-awesome-icon :icon="['fas', 'sign-in-alt']" class="userIcon">
             </font-awesome-icon
             >&nbsp; Login
-          </a>
-        </router-link>
+          </router-link>
+        </li>
         <!-- end logged out -->
       </ul>
     </nav>
@@ -199,9 +195,7 @@ export default {
 
   watch: {
     $route() {
-      window.innerWidth > 991
-        ? (this.displayMenu = true)
-        : (this.displayMenu = false)
+      this.onResize()
     }
   },
 

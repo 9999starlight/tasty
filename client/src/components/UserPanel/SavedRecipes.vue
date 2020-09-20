@@ -41,22 +41,23 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import NotFound from '../sharedComponents/NotFound'
-import Loader from '../sharedComponents/Loader'
-import SortingButtons from '../sharedComponents/SortingButtons'
 import loaderMixin from '../../mixins/loaderMixin'
 import sortingResults from '../../mixins/sortingResults'
 import apiCalls from '../../mixins/apiCalls'
-import Recipe from './Recipe'
 
 export default {
   name: 'saved_recipes',
 
   components: {
-    NotFound,
-    Loader,
-    Recipe,
-    SortingButtons
+    NotFound: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/NotFound.vue'),
+    Loader: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
+    Recipe: () => import(/* webpackPrefetch: true */ './Recipe.vue'),
+    SortingButtons: () =>
+      import(
+        /* webpackPrefetch: true */ '../sharedComponents/SortingButtons.vue'
+      )
   },
 
   data() {

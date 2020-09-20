@@ -76,12 +76,14 @@
                 :src="getDefaultImage"
                 :alt="recipe.mealName"
                 class="imageFit"
+                loading="lazy"
               />
               <img
                 v-else
                 :src="recipe.image"
                 :alt="recipe.mealName"
                 class="imageFit"
+                loading="lazy"
               />
             </figure>
             <h5>{{ recipe.mealName | titleCase }}</h5>
@@ -162,8 +164,6 @@ import StatisticBox from './StatisticBox/StatisticBox'
 import Select from '../sharedComponents/Select'
 import SortingButtons from '../sharedComponents/SortingButtons'
 import CreateEditForm from '../sharedComponents/CreateEditForm'
-import Pagination from '../sharedComponents/Pagination'
-import Loader from '../sharedComponents/Loader'
 import Tooltip from '../sharedComponents/Tooltip'
 import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
@@ -182,10 +182,12 @@ export default {
     Select,
     StatisticBox,
     SortingButtons,
-    Pagination,
     CreateEditForm,
-    Loader,
-    Tooltip
+    Tooltip,
+    Loader: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
+    Pagination: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Pagination.vue')
   },
 
   data() {

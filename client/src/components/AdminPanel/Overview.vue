@@ -37,12 +37,14 @@
                 :src="getDefaultImage"
                 :alt="recipe.mealName"
                 class="imageFit"
+                loading="lazy"
               />
               <img
                 v-else
                 :src="recipe.image"
                 :alt="recipe.mealName"
                 class="imageFit"
+                loading="lazy"
               />
             </figure>
             <h5 class="center">{{ recipe.mealName | titleCase }}</h5>
@@ -86,7 +88,6 @@
 
 <script>
 import StatisticBox from './StatisticBox/StatisticBox'
-import Loader from '../sharedComponents/Loader'
 import { mapGetters } from 'vuex'
 import dateFormat from '../../mixins/dateFormat'
 import apiCalls from '../../mixins/apiCalls'
@@ -110,7 +111,8 @@ export default {
 
   components: {
     StatisticBox,
-    Loader
+    Loader: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue')
   },
 
   mixins: [dateFormat, apiCalls, loaderMixin],

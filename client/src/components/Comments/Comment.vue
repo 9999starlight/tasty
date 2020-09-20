@@ -1,15 +1,17 @@
 <template>
-  <div class="singleCommentWrapper flex mgb1">
+  <div class="singleCommentWrapper flex mgb1" v-animationscroll>
     <p class="commentAuthor flex flexCenter">
       <img
         v-if="!singleComment.author.user_image"
         :src="getDefaultUserImage"
         :alt="singleComment.author.username"
+        loading="lazy"
       />
       <img
         v-else
         :src="singleComment.author.user_image.url"
         :alt="singleComment.author.username"
+        loading="lazy"
       />
       <span class="slim">{{ singleComment.author.username }}</span>
     </p>

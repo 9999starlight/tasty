@@ -43,11 +43,13 @@
                   v-if="comment.author.user_image.url"
                   :src="comment.author.user_image.url"
                   :alt="comment.author.username"
+                  loading="lazy"
                 />
                 <img
                   v-else
                   :src="getDefaultUserImage"
                   :alt="comment.author.username"
+                  loading="lazy"
                 />
                 <span class="username lightItalic">
                   {{ comment.author.username }}
@@ -115,9 +117,7 @@ import loaderMixin from '../../mixins/loaderMixin'
 import sortingResults from '../../mixins/sortingResults'
 import dateFormat from '../../mixins/dateFormat'
 import paginationOptions from '../../mixins/paginationOptions'
-import Loader from '../sharedComponents/Loader'
 import SortingButtons from '../sharedComponents/SortingButtons'
-import Pagination from '../sharedComponents/Pagination'
 import Tooltip from '../sharedComponents/Tooltip'
 import Select from '../sharedComponents/Select'
 import { mapGetters } from 'vuex'
@@ -128,9 +128,11 @@ export default {
   name: 'admin_comments',
 
   components: {
-    Loader,
+    Loader: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
+    Pagination: () =>
+      import(/* webpackPrefetch: true */ '../sharedComponents/Pagination.vue'),
     SortingButtons,
-    Pagination,
     Select,
     Tooltip
   },

@@ -21,7 +21,6 @@
 
 <script>
 import Popular from '../components/Home/Popular/Popular'
-import Forms from '../components/sharedComponents/Forms'
 import Tags from '../components/Home/Tags/Tags'
 import LatestRecipes from '../components/Home/LatestRecipes'
 import Recommended from '../components/Home/Recommended'
@@ -31,10 +30,11 @@ export default {
   name: 'home',
   components: {
     Popular,
-    Forms,
     Tags,
     LatestRecipes,
-    Recommended
+    Recommended,
+    Forms: () =>
+      import(/* webpackPrefetch: true */ '../components/sharedComponents/Forms.vue')
   },
 
   computed: {

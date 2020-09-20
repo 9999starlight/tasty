@@ -3,22 +3,22 @@ import Router from 'vue-router'
 import { store } from './store/store'
 // views
 import Home from './views/Home'
-import Login from './views/Login'
+/* import Login from './views/Login'
 import SingleResult from './views/SingleResult'
 import RenderResults from './views/RenderResults'
-import ErrorPage from './views/ErrorPage'
+import ErrorPage from './views/ErrorPage' */
 // UserPanel & children
-import UserPanel from './views/UserPanel'
+/* import UserPanel from './views/UserPanel'
 import UserProfile from './components/UserPanel/UserProfile'
 import UserRecipes from './components/UserPanel/UserRecipes'
 import CreateRecipe from './components/UserPanel/CreateRecipe'
-import SavedRecipes from './components/UserPanel/SavedRecipes'
+import SavedRecipes from './components/UserPanel/SavedRecipes' */
 // AdminPanel & children
-import AdminPanel from './views/AdminPanel'
+/* import AdminPanel from './views/AdminPanel'
 import Overview from './components/AdminPanel/Overview'
 import AdminUsers from './components/AdminPanel/AdminUsers'
 import AdminRecipes from './components/AdminPanel/AdminRecipes'
-import AdminComments from './components/AdminPanel/AdminComments'
+import AdminComments from './components/AdminPanel/AdminComments' */
 
 Vue.use(Router)
 
@@ -44,27 +44,40 @@ let router = new Router({
     },
     {
       path: '/userpanel',
-      component: UserPanel,
+      component: () =>
+        import(/* webpackChunkName: "userpanel" */ './views/UserPanel.vue'),
       children: [
         {
           path: '',
           name: 'user_profile',
-          component: UserProfile
+          component: () =>
+            import(
+              /* webpackChunkName: "userprofile" */ './components/UserPanel/UserProfile.vue'
+            )
         },
         {
           path: '/userpanel/user_recipes',
           name: 'user_recipes',
-          component: UserRecipes
+          component: () =>
+            import(
+              /* webpackChunkName: "userrecipes" */ './components/UserPanel/UserRecipes.vue'
+            )
         },
         {
           path: '/userpanel/create_recipe',
           name: 'create_recipe',
-          component: CreateRecipe
+          component: () =>
+            import(
+              /* webpackChunkName: "createrecipe" */ './components/UserPanel/CreateRecipe.vue'
+            )
         },
         {
           path: '/userpanel/saved_recipes',
           name: 'saved_recipes',
-          component: SavedRecipes
+          component: () =>
+            import(
+              /* webpackChunkName: "savedrecipes" */ './components/UserPanel/SavedRecipes.vue'
+            )
         }
       ],
       meta: {
@@ -73,27 +86,40 @@ let router = new Router({
     },
     {
       path: '/adminpanel',
-      component: AdminPanel,
+      component: () =>
+        import(/* webpackChunkName: "adminpanel" */ './views/AdminPanel.vue'),
       children: [
         {
           path: '',
           name: 'overview',
-          component: Overview
+          component: () =>
+            import(
+              /* webpackChunkName: "overview" */ './components/AdminPanel/Overview.vue'
+            )
         },
         {
           path: '/adminpanel/admin_users',
           name: 'admin_users',
-          component: AdminUsers
+          component: () =>
+            import(
+              /* webpackChunkName: "adminusers" */ './components/AdminPanel/AdminUsers.vue'
+            )
         },
         {
           path: '/adminpanel/admin_recipes',
           name: 'admin_recipes',
-          component: AdminRecipes
+          component: () =>
+            import(
+              /* webpackChunkName: "adminrecipes" */ './components/AdminPanel/AdminRecipes.vue'
+            )
         },
         {
           path: '/adminpanel/admin_comments',
           name: 'admin_comments',
-          component: AdminComments
+          component: () =>
+            import(
+              /* webpackChunkName: "admincomments" */ './components/AdminPanel/AdminComments.vue'
+            )
         }
       ],
       meta: {
@@ -104,7 +130,8 @@ let router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: () =>
+        import(/* webpackChunkName: "login" */ './views/Login.vue'),
       beforeEnter(to, from, next) {
         // check status, if logged in can't go to login page
         if (store.getters['getIsLogged'] == false) {
@@ -119,13 +146,19 @@ let router = new Router({
     {
       path: '/SingleResult/:id',
       name: 'SingleResult',
-      component: SingleResult,
+      component: () =>
+        import(
+          /* webpackChunkName: "singleresult" */ './views/SingleResult.vue'
+        ),
       props: true
     },
     {
       path: '/render_results',
       name: 'render_results',
-      component: RenderResults,
+      component: () =>
+        import(
+          /* webpackChunkName: "renderresults" */ './views/RenderResults.vue'
+        ),
       meta: {
         showSearch: true
       }
@@ -133,11 +166,13 @@ let router = new Router({
     {
       path: '/error404',
       name: 'error404',
-      component: ErrorPage
+      component: () =>
+        import(/* webpackChunkName: "errorpage" */ './views/ErrorPage.vue')
     },
     {
       path: '*',
-      component: ErrorPage
+      component: () =>
+        import(/* webpackChunkName: "errorpage" */ './views/ErrorPage.vue')
     }
   ]
 })

@@ -153,7 +153,7 @@
       <div class="inner center">
         <div class="images flex">
           <figure v-if="preview" class="flex flexCenter">
-            <img :src="preview" :alt="filename" />
+            <img :src="preview" :alt="filename" loading="lazy" />
             <figcaption>Image preview: {{ filename }}</figcaption>
           </figure>
           <figure
@@ -163,6 +163,7 @@
             <img
               :src="getSingleRecipe.image.url"
               :alt="getSingleRecipe.mealName"
+              loading="lazy"
             />
             <figcaption>Current image</figcaption>
           </figure>
@@ -334,8 +335,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import Select from './Select'
-import InfoMessage from './InfoMessage'
-import Loader from './Loader'
 import Tooltip from './Tooltip'
 import fileValidation from '../../mixins/fileValidation'
 import loaderMixin from '../../mixins/loaderMixin'
@@ -348,9 +347,9 @@ export default {
 
   components: {
     Select,
-    InfoMessage,
-    Loader,
-    Tooltip
+    Tooltip,
+    InfoMessage: () => import(/* webpackPrefetch: true */ './InfoMessage.vue'),
+    Loader: () => import(/* webpackPrefetch: true */ './Loader.vue')
   },
 
   data() {

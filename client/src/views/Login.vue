@@ -142,8 +142,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import InfoMessage from '../components/sharedComponents/InfoMessage'
-import Loader from '../components/sharedComponents/Loader'
+//import InfoMessage from '../components/sharedComponents/InfoMessage'
+//import Loader from '../components/sharedComponents/Loader'
 import Tooltip from '../components/sharedComponents/Tooltip'
 import fileValidation from '../mixins/fileValidation'
 import loaderMixin from '../mixins/loaderMixin'
@@ -151,8 +151,14 @@ export default {
   name: 'login',
 
   components: {
-    InfoMessage,
-    Loader,
+    InfoMessage: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/InfoMessage.vue'
+      ),
+    Loader: () =>
+      import(
+        /* webpackPrefetch: true */ '../components/sharedComponents/Loader.vue'
+      ),
     Tooltip
   },
 
