@@ -93,13 +93,8 @@ export default {
 
   components: {
     InfoMessage: () =>
-      import(
-        /* webpackPrefetch: true */ '../../components/sharedComponents/InfoMessage.vue'
-      ),
-    Loader: () =>
-      import(
-        /* webpackPrefetch: true */ '../../components/sharedComponents/Loader.vue'
-      )
+      import('../../components/sharedComponents/InfoMessage.vue'),
+    Loader: () => import('../../components/sharedComponents/Loader.vue')
   },
 
   data() {

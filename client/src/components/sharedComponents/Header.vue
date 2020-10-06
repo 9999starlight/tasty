@@ -200,7 +200,6 @@ export default {
   },
 
   computed: {
-    ...mapActions(['logoutUser']),
     ...mapGetters(['getCurrentUser', 'getIsLogged', 'getDefaultUserImage']),
 
     authAdmin() {
@@ -209,6 +208,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['logoutUser']),
+
     showMenu() {
       this.displayMenu = !this.displayMenu
     },
@@ -336,7 +337,6 @@ header {
     li {
       border-bottom: 1px solid #fff;
       @include boxSize($width: 100%);
-      @include alignment($justify: center, $align: center);
 
       &.active {
         background-color: rgba(250, 128, 114, 0.123);
@@ -447,6 +447,7 @@ header {
           border: none;
           padding: 0 0.5rem;
           @include boxSize($width: initial, $height: 100%);
+          display: flex;
 
           .userIcon {
             color: lighten($graphite, 20%);

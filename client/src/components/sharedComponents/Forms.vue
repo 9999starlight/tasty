@@ -128,8 +128,6 @@ export default {
   },
 
   computed: {
-    ...mapActions(['fetchQueriedRecipes']),
-
     basicSelected() {
       if (this.$refs['basicSelect'].selected === 'Any Category') return ''
       else return this.$refs['basicSelect'].selected.toLowerCase()
@@ -147,6 +145,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchQueriedRecipes']),
+
     // set query params
     configBasicParams() {
       if (this.basicSelected !== '') {

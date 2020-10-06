@@ -218,26 +218,14 @@ import { usersUrl } from '../apiData'
 export default {
   name: 'SingleResult',
   components: {
-    NotFound: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/sharedComponents/NotFound.vue'
-      ),
-    Forms: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/sharedComponents/Forms.vue'
-      ),
+    NotFound: () => import('../components/sharedComponents/NotFound.vue'),
+    Forms: () => import('../components/sharedComponents/Forms.vue'),
     Loader: () =>
       import(
         /* webpackPrefetch: true */ '../components/sharedComponents/Loader.vue'
       ),
-    Rating: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/SingleResult/Rating.vue'
-      ),
-    InfoMessage: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/sharedComponents/InfoMessage.vue'
-      ),
+    Rating: () => import('../components/SingleResult/Rating.vue'),
+    InfoMessage: () => import('../components/sharedComponents/InfoMessage.vue'),
     Comments,
     Tooltip
   },
@@ -271,7 +259,6 @@ export default {
   },
 
   computed: {
-    ...mapActions(['fetchSingleRecipe']),
     ...mapGetters([
       'getSingleRecipe',
       'getDefaultImage',
@@ -341,6 +328,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchSingleRecipe']),
+
     updateMessage(message) {
       this.message = message
     },

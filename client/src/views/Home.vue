@@ -34,7 +34,7 @@ export default {
     LatestRecipes,
     Recommended,
     Forms: () =>
-      import(/* webpackPrefetch: true */ '../components/sharedComponents/Forms.vue')
+      import('../components/sharedComponents/Forms.vue')
   },
 
   computed: {

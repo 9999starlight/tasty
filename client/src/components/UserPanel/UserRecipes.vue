@@ -69,19 +69,12 @@ export default {
   name: 'user_recipes',
 
   components: {
-    NotFound: () =>
-      import(/* webpackPrefetch: true */ '../sharedComponents/NotFound.vue'),
+    NotFound: () => import('../sharedComponents/NotFound.vue'),
     Loader: () =>
       import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
-    Recipe: () => import(/* webpackPrefetch: true */ './Recipe.vue'),
-    SortingButtons: () =>
-      import(
-        /* webpackPrefetch: true */ '../sharedComponents/SortingButtons.vue'
-      ),
-    CreateEditForm: () =>
-      import(
-        /* webpackPrefetch: true */ '../sharedComponents/CreateEditForm.vue'
-      ),
+    Recipe: () => import('./Recipe.vue'),
+    SortingButtons: () => import('../sharedComponents/SortingButtons.vue'),
+    CreateEditForm: () => import('../sharedComponents/CreateEditForm.vue'),
     Tooltip
   },
 

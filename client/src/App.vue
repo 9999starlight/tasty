@@ -20,13 +20,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Berkshire+Swash&display=swap');
-@import './styles/global.scss';
 #app {
   box-sizing: border-box;
   @include boxSize($width: 100%, $minHeight: 100vh);
   @include alignment($direction: column, $align: center);
-  font-family: 'Montserrat', Arial, sans-serif;
 }
 </style>

@@ -112,6 +112,11 @@ img {
 } */
 
 @media (min-width: 992px) {
+  .latestRecipesContainer {
+    button:hover {
+      color: $light;
+    }
+  }
   img {
     height: 55px;
     margin: auto;

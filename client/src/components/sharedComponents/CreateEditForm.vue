@@ -348,8 +348,8 @@ export default {
   components: {
     Select,
     Tooltip,
-    InfoMessage: () => import(/* webpackPrefetch: true */ './InfoMessage.vue'),
-    Loader: () => import(/* webpackPrefetch: true */ './Loader.vue')
+    InfoMessage: () => import('./InfoMessage.vue'),
+    Loader: () => import('./Loader.vue')
   },
 
   data() {

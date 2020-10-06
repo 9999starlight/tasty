@@ -14,8 +14,7 @@ export default {
   name: 'render_results',
   components: {
     Forms: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/sharedComponents/Forms'
+      import('../components/sharedComponents/Forms'
       ),
     QueryResults
   },

@@ -21,11 +21,9 @@ export default {
     }
   },
 
-  computed: {
-    ...mapActions(['fetchQueriedRecipes'])
-  },
-
   methods: {
+    ...mapActions(['fetchQueriedRecipes']),
+
     async fetchTaggedRecipes(params) {
       params = this.tag.tagParams
       try {

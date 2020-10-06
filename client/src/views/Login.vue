@@ -142,8 +142,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-//import InfoMessage from '../components/sharedComponents/InfoMessage'
-//import Loader from '../components/sharedComponents/Loader'
 import Tooltip from '../components/sharedComponents/Tooltip'
 import fileValidation from '../mixins/fileValidation'
 import loaderMixin from '../mixins/loaderMixin'
@@ -151,14 +149,8 @@ export default {
   name: 'login',
 
   components: {
-    InfoMessage: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/sharedComponents/InfoMessage.vue'
-      ),
-    Loader: () =>
-      import(
-        /* webpackPrefetch: true */ '../components/sharedComponents/Loader.vue'
-      ),
+    InfoMessage: () => import('../components/sharedComponents/InfoMessage.vue'),
+    Loader: () => import('../components/sharedComponents/Loader.vue'),
     Tooltip
   },
 
@@ -180,7 +172,6 @@ export default {
   mixins: [fileValidation, loaderMixin],
 
   computed: {
-    ...mapActions(['loginUser', 'signUpUser']),
     ...mapGetters(['getUserToken', 'getErrorMessage', 'getIsLogged']),
 
     valImg() {
@@ -193,6 +184,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['loginUser', 'signUpUser']),
+
     updateMessage(message) {
       this.errorMessage = message
     },

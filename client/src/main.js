@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import animationScroll from './directives/animationScroll'
 Vue.use(VueAxios, axios)
 Vue.directive('animationscroll', animationScroll)
+import './styles/global.scss'
 
 // Font Awesome:
 import { library } from '@fortawesome/fontawesome-svg-core'

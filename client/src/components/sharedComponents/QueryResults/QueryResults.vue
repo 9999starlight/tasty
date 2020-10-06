@@ -59,10 +59,10 @@ export default {
 
   components: {
     SingleQueryResult: () =>
-      import(/* webpackPrefetch: true */ './SingleQueryResult.vue'),
-    Pagination: () => import(/* webpackPrefetch: true */ '../Pagination.vue'),
+      import('./SingleQueryResult.vue'),
+    Pagination: () => import('../Pagination.vue'),
     SortingButtons: () =>
-      import(/* webpackPrefetch: true */ '../SortingButtons.vue')
+      import('../SortingButtons.vue')
   },
 
   mixins: [paginationOptions, sortingResults],

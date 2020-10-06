@@ -129,9 +129,9 @@ export default {
 
   components: {
     Loader: () =>
-      import(/* webpackPrefetch: true */ '../sharedComponents/Loader.vue'),
+      import('../sharedComponents/Loader.vue'),
     Pagination: () =>
-      import(/* webpackPrefetch: true */ '../sharedComponents/Pagination.vue'),
+      import('../sharedComponents/Pagination.vue'),
     SortingButtons,
     Select,
     Tooltip

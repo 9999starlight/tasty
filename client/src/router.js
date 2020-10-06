@@ -1,24 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { store } from './store/store'
-// views
 import Home from './views/Home'
-/* import Login from './views/Login'
-import SingleResult from './views/SingleResult'
-import RenderResults from './views/RenderResults'
-import ErrorPage from './views/ErrorPage' */
-// UserPanel & children
-/* import UserPanel from './views/UserPanel'
-import UserProfile from './components/UserPanel/UserProfile'
-import UserRecipes from './components/UserPanel/UserRecipes'
-import CreateRecipe from './components/UserPanel/CreateRecipe'
-import SavedRecipes from './components/UserPanel/SavedRecipes' */
-// AdminPanel & children
-/* import AdminPanel from './views/AdminPanel'
-import Overview from './components/AdminPanel/Overview'
-import AdminUsers from './components/AdminPanel/AdminUsers'
-import AdminRecipes from './components/AdminPanel/AdminRecipes'
-import AdminComments from './components/AdminPanel/AdminComments' */
 
 Vue.use(Router)
 

@@ -40,7 +40,7 @@ export default {
   name: 'PostComment',
   components: {
     InfoMessage: () =>
-      import(/* webpackPrefetch: true */ '../sharedComponents/InfoMessage.vue')
+      import('../sharedComponents/InfoMessage.vue')
   },
   data() {
     return {
